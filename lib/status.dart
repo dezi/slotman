@@ -11,7 +11,7 @@ class Status {
   static int selectedController = 0;
   static bool isCalibrating = false;
 
-  static Race race = Race(mode: 'set', title: '', tracks: 0, rounds: 0);
+  static Race race = Race(mode: 'set');
 
   static Future<void> initialize() async {
     var tracks = Tracks(mode: 'get');

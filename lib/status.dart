@@ -4,14 +4,16 @@ import 'package:slotman/messages/race.dart';
 import 'package:slotman/messages/tracks.dart';
 import 'package:slotman/pages/setup_controller.dart';
 import 'package:slotman/pages/setup_race.dart';
+import 'package:slotman/pages/setup_tracks.dart';
 import 'package:slotman/socket.dart';
 
 class Status {
-  static int numberOfTracks = 0;
   static int selectedController = 0;
   static bool isCalibrating = false;
 
   static Race race = Race(mode: 'set');
+  static Tracks tracks = Tracks(mode: 'set');
+  static Controller controller = Controller(mode: 'set');
 
   static Future<void> initialize() async {
     var tracks = Tracks(mode: 'get');
@@ -31,35 +33,27 @@ class Status {
     }
   }
 
-  static void sndNumberOfTracks(int numberOfTracks) {
-    Status.numberOfTracks = numberOfTracks;
-    var tracks = Tracks(mode: 'set', numberOfTracks: numberOfTracks);
+  static void sndTracks(Tracks tracks) {
+    Status.tracks = tracks;
     Socket.transmit(jsonEncode(tracks));
   }
 
-  static void rcvNumberOfTracks(Tracks tracks) {
-    Status.numberOfTracks = tracks.numberOfTracks;
+  static void rcvTracks(Tracks tracks) {
+    Status.tracks = tracks;
+    if (SetupTracksPageState.injector != null) {
+      SetupTracksPageState.injector!.setContent();
+    }
   }
 
-  static void sndCalibrateController(int selectedController, bool isCalibrating) {
-    Status.selectedController = selectedController;
-    Status.isCalibrating = isCalibrating;
-    var controller = Controller(
-      mode: 'set',
-      controller: selectedController,
-      isCalibrating: isCalibrating,
-    );
+  static void sndController(Controller controller) {
+    Status.controller = controller;
     Socket.transmit(jsonEncode(controller));
   }
 
-  static void rcvCalibrateController(Controller controller) {
+  static void rcvController(Controller controller) {
+    Status.controller = controller;
     if (SetupControllerPageState.injector != null) {
-      SetupControllerPageState.injector!.setMinMaxValue(
-        controller.controller,
-        controller.isCalibrating,
-        controller.minValue,
-        controller.maxValue,
-      );
+      SetupControllerPageState.injector!.setContent();
     }
   }
 }

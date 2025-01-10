@@ -1,23 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:slotman/drawer.dart';
+import 'package:slotman/messages/tracks.dart';
 import 'package:slotman/status.dart';
 
 import '../locals.dart';
 
-class SetupTrackPage extends StatefulWidget {
-  const SetupTrackPage({super.key});
+class SetupTracksPage extends StatefulWidget {
+  const SetupTracksPage({super.key});
 
   final String title = 'Track Setup';
 
   @override
-  State<SetupTrackPage> createState() => _SetupTrackPageState();
+  State<SetupTracksPage> createState() => SetupTracksPageState();
 }
 
-class _SetupTrackPageState extends State<SetupTrackPage> {
-  int numberOfTracks = Status.numberOfTracks;
+class SetupTracksPageState extends State<SetupTracksPage> {
+
+  static SetupTracksPageState? injector;
+
+  var tracks = Tracks.clone(Status.tracks);
+
+  void setContent() {
+    setState(() {
+      tracks = Tracks.clone(Status.tracks);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+
+    injector = this;
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
@@ -32,30 +45,30 @@ class _SetupTrackPageState extends State<SetupTrackPage> {
             RadioListTile<int>(
               title: Text('2 Tracks'),
               value: 2,
-              groupValue: numberOfTracks,
+              groupValue: tracks.tracks,
               onChanged: (int? value) {
                 setState(() {
-                  numberOfTracks = value!;
+                  tracks.tracks = value!;
                 });
               },
             ),
             RadioListTile<int>(
               title: Text('4 Tracks'),
               value: 4,
-              groupValue: numberOfTracks,
+              groupValue: tracks.tracks,
               onChanged: (int? value) {
                 setState(() {
-                  numberOfTracks = value!;
+                  tracks.tracks = value!;
                 });
               },
             ),
             RadioListTile<int>(
               title: Text('6 Tracks'),
               value: 6,
-              groupValue: numberOfTracks,
+              groupValue: tracks.tracks,
               onChanged: (int? value) {
                 setState(() {
-                  numberOfTracks = value!;
+                  tracks.tracks = value!;
                 });
               },
             ),
@@ -69,7 +82,7 @@ class _SetupTrackPageState extends State<SetupTrackPage> {
                 ),
               ),
               onPressed: () {
-                Status.sndNumberOfTracks(numberOfTracks);
+                Status.sndTracks(tracks);
               },
               child: Text('Update'),
             )

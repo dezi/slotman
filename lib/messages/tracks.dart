@@ -1,18 +1,22 @@
 class Tracks {
   final String what = 'tracks';
-  final String mode;
+  String mode;
 
-  final int numberOfTracks;
+  int tracks;
 
-  Tracks({required this.mode, this.numberOfTracks = 0});
+  Tracks({required this.mode, this.tracks = 0});
+
+  Tracks.clone(Tracks tracks)
+      : mode = tracks.mode,
+        tracks = tracks.tracks;
 
   Tracks.fromJson(Map<String, dynamic> json)
       : mode = json['mode'] as String,
-        numberOfTracks = json['numberOfTracks'] as int;
+        tracks = json['tracks'] as int;
 
   Map<String, dynamic> toJson() => {
         'what': what,
         'mode': mode,
-        'numberOfTracks': numberOfTracks,
+        'tracks': tracks,
       };
 }

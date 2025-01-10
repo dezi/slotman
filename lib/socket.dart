@@ -38,11 +38,11 @@ class Socket {
           break;
         case 'tracks|set':
           var tracks = Tracks.fromJson(jsonDecode(json));
-          Status.rcvNumberOfTracks(tracks);
+          Status.rcvTracks(tracks);
           break;
         case 'controller|set':
           var controller = Controller.fromJson(jsonDecode(json));
-          Status.rcvCalibrateController(controller);
+          Status.rcvController(controller);
       }
     });
   }

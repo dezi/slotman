@@ -6,7 +6,7 @@ import 'package:slotman/pages/start.dart';
 import 'package:slotman/pages/setup_pilot.dart';
 import 'package:slotman/pages/setup_race.dart';
 import 'package:slotman/pages/setup_controller.dart';
-import 'package:slotman/pages/setup_track.dart';
+import 'package:slotman/pages/setup_tracks.dart';
 import 'package:slotman/socket.dart';
 import 'package:slotman/status.dart';
 
@@ -44,7 +44,7 @@ class _MainAppState extends State<MainApp> {
         '/join': (context) => JoinPage(),
         '/setup/race': (context) => SetupRacePage(),
         '/setup/pilot': (context) => SetupPilotPage(),
-        '/setup/track': (context) => SetupTrackPage(),
+        '/setup/track': (context) => SetupTracksPage(),
         '/setup/controller': (context) => SetupControllerPage(),
       },
     );

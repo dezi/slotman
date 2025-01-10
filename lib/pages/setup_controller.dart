@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:slotman/drawer.dart';
+import 'package:slotman/messages/controller.dart';
 import 'package:slotman/status.dart';
 
 class SetupControllerPage extends StatefulWidget {
@@ -15,20 +16,11 @@ class SetupControllerPageState extends State<SetupControllerPage> {
 
   static SetupControllerPageState? injector;
 
-  bool isCalibrating = false;
+  var controller = Controller.clone(Status.controller);
 
-  int selected = 1;
-  int numControllers = Status.numberOfTracks;
-
-  int minValue = 0;
-  int maxValue = 0;
-
-  void setMinMaxValue(int selected, bool isCalibrating, int minValue, int maxValue) {
+  void setContent() {
     setState(() {
-      this.selected = selected;
-      this.isCalibrating = isCalibrating;
-      this.minValue = minValue;
-      this.maxValue = maxValue;
+      controller = Controller.clone(Status.controller);
     });
   }
 
@@ -50,14 +42,14 @@ class SetupControllerPageState extends State<SetupControllerPage> {
             decoration: const BoxDecoration(color: Colors.transparent),
             child: Column(children: [
               SizedBox(height: 16),
-              for (int controller = 1; controller <= numControllers; controller++)
+              for (int count = 1; count <= Status.tracks.tracks; count++)
                 RadioListTile<int>(
-                  title: Text('Controller $controller'),
-                  value: controller,
-                  groupValue: selected,
+                  title: Text('Controller $count'),
+                  value: count,
+                  groupValue: controller.controller,
                   onChanged: (int? value) {
                     setState(() {
-                      selected = value!;
+                      controller.controller = value!;
                     });
                   },
                 ),
@@ -73,14 +65,14 @@ class SetupControllerPageState extends State<SetupControllerPage> {
                 ),
                 onPressed: () {
                   setState(() {
-                    isCalibrating = !isCalibrating;
-                    Status.sndCalibrateController(selected, isCalibrating);
+                    controller.isCalibrating = !controller.isCalibrating;
+                    Status.sndController(controller);
                   });
                 },
-                child: Text(isCalibrating ? 'Calibrating...' : 'Calibrate'),
+                child: Text(controller.isCalibrating ? 'Calibrating...' : 'Calibrate'),
               ),
               SizedBox(height: 16),
-              if (isCalibrating)
+              if (controller.isCalibrating)
                 Row(
                   children: [
                     SizedBox(width: 40, child: Text('Min')),
@@ -91,14 +83,14 @@ class SetupControllerPageState extends State<SetupControllerPage> {
                         child: SizedBox(
                             width: 120,
                             child: Text(
-                              '$minValue',
+                              '${controller.minValue}',
                               textAlign: TextAlign.center,
                               style: TextStyle(fontWeight: FontWeight.bold),
                             ))),
                   ],
                 ),
               SizedBox(height: 16),
-              if (isCalibrating)
+              if (controller.isCalibrating)
                 Row(
                   children: [
                     SizedBox(width: 40, child: Text('Max')),
@@ -109,7 +101,7 @@ class SetupControllerPageState extends State<SetupControllerPage> {
                         child: SizedBox(
                             width: 120,
                             child: Text(
-                              '$maxValue',
+                              '${controller.maxValue}',
                               textAlign: TextAlign.center,
                               style: TextStyle(fontWeight: FontWeight.bold),
                             ))),

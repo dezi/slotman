@@ -6,7 +6,7 @@ class Status {
 
   static int numberOfTracks = 0;
 
-  static void initialize() async {
+  static Future<void> initialize() async {
     var tracks = Tracks(mode:'get');
     Socket.transmit(jsonEncode(tracks));
   }

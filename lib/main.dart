@@ -11,9 +11,9 @@ import 'package:slotman/socket.dart';
 import 'package:slotman/status.dart';
 
 void main() async {
-  Socket.initialize();
-  Locals.initialize();
-  Status.initialize();
+  await Locals.initialize();
+  await Socket.initialize();
+  await Status.initialize();
   runApp(MainApp());
 }
 

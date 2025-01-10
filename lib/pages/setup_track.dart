@@ -14,6 +14,8 @@ class SetupTrackPage extends StatefulWidget {
 }
 
 class _SetupTrackPageState extends State<SetupTrackPage> {
+  int numberOfTracks = Status.numberOfTracks;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,38 +26,52 @@ class _SetupTrackPageState extends State<SetupTrackPage> {
       drawer: MainDrawer(),
       body: Center(
         child: SizedBox(
-          width: 300,
-          child: Column(children: [
+          width: 200,
+          child: ListView(children: [
             SizedBox(height: 16),
             RadioListTile<int>(
               title: Text('2 Tracks'),
               value: 2,
-              groupValue: Status.numberOfTracks,
+              groupValue: numberOfTracks,
               onChanged: (int? value) {
                 setState(() {
-                  Status.sndNumberOfTracks(value!);
+                  numberOfTracks = value!;
                 });
               },
             ),
             RadioListTile<int>(
               title: Text('4 Tracks'),
               value: 4,
-              groupValue: Status.numberOfTracks,
+              groupValue: numberOfTracks,
               onChanged: (int? value) {
                 setState(() {
-                  Status.sndNumberOfTracks(value!);
+                  numberOfTracks = value!;
                 });
               },
             ),
             RadioListTile<int>(
               title: Text('6 Tracks'),
               value: 6,
-              groupValue: Status.numberOfTracks,
+              groupValue: numberOfTracks,
               onChanged: (int? value) {
                 setState(() {
-                  Status.sndNumberOfTracks(value!);
+                  numberOfTracks = value!;
                 });
               },
+            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                foregroundColor: Colors.blue,
+                minimumSize: Size(200, 48),
+                padding: EdgeInsets.symmetric(horizontal: 16),
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(2)),
+                ),
+              ),
+              onPressed: () {
+                Status.sndNumberOfTracks(numberOfTracks);
+              },
+              child: Text('Update'),
             )
           ]),
         ),

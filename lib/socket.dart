@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'package:slotman/locals.dart';
 import 'package:slotman/messages/message.dart';
 import 'package:slotman/messages/tracks.dart';
 import 'package:slotman/status.dart';
@@ -8,13 +9,14 @@ import 'package:web_socket_channel/web_socket_channel.dart';
 class Socket {
   static WebSocketChannel? channel;
 
-  static initialize() async {
-    log('########### channel connect ${Uri.base}');
+  static Future<void> initialize() async {
+    if (channel != null) return;
 
-    channel = WebSocketChannel.connect(
-      //Uri.parse('wss://echo.websocket.events'),
-      Uri.parse('ws://localhost:8888/ws'),
-    );
+    var uri = Uri.parse('ws://localhost:8888/ws/${Locals.appUuid}');
+
+    log('########### channel connect ${uri.path}');
+
+    channel = WebSocketChannel.connect(uri);
 
     log('########### channel $channel');
 
@@ -23,7 +25,6 @@ class Socket {
     log('########### channel ready $channel');
 
     channel!.stream.listen((json) {
-
       log('########### channel rcv $json');
       var message = Message.fromJson(jsonDecode(json));
 

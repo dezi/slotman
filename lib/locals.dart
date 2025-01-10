@@ -17,7 +17,7 @@ class Locals {
   static int pilotMinSpeed = 0;
   static int pilotMaxSpeed = 100;
 
-  static void initialize() async {
+  static Future<void> initialize() async {
     prefs = await SharedPreferences.getInstance();
 
     if (prefs?.getBool('initialized') == null) {
@@ -49,31 +49,26 @@ class Locals {
 
   static void savePilotFirstName(String val) {
     prefs?.setString('pilotFirstName', pilotFirstName = val);
-    sndPilot();
   }
 
   static void savePilotLastName(String val) {
     prefs?.setString('pilotLastName', pilotLastName = val);
-    sndPilot();
   }
 
   static void savePilotCarModel(String val) {
     prefs?.setString('pilotCarModel', pilotCarModel = val);
-    sndPilot();
   }
 
   static void savePilotMinSpeed(int percent) {
     if (percent < 0) percent = 0;
     if (percent > 100) percent = 100;
     prefs?.setInt('pilotMinSpeed', pilotMinSpeed = percent);
-    sndPilot();
   }
 
   static void savePilotMaxSpeed(int percent) {
     if (percent < 0) percent = 0;
     if (percent > 100) percent = 100;
     prefs?.setInt('pilotMaxSpeed', pilotMaxSpeed = percent);
-    sndPilot();
   }
 
   static void sndPilot() {

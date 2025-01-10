@@ -109,6 +109,20 @@ class _SetupPilotPageState extends State<SetupPilotPage> {
                 });
               },
             ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                foregroundColor: Colors.blue,
+                minimumSize: Size(200, 48),
+                padding: EdgeInsets.symmetric(horizontal: 16),
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(2)),
+                ),
+              ),
+              onPressed: () {
+                Locals.sndPilot();
+              },
+              child: Text('Update'),
+            )
           ]),
         ),
       ),

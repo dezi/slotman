@@ -14,20 +14,24 @@ class SetupRacePage extends StatefulWidget {
 class SetupRacePageState extends State<SetupRacePage> {
   static SetupRacePageState? injector;
 
+  var race = Status.race.clone();
+
   void setContent() {
-    setState(() {});
+    setState(() {
+      race = Status.race.clone();
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     injector = this;
 
-    var tracks = Status.race.tracks != 0 ? '${Status.race.tracks}' : '';
-    var rounds = Status.race.rounds != 0 ? '${Status.race.rounds}' : '';
+    var tracks = race.tracks != 0 ? '${race.tracks}' : '';
+    var rounds = race.rounds != 0 ? '${race.rounds}' : '';
 
-    TextEditingController titleController = TextEditingController(text: Status.race.title);
-    TextEditingController tracksController = TextEditingController(text: tracks);
-    TextEditingController roundsController = TextEditingController(text: rounds);
+    TextEditingController titleCtl = TextEditingController(text: race.title);
+    TextEditingController tracksCtl = TextEditingController(text: tracks);
+    TextEditingController roundsCtl = TextEditingController(text: rounds);
 
     return Scaffold(
       appBar: AppBar(
@@ -41,7 +45,7 @@ class SetupRacePageState extends State<SetupRacePage> {
           child: Column(children: [
             SizedBox(height: 16),
             TextField(
-              controller: titleController,
+              controller: titleCtl,
               decoration: InputDecoration(
                 labelText: 'Race Title',
                 hintText: 'Please enter the race title',
@@ -49,11 +53,13 @@ class SetupRacePageState extends State<SetupRacePage> {
               ),
               maxLength: 48,
               onChanged: (text) {
-                Status.race.title = text;
+                setState(() {
+                  race.title = text;
+                });
               },
             ),
             TextField(
-              controller: tracksController,
+              controller: tracksCtl,
               decoration: InputDecoration(
                 labelText: 'Number of tracks',
                 hintText: 'Please enter the number of tracks',
@@ -62,12 +68,12 @@ class SetupRacePageState extends State<SetupRacePage> {
               maxLength: 3,
               onChanged: (text) {
                 setState(() {
-                  Status.race.tracks = int.parse(text);
+                  race.tracks = int.parse(text);
                 });
               },
             ),
             TextField(
-              controller: roundsController,
+              controller: roundsCtl,
               decoration: InputDecoration(
                 labelText: 'Number of rounds',
                 hintText: 'Please enter the number of rounds',
@@ -76,7 +82,7 @@ class SetupRacePageState extends State<SetupRacePage> {
               maxLength: 3,
               onChanged: (text) {
                 setState(() {
-                  Status.race.rounds = int.parse(text);
+                  race.rounds = int.parse(text);
                 });
               },
             ),
@@ -90,7 +96,7 @@ class SetupRacePageState extends State<SetupRacePage> {
                 ),
               ),
               onPressed: () {
-                Status.sndRace();
+                Status.sndRace(race);
               },
               child: Text('Update'),
             )

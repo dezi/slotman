@@ -26,4 +26,8 @@ class Race {
         'tracks': tracks,
         'rounds': rounds,
       };
+
+  Race clone() {
+    return Race.fromJson(toJson());
+  }
 }

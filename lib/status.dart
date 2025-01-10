@@ -27,7 +27,8 @@ class Status {
     Socket.transmit(jsonEncode(pilot));
   }
 
-  static void sndRace() {
+  static void sndRace(Race race) {
+    Status.race = race;
     Socket.transmit(jsonEncode(race));
   }
 

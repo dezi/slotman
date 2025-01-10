@@ -13,20 +13,17 @@ class SetupPilotPage extends StatefulWidget {
 }
 
 class SetupPilotPageState extends State<SetupPilotPage> {
-
   Pilot pilot = Status.pilot.clone();
-
-  TextEditingController appUuidController = TextEditingController(text: Status.pilot.appUuid);
-  TextEditingController firstNameController = TextEditingController(text: Status.pilot.firstName);
-  TextEditingController lastNameController = TextEditingController(text: Status.pilot.lastName);
-  TextEditingController carModelController = TextEditingController(text: Status.pilot.carModel);
-  TextEditingController minSpeedController =
-      TextEditingController(text: '${Status.pilot.minSpeed}');
-  TextEditingController maxSpeedController =
-      TextEditingController(text: '${Status.pilot.maxSpeed}');
 
   @override
   Widget build(BuildContext context) {
+    TextEditingController appUuidCtl = TextEditingController(text: pilot.appUuid);
+    TextEditingController firstNameCtl = TextEditingController(text: pilot.firstName);
+    TextEditingController lastNameCtl = TextEditingController(text: pilot.lastName);
+    TextEditingController carModelCtl = TextEditingController(text: pilot.carModel);
+    TextEditingController minSpeedCtl = TextEditingController(text: '${pilot.minSpeed}');
+    TextEditingController maxSpeedCtl = TextEditingController(text: '${pilot.maxSpeed}');
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
@@ -39,7 +36,7 @@ class SetupPilotPageState extends State<SetupPilotPage> {
           child: Column(children: [
             SizedBox(height: 16),
             TextField(
-              controller: appUuidController,
+              controller: appUuidCtl,
               decoration: InputDecoration(
                 labelText: 'App Uuid',
                 border: OutlineInputBorder(),
@@ -48,7 +45,7 @@ class SetupPilotPageState extends State<SetupPilotPage> {
             ),
             SizedBox(height: 16),
             TextField(
-              controller: firstNameController,
+              controller: firstNameCtl,
               decoration: InputDecoration(
                 labelText: 'First Name',
                 hintText: 'Please enter your first name',
@@ -62,7 +59,7 @@ class SetupPilotPageState extends State<SetupPilotPage> {
               },
             ),
             TextField(
-              controller: lastNameController,
+              controller: lastNameCtl,
               decoration: InputDecoration(
                 labelText: 'Last Name',
                 hintText: 'Please enter your last name',
@@ -76,7 +73,7 @@ class SetupPilotPageState extends State<SetupPilotPage> {
               },
             ),
             TextField(
-              controller: carModelController,
+              controller: carModelCtl,
               decoration: InputDecoration(
                 labelText: 'Car Model',
                 hintText: 'Please enter your car model',
@@ -90,7 +87,7 @@ class SetupPilotPageState extends State<SetupPilotPage> {
               },
             ),
             TextField(
-              controller: minSpeedController,
+              controller: minSpeedCtl,
               decoration: InputDecoration(
                 labelText: 'Controller Min Speed %',
                 hintText: 'Please enter controller min speed %',
@@ -104,7 +101,7 @@ class SetupPilotPageState extends State<SetupPilotPage> {
               },
             ),
             TextField(
-              controller: maxSpeedController,
+              controller: maxSpeedCtl,
               decoration: InputDecoration(
                 labelText: 'Controller Max Speed %',
                 hintText: 'Please enter controller max speed %',

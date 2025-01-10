@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:slotman/locals.dart';
 import 'package:slotman/messages/controller.dart';
 import 'package:slotman/messages/message.dart';
+import 'package:slotman/messages/pilot.dart';
 import 'package:slotman/messages/race.dart';
 import 'package:slotman/messages/tracks.dart';
 import 'package:slotman/status.dart';
@@ -43,6 +44,9 @@ class Socket {
         case 'controller|set':
           var controller = Controller.fromJson(jsonDecode(json));
           Status.rcvController(controller);
+        case 'pilot|set':
+          var pilot = Pilot.fromJson(jsonDecode(json));
+          Status.rcvPilot(pilot);
       }
     });
   }

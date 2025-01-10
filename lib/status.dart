@@ -14,17 +14,23 @@ class Status {
   static Pilot pilot = Pilot();
   static Tracks tracks = Tracks();
   static Controller controller = Controller();
+  static Map<String,Pilot> pilots = <String,Pilot>{};
 
   static Future<void> initialize() async {
     var tracks = Tracks(mode: 'get');
     Socket.transmit(jsonEncode(tracks));
     var race = Race(mode: 'get');
     Socket.transmit(jsonEncode(race));
+    Socket.transmit(jsonEncode(pilot));
   }
 
   static void sndPilot(Pilot pilot) {
     Status.pilot = pilot;
     Socket.transmit(jsonEncode(pilot));
+  }
+
+  static void rcvPilot(Pilot pilot) {
+    pilots[pilot.appUuid] = pilot;
   }
 
   static void sndRace(Race race) {

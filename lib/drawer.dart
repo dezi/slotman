@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:slotman/locals.dart';
+import 'package:slotman/status.dart';
 
 class MainDrawer extends StatelessWidget {
   const MainDrawer({super.key});
@@ -8,16 +8,16 @@ class MainDrawer extends StatelessWidget {
   Widget build(BuildContext context) {
 
     String initials = "";
-    if (Locals.pilotFirstName.isNotEmpty) initials += Locals.pilotFirstName[0];
-    if (Locals.pilotLastName.isNotEmpty) initials += Locals.pilotLastName[0];
+    if (Status.pilot.firstName.isNotEmpty) initials += Status.pilot.firstName[0];
+    if (Status.pilot.lastName.isNotEmpty) initials += Status.pilot.lastName[0];
 
     return Drawer(
       child: ListView(
         padding: EdgeInsets.zero,
         children: <Widget>[
           UserAccountsDrawerHeader(
-            accountName: Text("${Locals.pilotFirstName} ${Locals.pilotLastName}"),
-            accountEmail: Text(Locals.pilotCarModel),
+            accountName: Text("${Status.pilot.firstName} ${Status.pilot.lastName}"),
+            accountEmail: Text(Status.pilot.carModel),
             currentAccountPicture: CircleAvatar(
               backgroundColor: Colors.orange,
               child: Text(

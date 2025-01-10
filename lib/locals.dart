@@ -70,6 +70,7 @@ class Locals {
   }
 
   static void sndPilot() {
+
     var pilot = Pilot(
       appUuid: appUuid,
       firstName: pilotFirstName,
@@ -79,6 +80,6 @@ class Locals {
       maxSpeed: pilotMaxSpeed,
     );
 
-    Status.sndPilot(pilot);
+    Status.pilot = pilot;
   }
 }

@@ -33,6 +33,30 @@ class SetupRacePageState extends State<SetupRacePage> {
     TextEditingController tracksCtl = TextEditingController(text: tracks);
     TextEditingController roundsCtl = TextEditingController(text: rounds);
 
+    List<Widget> pilots = [];
+
+    Status.pilots.forEach((appUuid, pilot) {
+      String initials = "";
+      if (pilot.firstName.isNotEmpty) initials += pilot.firstName[0];
+      if (pilot.lastName.isNotEmpty) initials += pilot.lastName[0];
+
+      pilots.add(SizedBox(height: 16));
+
+      pilots.add(
+        UserAccountsDrawerHeader(
+          accountName: Text("${pilot.firstName} ${pilot.lastName}"),
+          accountEmail: Text(pilot.carModel),
+          currentAccountPicture: CircleAvatar(
+            backgroundColor: Colors.orange,
+            child: Text(
+              initials,
+              style: TextStyle(fontSize: 40.0),
+            ),
+          ),
+        ),
+      );
+    });
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
@@ -99,7 +123,8 @@ class SetupRacePageState extends State<SetupRacePage> {
                 Status.sndRace(race);
               },
               child: Text('Update'),
-            )
+            ),
+            ...pilots,
           ]),
         ),
       ),

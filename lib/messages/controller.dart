@@ -9,19 +9,12 @@ class Controller {
   int maxValue;
 
   Controller({
-    required this.mode,
+    this.mode = 'set',
     this.controller = 0,
     this.isCalibrating = false,
     this.minValue = 0,
     this.maxValue = 0,
   });
-
-  Controller.clone(Controller controller)
-      : mode = controller.mode,
-        controller = controller.controller,
-        isCalibrating = controller.isCalibrating,
-        minValue = controller.minValue,
-        maxValue = controller.maxValue;
 
   Controller.fromJson(Map<String, dynamic> json)
       : mode = json['mode'] as String,
@@ -38,4 +31,8 @@ class Controller {
         'minValue': minValue,
         'maxValue': maxValue,
       };
+
+  Controller clone() {
+    return Controller.fromJson(toJson());
+  }
 }

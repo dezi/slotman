@@ -4,11 +4,10 @@ class Tracks {
 
   int tracks;
 
-  Tracks({required this.mode, this.tracks = 0});
-
-  Tracks.clone(Tracks tracks)
-      : mode = tracks.mode,
-        tracks = tracks.tracks;
+  Tracks({
+    this.mode = 'set',
+    this.tracks = 0,
+  });
 
   Tracks.fromJson(Map<String, dynamic> json)
       : mode = json['mode'] as String,
@@ -19,4 +18,8 @@ class Tracks {
         'mode': mode,
         'tracks': tracks,
       };
+
+  Tracks clone() {
+    return Tracks.fromJson(toJson());
+  }
 }

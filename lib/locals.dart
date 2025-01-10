@@ -1,8 +1,6 @@
-import 'dart:convert';
-
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:slotman/messages/pilot.dart';
-import 'package:slotman/socket.dart';
+import 'package:slotman/status.dart';
 import 'package:uuid/uuid.dart';
 
 class Locals {
@@ -20,7 +18,7 @@ class Locals {
   static Future<void> initialize() async {
     prefs = await SharedPreferences.getInstance();
 
-    if (prefs?.getBool('initialized') == null) {
+    if (prefs?.getString('appUuid') == null) {
       saveAppUuid(Uuid().v4());
 
       savePilotFirstName('Max');
@@ -29,8 +27,6 @@ class Locals {
 
       savePilotMinSpeed(0);
       savePilotMaxSpeed(100);
-
-      prefs?.setBool('initialized', true);
     }
 
     appUuid = prefs?.getString('appUuid') ?? '';
@@ -41,6 +37,8 @@ class Locals {
 
     pilotMinSpeed = prefs?.getInt('pilotMinSpeed') ?? 0;
     pilotMaxSpeed = prefs?.getInt('pilotMaxSpeed') ?? 0;
+
+    sndPilot();
   }
 
   static void saveAppUuid(String val) {
@@ -73,7 +71,6 @@ class Locals {
 
   static void sndPilot() {
     var pilot = Pilot(
-      mode: 'set',
       appUuid: appUuid,
       firstName: pilotFirstName,
       lastName: pilotLastName,
@@ -82,6 +79,6 @@ class Locals {
       maxSpeed: pilotMaxSpeed,
     );
 
-    Socket.transmit(jsonEncode(pilot));
+    Status.sndPilot(pilot);
   }
 }

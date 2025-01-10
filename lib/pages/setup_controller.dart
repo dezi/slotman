@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:slotman/drawer.dart';
-import 'package:slotman/messages/controller.dart';
 import 'package:slotman/status.dart';
 
 class SetupControllerPage extends StatefulWidget {
@@ -16,11 +15,11 @@ class SetupControllerPageState extends State<SetupControllerPage> {
 
   static SetupControllerPageState? injector;
 
-  var controller = Controller.clone(Status.controller);
+  var controller = Status.controller.clone();
 
   void setContent() {
     setState(() {
-      controller = Controller.clone(Status.controller);
+      controller = Status.controller.clone();
     });
   }
 

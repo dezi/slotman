@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:slotman/locals.dart';
 import 'package:slotman/pages/join.dart';
@@ -11,8 +10,8 @@ import 'package:slotman/socket.dart';
 import 'package:slotman/status.dart';
 
 void main() async {
-  await Locals.initialize();
   await Socket.initialize();
+  await Locals.initialize();
   await Status.initialize();
   runApp(MainApp());
 }

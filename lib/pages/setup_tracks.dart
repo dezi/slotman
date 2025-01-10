@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:slotman/drawer.dart';
-import 'package:slotman/messages/tracks.dart';
 import 'package:slotman/status.dart';
-
-import '../locals.dart';
 
 class SetupTracksPage extends StatefulWidget {
   const SetupTracksPage({super.key});
@@ -18,11 +15,11 @@ class SetupTracksPageState extends State<SetupTracksPage> {
 
   static SetupTracksPageState? injector;
 
-  var tracks = Tracks.clone(Status.tracks);
+  var tracks = Status.tracks.clone();
 
   void setContent() {
     setState(() {
-      tracks = Tracks.clone(Status.tracks);
+      tracks = Status.tracks.clone();
     });
   }
 

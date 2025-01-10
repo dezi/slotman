@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:slotman/drawer.dart';
-import 'package:slotman/locals.dart';
+import 'package:slotman/messages/pilot.dart';
+import 'package:slotman/status.dart';
 
 class SetupPilotPage extends StatefulWidget {
   const SetupPilotPage({super.key});
@@ -8,18 +9,21 @@ class SetupPilotPage extends StatefulWidget {
   final String title = 'Pilot Setup';
 
   @override
-  State<SetupPilotPage> createState() => _SetupPilotPageState();
+  State<SetupPilotPage> createState() => SetupPilotPageState();
 }
 
-class _SetupPilotPageState extends State<SetupPilotPage> {
-  TextEditingController appUuidController = TextEditingController(text: Locals.appUuid);
-  TextEditingController firstNameController = TextEditingController(text: Locals.pilotFirstName);
-  TextEditingController lastNameController = TextEditingController(text: Locals.pilotLastName);
-  TextEditingController carModelController = TextEditingController(text: Locals.pilotCarModel);
+class SetupPilotPageState extends State<SetupPilotPage> {
+
+  Pilot pilot = Status.pilot.clone();
+
+  TextEditingController appUuidController = TextEditingController(text: Status.pilot.appUuid);
+  TextEditingController firstNameController = TextEditingController(text: Status.pilot.firstName);
+  TextEditingController lastNameController = TextEditingController(text: Status.pilot.lastName);
+  TextEditingController carModelController = TextEditingController(text: Status.pilot.carModel);
   TextEditingController minSpeedController =
-      TextEditingController(text: '${Locals.pilotMinSpeed}');
+      TextEditingController(text: '${Status.pilot.minSpeed}');
   TextEditingController maxSpeedController =
-      TextEditingController(text: '${Locals.pilotMaxSpeed}');
+      TextEditingController(text: '${Status.pilot.maxSpeed}');
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +56,9 @@ class _SetupPilotPageState extends State<SetupPilotPage> {
               ),
               maxLength: 20,
               onChanged: (text) {
-                Locals.savePilotFirstName(text);
+                setState(() {
+                  pilot.firstName = text;
+                });
               },
             ),
             TextField(
@@ -64,7 +70,9 @@ class _SetupPilotPageState extends State<SetupPilotPage> {
               ),
               maxLength: 20,
               onChanged: (text) {
-                Locals.savePilotLastName(text);
+                setState(() {
+                  pilot.lastName = text;
+                });
               },
             ),
             TextField(
@@ -76,7 +84,9 @@ class _SetupPilotPageState extends State<SetupPilotPage> {
               ),
               maxLength: 20,
               onChanged: (text) {
-                Locals.savePilotCarModel(text);
+                setState(() {
+                  pilot.carModel = text;
+                });
               },
             ),
             TextField(
@@ -89,7 +99,7 @@ class _SetupPilotPageState extends State<SetupPilotPage> {
               maxLength: 3,
               onChanged: (text) {
                 setState(() {
-                  Locals.savePilotMinSpeed(int.parse(text));
+                  pilot.minSpeed = int.parse(text);
                 });
               },
             ),
@@ -103,7 +113,7 @@ class _SetupPilotPageState extends State<SetupPilotPage> {
               maxLength: 3,
               onChanged: (text) {
                 setState(() {
-                  Locals.savePilotMaxSpeed(int.parse(text));
+                  pilot.maxSpeed = int.parse(text);
                 });
               },
             ),
@@ -117,7 +127,7 @@ class _SetupPilotPageState extends State<SetupPilotPage> {
                 ),
               ),
               onPressed: () {
-                Locals.sndPilot();
+                Status.sndPilot(pilot);
               },
               child: Text('Update'),
             )

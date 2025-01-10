@@ -1,13 +1,13 @@
 class Race {
   final String what = 'race';
-  final String mode;
+  String mode;
 
   String title;
   int tracks;
   int rounds;
 
   Race({
-    required this.mode,
+    this.mode = 'set',
     this.title = '',
     this.tracks = 0,
     this.rounds = 0,

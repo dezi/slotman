@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:slotman/locals.dart';
 import 'package:slotman/messages/controller.dart';
 import 'package:slotman/messages/message.dart';
+import 'package:slotman/messages/race.dart';
 import 'package:slotman/messages/tracks.dart';
 import 'package:slotman/status.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
@@ -31,15 +32,17 @@ class Socket {
       var message = Message.fromJson(jsonDecode(json));
 
       switch (message.tag()) {
+        case 'race|set':
+          var race = Race.fromJson(jsonDecode(json));
+          Status.rcvRace(race);
+          break;
         case 'tracks|set':
-        case 'tracks|get':
           var tracks = Tracks.fromJson(jsonDecode(json));
           Status.rcvNumberOfTracks(tracks);
           break;
         case 'controller|set':
           var controller = Controller.fromJson(jsonDecode(json));
           Status.rcvCalibrateController(controller);
-
       }
     });
   }

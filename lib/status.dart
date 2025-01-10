@@ -1,7 +1,9 @@
 import 'dart:convert';
 import 'package:slotman/messages/controller.dart';
+import 'package:slotman/messages/race.dart';
 import 'package:slotman/messages/tracks.dart';
 import 'package:slotman/pages/setup_controller.dart';
+import 'package:slotman/pages/setup_race.dart';
 import 'package:slotman/socket.dart';
 
 class Status {
@@ -9,9 +11,24 @@ class Status {
   static int selectedController = 0;
   static bool isCalibrating = false;
 
+  static Race race = Race(mode: 'set', title: '', tracks: 0, rounds: 0);
+
   static Future<void> initialize() async {
     var tracks = Tracks(mode: 'get');
     Socket.transmit(jsonEncode(tracks));
+    var race = Race(mode: 'get');
+    Socket.transmit(jsonEncode(race));
+  }
+
+  static void sndRace() {
+    Socket.transmit(jsonEncode(race));
+  }
+
+  static void rcvRace(Race race) {
+    Status.race = race;
+    if (SetupRacePageState.injector != null) {
+      SetupRacePageState.injector!.setContent();
+    }
   }
 
   static void sndNumberOfTracks(int numberOfTracks) {

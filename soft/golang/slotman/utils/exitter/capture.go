@@ -2,9 +2,9 @@ package exitter
 
 import (
 	"fmt"
-	"log"
 	"os"
 	"os/signal"
+	"slotman/utils/log"
 	"syscall"
 )
 

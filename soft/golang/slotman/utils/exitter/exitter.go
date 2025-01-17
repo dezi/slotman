@@ -1,7 +1,7 @@
 package exitter
 
 import (
-	"log"
+	"slotman/utils/log"
 	"time"
 )
 

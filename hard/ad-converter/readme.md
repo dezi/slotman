@@ -34,6 +34,11 @@ Material List
 
   1 x Enameled copper wire 0.4 mm (https://www.amazon.de/dp/B0DCJQJJCY)
 
+Tool Set
+========
+
+[Look here...](../a2z-tools/readme.md)
+
 Step 1
 ======
 

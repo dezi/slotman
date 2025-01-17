@@ -1,12 +1,12 @@
 # Analog-Digital Converters for Carrera-Go Speed Controllers
 
 Converts the resistor values from the original **Carrera-Go Speed 
-Controllers** into digital value for further processing.
+Controllers** into digital values for further processing.
 
 The conversion is done via dual **ADS1115** analog/digital with 4
 analog inputs each yielding in 8 tracks.
 
-The data is sent via the **I2C** bus to the **Raspberry Pi**.
+The data is exchanged via the **I2C** bus with the **Raspberry Pi**.
 
 ## Benefits
 

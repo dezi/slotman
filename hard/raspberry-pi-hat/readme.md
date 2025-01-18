@@ -61,7 +61,7 @@ sure they are standing straight.**
 
 [<img src="images/raspberry-pi-hat-step-02-b.jpg" width="400"/>](images/raspberry-pi-hat-step-02-b.jpg)
 
-Step 2
+Step 3
 ======
 
 Now we start with the additional 5V pin header because it is simple.
@@ -88,3 +88,32 @@ Solder them to 5V pin and GND pin as displayed in the image.
 
 [<img src="images/raspberry-pi-hat-gpio-pins.jpg" width="400"/>](images/raspberry-pi-hat-gpio-pins.jpg)
 
+Step 4
+======
+
+We continue with the 4 pin I2C connector.
+
+Prepare Your connecting wires.
+
+[<img src="images/raspberry-pi-hat-step-04-a.jpg" width="400"/>](images/raspberry-pi-hat-step-04-a.jpg)
+
+Pull the wires tight with a tweezer or plunge.
+
+[<img src="images/raspberry-pi-hat-step-04-b.jpg" width="400"/>](images/raspberry-pi-hat-step-04-b.jpg)
+
+Unconnected wire after pulling them tight.
+
+[<img src="images/raspberry-pi-hat-step-04-c.jpg" width="400"/>](images/raspberry-pi-hat-step-04-c.jpg)
+
+Solder them as displayed in the image.
+
+[<img src="images/raspberry-pi-hat-step-04-d.jpg" width="400"/>](images/raspberry-pi-hat-step-04-d.jpg)
+
+The I2C connector pins from left to right:
+
+- 5V
+- GND
+- SCL (GPIO 3 Serial Clock I2C)
+- SDA (GPIO 2 Serial Data I2C)
+
+[<img src="images/raspberry-pi-hat-gpio-pins.jpg" width="400"/>](images/raspberry-pi-hat-gpio-pins.jpg)

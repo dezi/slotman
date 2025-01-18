@@ -101,7 +101,7 @@ Pull the wires tight with a tweezer or plunge.
 
 [<img src="images/raspberry-pi-hat-step-04-b.jpg" width="400"/>](images/raspberry-pi-hat-step-04-b.jpg)
 
-Unconnected wire after pulling them tight.
+Unconnected wires after pulling them tight.
 
 [<img src="images/raspberry-pi-hat-step-04-c.jpg" width="400"/>](images/raspberry-pi-hat-step-04-c.jpg)
 
@@ -117,3 +117,37 @@ The I2C connector pins from left to right:
 - SDA (GPIO 2 Serial Data I2C)
 
 [<img src="images/raspberry-pi-hat-gpio-pins.jpg" width="400"/>](images/raspberry-pi-hat-gpio-pins.jpg)
+
+Step 5
+======
+
+We continue with the 8 pin SPI-0 connector.
+
+Prepare Your 7 connecting wires.
+
+[<img src="images/raspberry-pi-hat-step-05-a.jpg" width="400"/>](images/raspberry-pi-hat-step-05-a.jpg)
+
+Unconnected wires after pulling them tight.
+
+[<img src="images/raspberry-pi-hat-step-05-b.jpg" width="400"/>](images/raspberry-pi-hat-step-05-b.jpg)
+
+Unconnected wires before soldering.
+
+[<img src="images/raspberry-pi-hat-step-05-c.jpg" width="400"/>](images/raspberry-pi-hat-step-05-c.jpg)
+
+Connected wires after soldering.
+
+[<img src="images/raspberry-pi-hat-step-05-d.jpg" width="400"/>](images/raspberry-pi-hat-step-05-d.jpg)
+
+The SPI-0 connector pins from left to right:
+
+- 3.3V
+- GND
+- SCLK (GPIO 11 SCXL SPI 0)
+- MISO (GPIO 9 MISO SPI 0)
+- MOSI (GPIO 10 MOSI SPI 0)
+- CE0 (GPIO 8 Chip Enabled-CE0 SPI 0)
+- CE1 (GPIO 7 Chip Enabled-CE1 SPI 0)
+
+[<img src="images/raspberry-pi-hat-gpio-pins.jpg" width="400"/>](images/raspberry-pi-hat-gpio-pins.jpg)
+

@@ -1,9 +1,7 @@
 package gc9a01
 
 import (
-	"image/jpeg"
 	"math/rand"
-	"os"
 	"slotman/utils/log"
 	"time"
 )
@@ -29,25 +27,15 @@ func TestDisplay() {
 
 	_ = gc9a01.SetOrientation(2)
 
-	f, err := os.Open("/home/liesa/dezi.profil.jpg")
-	if err != nil {
-		log.Cerror(err)
-		return
-	}
-
-	rgbImage, err := jpeg.Decode(f)
-	if err != nil {
-		log.Cerror(err)
-		return
-	}
-
-	_ = f.Close()
+	img, err := gc9a01.LoadImage("/home/liesa/dezi.profil.jpg")
 
 	log.Printf("Profil wid=%d hei=%d",
-		rgbImage.Bounds().Size().X,
-		rgbImage.Bounds().Size().Y)
+		img.Bounds().Size().X,
+		img.Bounds().Size().Y)
 
-	err = gc9a01.BlipFullImage(rgbImage)
+	//gg.NewContextForRGBA()
+
+	err = gc9a01.BlipFullImage(img)
 	if err != nil {
 		log.Cerror(err)
 		return

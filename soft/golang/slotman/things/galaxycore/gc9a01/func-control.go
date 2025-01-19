@@ -2,8 +2,8 @@ package gc9a01
 
 import (
 	"errors"
+	"golang.org/x/image/draw"
 	"image"
-	"image/draw"
 	"slotman/utils/log"
 )
 
@@ -13,7 +13,7 @@ func (se *GC9A01) BlipFullImage(img image.Image) (err error) {
 		img.Bounds().Size().Y != ScreenHeight {
 
 		rgb := image.NewRGBA(image.Rect(0, 0, 240, 240))
-		draw.Draw(rgb, rgb.Bounds(), img, image.ZP, draw.Src)
+		draw.BiLinear.Scale(rgb, rgb.Bounds(), img, img.Bounds(), draw.Src, nil)
 		img = rgb
 	}
 

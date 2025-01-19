@@ -20,19 +20,19 @@ The data is exchanged via the **I2C** bus with the **Raspberry Pi**.
 Material List
 =============
 
-  2 x I2C ADS1115 16Bit ADC 4 channel Module Gain Amplifier (https://www.amazon.de/dp/B07RJT3GHC)
+  2 x I2C ADS1115 16Bit ADC 4 Channel Module Gain Amplifier (https://www.amazon.de/dp/B07RJT3GHC)
 
-  1 x Development board 24 x 18 holes (https://www.amazon.de/dp/B0734XYJPM)
+  1 x Development Board 24 x 18 holes (https://www.amazon.de/dp/B0734XYJPM)
 
 16 x 1k Ohm resistor (https://www.amazon.de/dp/B0BMXBZCTF) 
 
   1 x 2.54mm Breakaway 40 Pin Right Angle Single Row Pin Header PCB Connector (https://www.amazon.de/dp/B01MZE0XGZ)
 
-  1 x 2.54mm Breakaway 40 Pin Female Header PCB Connector (https://www.amazon.de/dp/B01MZE0XGZ)
+  1 x 2.54mm Breakaway 40 Pin Female Header PCB Connector (https://www.amazon.de/dp/B07DBY753C)
 
-  1 x Distance holder set (https://www.amazon.de/dp/B08VD1ZCFJ)
+  1 x Distance Holder Set (https://www.amazon.de/dp/B08VD1ZCFJ)
 
-  1 x Enameled copper wire 0.4 mm (https://www.amazon.de/dp/B0DCJQJJCY)
+  1 x Enameled Copper Wire 0.4 mm (https://www.amazon.de/dp/B0DCJQJJCY)
 
 Tool Set
 ========

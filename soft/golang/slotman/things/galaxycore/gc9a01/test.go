@@ -21,8 +21,6 @@ func TestDisplay() {
 
 	log.Printf("Display GC8A01 device SPI0-0 opened.")
 
-	_ = gc9a01.Initialize()
-
 	_ = gc9a01.SetFrame(Frame{
 		X0: 0,
 		Y0: 0,

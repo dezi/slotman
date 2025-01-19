@@ -32,7 +32,7 @@ func TestDisplay() {
 
 	log.Printf("Display GC8A01 test patterns.")
 
-	chunk := 8
+	chunk := 4
 
 	line := make([]byte, 3*240*chunk)
 

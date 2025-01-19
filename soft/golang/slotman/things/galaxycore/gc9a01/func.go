@@ -2,8 +2,6 @@ package gc9a01
 
 import (
 	"slotman/drivers/gpio"
-	"time"
-
 	"slotman/drivers/spi"
 	"slotman/utils/log"
 )
@@ -141,11 +139,6 @@ func (se *GC9A01) Initialize() (err error) {
 
 	_ = se.WriteCommand(0x36)
 	_ = se.WriteByte(0x18)
-
-	// #define COLOR_MODE          0x3A
-	// #define COLOR_MODE__12_BIT  0x03
-	// #define COLOR_MODE__16_BIT  0x05
-	// #define COLOR_MODE__18_BIT  0x06
 
 	_ = se.WriteCommand(COLOR_MODE)
 	_ = se.WriteByte(COLOR_MODE_18_BIT)
@@ -321,10 +314,10 @@ func (se *GC9A01) Initialize() (err error) {
 	_ = se.WriteCommand(0x21)
 
 	_ = se.WriteCommand(0x11)
-	time.Sleep(time.Millisecond * 120)
+	//time.Sleep(time.Millisecond * 120)
 
 	_ = se.WriteCommand(0x29)
-	time.Sleep(time.Millisecond * 20)
+	//time.Sleep(time.Millisecond * 20)
 
 	return
 }

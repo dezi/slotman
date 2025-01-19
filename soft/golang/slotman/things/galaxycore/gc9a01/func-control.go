@@ -122,7 +122,7 @@ func (se *GC9A01) BlipFullImageRaw(image []byte) (err error) {
 		return
 	}
 
-	err = gc9a01.SetFrame(Frame{X0: 0, Y0: 0, X1: ScreenWidth - 1, Y1: ScreenHeight - 1})
+	err = se.SetFrame(Frame{X0: 0, Y0: 0, X1: ScreenWidth - 1, Y1: ScreenHeight - 1})
 	if err != nil {
 		return
 	}
@@ -131,9 +131,9 @@ func (se *GC9A01) BlipFullImageRaw(image []byte) (err error) {
 
 	for chunkPos := 0; chunkPos < len(image); chunkPos += chunkSize {
 		if chunkPos == 0 {
-			_ = gc9a01.writeMem(image[chunkPos : chunkPos+chunkSize])
+			_ = se.writeMem(image[chunkPos : chunkPos+chunkSize])
 		} else {
-			_ = gc9a01.writeMemCont(image[chunkPos : chunkPos+chunkSize])
+			_ = se.writeMemCont(image[chunkPos : chunkPos+chunkSize])
 		}
 	}
 

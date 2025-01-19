@@ -81,11 +81,13 @@ func TestDisplay() {
 				off++
 			}
 
-			if first {
-				_ = gc9a01.WriteMem(line)
-				first = false
-			} else {
-				_ = gc9a01.WriteMemCont(line)
+			if (x+1)%chunk == 0 {
+				if first {
+					_ = gc9a01.WriteMem(line)
+					first = false
+				} else {
+					_ = gc9a01.WriteMemCont(line)
+				}
 			}
 		}
 

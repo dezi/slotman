@@ -32,12 +32,13 @@ func TestDisplay() {
 
 	log.Printf("Display GC8A01 test patterns.")
 
-	color := make([]byte, 3)
-	line := make([]byte, 3*240)
-	_ = line
+	chunk := 3
+
+	line := make([]byte, 3*240*chunk)
 
 	for {
 
+		color := make([]byte, 3)
 		color[0] = byte(rand.Int31())
 		color[1] = byte(rand.Int31())
 
@@ -56,9 +57,12 @@ func TestDisplay() {
 		//	}
 		//}
 
+		off := 0
 		for x := 0; x < 240; x++ {
 
-			off := 0
+			if x%chunk == 0 {
+				off = 0
+			}
 
 			for y := 0; y < 240; y++ {
 				if x < y {
@@ -75,11 +79,14 @@ func TestDisplay() {
 				off++
 			}
 
-			if x == 0 {
-				_ = gc9a01.WriteMem(line)
-			} else {
-				_ = gc9a01.WriteMemCont(line)
+			if x+1%chunk == 0 {
+				if x == 0 {
+					_ = gc9a01.WriteMem(line)
+				} else {
+					_ = gc9a01.WriteMemCont(line)
+				}
 			}
+
 		}
 
 		//_ = gc9a01.WriteMem(line)

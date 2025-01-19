@@ -13,7 +13,7 @@ func (se *GC9A01) BlipFullImage(img image.Image) (err error) {
 		img.Bounds().Size().Y != ScreenHeight {
 
 		rgb := image.NewRGBA(image.Rect(0, 0, 240, 240))
-		draw.Draw(rgb, rgb.Rect, img, img.Bounds().Size(), draw.Over)
+		draw.Draw(rgb, rgb.Rect, img, img.Bounds().Size(), draw.Src)
 		img = rgb
 	}
 

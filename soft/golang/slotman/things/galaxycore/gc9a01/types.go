@@ -23,6 +23,13 @@ type GC9A01 struct {
 	debug   bool
 }
 
+type Frame struct {
+	X0 uint16
+	Y0 uint16
+	X1 uint16
+	Y1 uint16
+}
+
 type Control interface {
 }
 

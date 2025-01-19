@@ -47,6 +47,14 @@ func TestDisplay() {
 		rgbImage.Bounds().Size().X,
 		rgbImage.Bounds().Size().Y)
 
+	err = gc9a01.BlipFullImage(rgbImage)
+	if err != nil {
+		log.Cerror(err)
+		return
+	}
+
+	time.Sleep(time.Second * 5)
+
 	rawImage := make([]byte, ScreenWidth*ScreenHeight*3)
 
 	for {

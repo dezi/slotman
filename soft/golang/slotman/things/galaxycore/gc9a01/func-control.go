@@ -3,14 +3,17 @@ package gc9a01
 import (
 	"errors"
 	"image"
+	"image/draw"
 )
 
 func (se *GC9A01) BlipFullImage(img image.Image) (err error) {
 
 	if img.Bounds().Size().X != ScreenWidth ||
 		img.Bounds().Size().Y != ScreenHeight {
-		err = errors.New("invalid image size")
-		return
+
+		rgb := image.NewRGBA(image.Rect(0, 0, 240, 240))
+		draw.Draw(rgb, rgb.Rect, img, img.Bounds().Size(), draw.Over)
+		img = rgb
 	}
 
 	rgba, ok := img.(*image.RGBA)

@@ -47,14 +47,14 @@ func (se *GC9A01) OpenSensor() (err error) {
 		return
 	}
 
-	err = gc9a01.SetFrame(Frame{X0: 0, Y0: 0, X1: ScreenWidth - 1, Y1: ScreenHeight - 1})
+	err = se.SetFrame(Frame{X0: 0, Y0: 0, X1: ScreenWidth - 1, Y1: ScreenHeight - 1})
 	if err != nil {
 		_ = se.spi.Close()
 		se.spi = nil
 		return
 	}
 
-	err = gc9a01.SetOrientation(2)
+	err = se.SetOrientation(2)
 	if err != nil {
 		_ = se.spi.Close()
 		se.spi = nil

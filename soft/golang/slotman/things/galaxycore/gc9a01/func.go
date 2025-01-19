@@ -35,7 +35,7 @@ func (se *GC9A01) OpenSensor() (err error) {
 
 	_ = se.spi.SetMode(0)
 	_ = se.spi.SetBitsPerWord(8)
-	_ = se.spi.SetSpeed(1000000)
+	_ = se.spi.SetSpeed(100000)
 
 	se.dcPin, err = gpio.GetPin(25)
 	if err != nil {
@@ -44,12 +44,12 @@ func (se *GC9A01) OpenSensor() (err error) {
 
 	se.dcPin.SetOutput()
 
-	for {
-		se.dcPin.SetLow()
-		time.Sleep(time.Second * 5)
-		se.dcPin.SetHigh()
-		time.Sleep(time.Second * 2)
-	}
+	//for {
+	//	se.dcPin.SetLow()
+	//	time.Sleep(time.Second * 5)
+	//	se.dcPin.SetHigh()
+	//	time.Sleep(time.Second * 2)
+	//}
 
 	return
 }
@@ -154,8 +154,8 @@ func (se *GC9A01) Initialize() (err error) {
 	// #define COLOR_MODE__16_BIT  0x05
 	// #define COLOR_MODE__18_BIT  0x06
 
-	_ = se.WriteCommand(0x3A)
-	_ = se.WriteByte(0x06)
+	_ = se.WriteCommand(COLOR_MODE)
+	_ = se.WriteByte(COLOR_MODE_18_BIT)
 
 	_ = se.WriteCommand(0x90)
 	_ = se.WriteByte(0x08)

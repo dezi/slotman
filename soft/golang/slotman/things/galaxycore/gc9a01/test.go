@@ -55,9 +55,9 @@ func TestDisplay() {
 		//	}
 		//}
 
-		for x := 0; x < 240; x++ {
+		off := 0
 
-			off := 0
+		for x := 0; x < 240; x++ {
 
 			for y := 0; y < 240; y++ {
 				if x < y {

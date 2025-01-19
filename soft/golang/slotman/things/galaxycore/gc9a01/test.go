@@ -30,6 +30,8 @@ func TestDisplay() {
 
 	log.Printf("Display GC8A01 test patterns.")
 
+	_ = gc9a01.SetOrientation(2)
+
 	image := make([]byte, screenWidth*screenHeight*3)
 
 	for {

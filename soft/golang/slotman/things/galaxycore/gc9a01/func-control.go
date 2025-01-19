@@ -27,6 +27,24 @@ func (se *GC9A01) BlipFullRawImage(image []byte) (err error) {
 	return
 }
 
+func (se *GC9A01) SetOrientation(orientation int) (err error) {
+
+	switch orientation {
+	case 0:
+		err = se.writeCommandBytes(0x36, 0x18)
+	case 1:
+		err = se.writeCommandBytes(0x36, 0x28)
+	case 2:
+		err = se.writeCommandBytes(0x36, 0x48)
+	case 3:
+		err = se.writeCommandBytes(0x36, 0x88)
+	default:
+		err = errors.New("wrong orientation")
+	}
+
+	return
+}
+
 func (se *GC9A01) SetFrame(frame Frame) (err error) {
 
 	var data [4]byte

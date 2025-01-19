@@ -3,11 +3,14 @@ package slotdisplay
 import (
 	"slotman/services/iface/slotdisplay"
 	"slotman/services/impl/provider"
+	"slotman/things/galaxycore/gc9a01"
 	"slotman/utils/log"
 	"time"
 )
 
 type Service struct {
+	turnDisplay1 *gc9a01.GC9A01
+	turnDisplay2 *gc9a01.GC9A01
 }
 
 var (

@@ -36,16 +36,14 @@ func TestDisplay() {
 	log.Printf("Profil wid=%d hei=%d", img.Bounds().Size().X, img.Bounds().Size().Y)
 
 	dc := gg.NewContextForRGBA(img.(*image.RGBA))
-	dc.SetRGB255(0x80, 0x00, 0x00)
+	dc.SetRGB255(0xff, 0xff, 0xff)
 
 	font, err := truetype.Parse(goregular.TTF)
 	if err != nil {
 		panic("")
 	}
 
-	face := truetype.NewFace(font, &truetype.Options{
-		Size: 40,
-	})
+	face := truetype.NewFace(font, &truetype.Options{Size: 24})
 
 	dc.SetFontFace(face)
 

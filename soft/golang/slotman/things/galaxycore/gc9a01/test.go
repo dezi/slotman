@@ -28,6 +28,8 @@ func TestDisplay() {
 		Y1: 239,
 	})
 
+	log.Printf("Display GC8A01 test patterns.")
+
 	color := make([]byte, 3)
 
 	// Triangle

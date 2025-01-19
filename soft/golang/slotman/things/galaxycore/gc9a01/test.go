@@ -62,9 +62,7 @@ func TestDisplay() {
 
 		for x := 0; x < 240; x++ {
 
-			if x%chunk == 0 {
-				off = 0
-			}
+			off = 0
 
 			for y := 0; y < 240; y++ {
 				if x < y {
@@ -81,15 +79,12 @@ func TestDisplay() {
 				off++
 			}
 
-			if x+1%chunk == 0 {
-				if first {
-					_ = gc9a01.WriteMem(line)
-					first = false
-				} else {
-					_ = gc9a01.WriteMemCont(line)
-				}
+			if first {
+				_ = gc9a01.WriteMem(line)
+				first = false
+			} else {
+				_ = gc9a01.WriteMemCont(line)
 			}
-
 		}
 
 		//_ = gc9a01.WriteMem(line)

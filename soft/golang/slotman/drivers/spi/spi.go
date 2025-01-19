@@ -82,9 +82,10 @@ func (spi *Device) Send(request []byte) (result []byte, err error) {
 		return nil, errors.New("request size to large")
 	}
 
-	for index, byt := range request {
-		wBuffer[index] = byt
-	}
+	copy(request, wBuffer[:])
+	//for index, byt := range request {
+	//	wBuffer[index] = byt
+	//}
 
 	transfer := SdIoctlTransfer{}
 	transfer.txBuf = uint64(uintptr(unsafe.Pointer(&wBuffer)))

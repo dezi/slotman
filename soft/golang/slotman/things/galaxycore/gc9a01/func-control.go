@@ -232,5 +232,19 @@ func (se *GC9A01) Initialize() (err error) {
 	_ = se.writeCommandBytes(0x11)
 	_ = se.writeCommandBytes(0x29)
 
+	err = se.SetFrame(Frame{X0: 0, Y0: 0, X1: ScreenWidth - 1, Y1: ScreenHeight - 1})
+	if err != nil {
+		_ = se.spi.Close()
+		se.spi = nil
+		return
+	}
+
+	err = se.SetOrientation(2)
+	if err != nil {
+		_ = se.spi.Close()
+		se.spi = nil
+		return
+	}
+
 	return
 }

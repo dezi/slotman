@@ -4,6 +4,7 @@ import (
 	"errors"
 	"image"
 	"image/draw"
+	"slotman/utils/log"
 )
 
 func (se *GC9A01) BlipFullImage(img image.Image) (err error) {
@@ -14,6 +15,12 @@ func (se *GC9A01) BlipFullImage(img image.Image) (err error) {
 		rgb := image.NewRGBA(image.Rect(0, 0, 240, 240))
 		draw.Draw(rgb, rgb.Rect, img, img.Bounds().Size(), draw.Over)
 		img = rgb
+	}
+
+	if img.Bounds().Size().X != ScreenWidth ||
+		img.Bounds().Size().Y != ScreenHeight {
+		err = errors.New("invalid image size")
+		return
 	}
 
 	rgba, ok := img.(*image.RGBA)
@@ -54,6 +61,7 @@ func (se *GC9A01) BlipFullImage(img image.Image) (err error) {
 		src += rgba.Stride
 	}
 
+	log.Printf("########### row= [ %02x ]", raw[0:240*3])
 	err = se.BlipFullImageRaw(raw)
 	return
 }

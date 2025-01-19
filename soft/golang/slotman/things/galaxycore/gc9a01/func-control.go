@@ -1,5 +1,32 @@
 package gc9a01
 
+import "errors"
+
+func (se *GC9A01) BlipFullRawImage(image []byte) (err error) {
+
+	if len(image) != screenWidth*screenHeight*3 {
+		err = errors.New("invalid image size")
+		return
+	}
+
+	err = gc9a01.SetFrame(Frame{X0: 0, Y0: 0, X1: screenWidth - 1, Y1: screenHeight - 1})
+	if err != nil {
+		return
+	}
+
+	chunkSize := screenWidth * 4 * 3
+
+	for chunkPos := 0; chunkPos < len(image); chunkPos += chunkSize {
+		if chunkPos == 0 {
+			_ = gc9a01.writeMem(image[chunkPos : chunkPos+chunkSize])
+		} else {
+			_ = gc9a01.writeMemCont(image[chunkPos : chunkPos+chunkSize])
+		}
+	}
+
+	return
+}
+
 func (se *GC9A01) SetFrame(frame Frame) (err error) {
 
 	var data [4]byte

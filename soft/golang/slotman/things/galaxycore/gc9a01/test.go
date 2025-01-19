@@ -1,7 +1,7 @@
 package gc9a01
 
 import (
-	"image"
+	"image/jpeg"
 	"math/rand"
 	"os"
 	"slotman/utils/log"
@@ -35,7 +35,7 @@ func TestDisplay() {
 		return
 	}
 
-	rgbImage, _, err := image.Decode(f)
+	rgbImage, err := jpeg.Decode(f)
 	if err != nil {
 		log.Cerror(err)
 		return

@@ -30,9 +30,7 @@ func TestDisplay() {
 
 	log.Printf("Display GC8A01 test patterns.")
 
-	chunk := 4
-
-	line := make([]byte, screenWidth*3*chunk)
+	image := make([]byte, screenWidth*screenHeight*3)
 
 	for {
 
@@ -41,14 +39,8 @@ func TestDisplay() {
 		color[1] = byte(rand.Int31())
 
 		off := 0
-		first := true
 
 		for x := 0; x < screenWidth; x++ {
-
-			if x%chunk == 0 {
-				off = 0
-			}
-
 			for y := 0; y < screenHeight; y++ {
 				if x < y {
 					color[2] = 0xFF
@@ -56,24 +48,61 @@ func TestDisplay() {
 					color[2] = 0x00
 				}
 
-				line[off] = color[0]
+				image[off] = color[0]
 				off++
-				line[off] = color[1]
+				image[off] = color[1]
 				off++
-				line[off] = color[2]
+				image[off] = color[2]
 				off++
-			}
-
-			if (x+1)%chunk == 0 {
-				if first {
-					_ = gc9a01.writeMem(line)
-					first = false
-				} else {
-					_ = gc9a01.writeMemCont(line)
-				}
 			}
 		}
 
+		err = gc9a01.BlipFullRawImage(image)
+
 		time.Sleep(time.Millisecond * 250)
 	}
+
+	//chunk := 4
+	//
+	//line := make([]byte, screenWidth*3*chunk)
+	//
+	//for {
+	//
+	//
+	//	off := 0
+	//	first := true
+	//
+	//	for x := 0; x < screenWidth; x++ {
+	//
+	//		if x%chunk == 0 {
+	//			off = 0
+	//		}
+	//
+	//		for y := 0; y < screenHeight; y++ {
+	//			if x < y {
+	//				color[2] = 0xFF
+	//			} else {
+	//				color[2] = 0x00
+	//			}
+	//
+	//			line[off] = color[0]
+	//			off++
+	//			line[off] = color[1]
+	//			off++
+	//			line[off] = color[2]
+	//			off++
+	//		}
+	//
+	//		if (x+1)%chunk == 0 {
+	//			if first {
+	//				_ = gc9a01.writeMem(line)
+	//				first = false
+	//			} else {
+	//				_ = gc9a01.writeMemCont(line)
+	//			}
+	//		}
+	//	}
+	//
+	//	time.Sleep(time.Millisecond * 250)
+	//}
 }

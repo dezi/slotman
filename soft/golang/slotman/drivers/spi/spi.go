@@ -89,7 +89,7 @@ func (spi *Device) Send(request []byte) (result []byte, err error) {
 	}
 
 	transfer := SdIoctlTransfer{}
-	transfer.txBuf = uint64(uintptr(unsafe.Pointer(&wBuffer)))
+	transfer.txBuf = uint64(uintptr(unsafe.Pointer(&request)))
 	transfer.rxBuf = uint64(uintptr(unsafe.Pointer(&rBuffer)))
 	transfer.length = uint32(len(request))
 	transfer.delayUSecs = spi.delay

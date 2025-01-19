@@ -18,3 +18,8 @@ const (
 	COLOR_MODE_18_BIT byte = 0x06
 	MEM_WR_CONT       byte = 0x3C
 )
+
+const (
+	screenWidth  = 240
+	screenHeight = 240
+)

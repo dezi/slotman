@@ -34,7 +34,7 @@ func TestDisplay() {
 
 	chunk := 4
 
-	line := make([]byte, 3*240*chunk)
+	line := make([]byte, screenWidth*3*chunk)
 
 	for {
 
@@ -42,17 +42,17 @@ func TestDisplay() {
 		color[0] = byte(rand.Int31())
 		color[1] = byte(rand.Int31())
 
-		//for x := 0; x < 240; x++ {
-		//	for y := 0; y < 240; y++ {
+		//for x := 0; x < screenWidth; x++ {
+		//	for y := 0; y < screenHeight; y++ {
 		//		if x < y {
 		//			color[2] = 0xFF
 		//		} else {
 		//			color[2] = 0x00
 		//		}
 		//		if x == 0 && y == 0 {
-		//			_ = gc9a01.WriteMem(color)
+		//			_ = gc9a01.writeMem(color)
 		//		} else {
-		//			_ = gc9a01.WriteMemCont(color)
+		//			_ = gc9a01.writeMemCont(color)
 		//		}
 		//	}
 		//}
@@ -60,13 +60,13 @@ func TestDisplay() {
 		off := 0
 		first := true
 
-		for x := 0; x < 240; x++ {
+		for x := 0; x < screenWidth; x++ {
 
 			if x%chunk == 0 {
 				off = 0
 			}
 
-			for y := 0; y < 240; y++ {
+			for y := 0; y < screenHeight; y++ {
 				if x < y {
 					color[2] = 0xFF
 				} else {
@@ -83,15 +83,15 @@ func TestDisplay() {
 
 			if (x+1)%chunk == 0 {
 				if first {
-					_ = gc9a01.WriteMem(line)
+					_ = gc9a01.writeMem(line)
 					first = false
 				} else {
-					_ = gc9a01.WriteMemCont(line)
+					_ = gc9a01.writeMemCont(line)
 				}
 			}
 		}
 
-		//_ = gc9a01.WriteMem(line)
+		//_ = gc9a01.writeMem(line)
 
 		time.Sleep(time.Millisecond * 250)
 	}

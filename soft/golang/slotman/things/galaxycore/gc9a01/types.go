@@ -3,10 +3,11 @@ package gc9a01
 import (
 	"slotman/drivers/gpio"
 	"slotman/drivers/spi"
+	"slotman/utils/simple"
 )
 
 type GC9A01 struct {
-	//Uuid simple.UUIDHex
+	Uuid simple.UUIDHex
 
 	Vendor string
 	Model  string
@@ -19,6 +20,7 @@ type GC9A01 struct {
 	dcPinNo byte
 	dcPin   *gpio.Pin
 	spi     *spi.Device
+
 	handler Handler
 	debug   bool
 }

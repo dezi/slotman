@@ -54,6 +54,13 @@ func (se *GC9A01) OpenSensor() (err error) {
 		return
 	}
 
+	err = gc9a01.SetOrientation(0)
+	if err != nil {
+		_ = se.spi.Close()
+		se.spi = nil
+		return
+	}
+
 	se.spi = spiDev
 	return
 }

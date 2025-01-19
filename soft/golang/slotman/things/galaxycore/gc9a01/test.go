@@ -21,12 +21,7 @@ func TestDisplay() {
 
 	log.Printf("Display GC8A01 device SPI0-0 opened.")
 
-	_ = gc9a01.SetFrame(Frame{
-		X0: 0,
-		Y0: 0,
-		X1: 239,
-		Y1: 239,
-	})
+	_ = gc9a01.SetFrame(Frame{X0: 0, Y0: 0, X1: screenWidth - 1, Y1: screenHeight - 1})
 
 	log.Printf("Display GC8A01 test patterns.")
 
@@ -63,48 +58,4 @@ func TestDisplay() {
 
 		time.Sleep(time.Millisecond * 250)
 	}
-
-	//chunk := 4
-	//
-	//line := make([]byte, screenWidth*3*chunk)
-	//
-	//for {
-	//
-	//
-	//	off := 0
-	//	first := true
-	//
-	//	for x := 0; x < screenWidth; x++ {
-	//
-	//		if x%chunk == 0 {
-	//			off = 0
-	//		}
-	//
-	//		for y := 0; y < screenHeight; y++ {
-	//			if x < y {
-	//				color[2] = 0xFF
-	//			} else {
-	//				color[2] = 0x00
-	//			}
-	//
-	//			line[off] = color[0]
-	//			off++
-	//			line[off] = color[1]
-	//			off++
-	//			line[off] = color[2]
-	//			off++
-	//		}
-	//
-	//		if (x+1)%chunk == 0 {
-	//			if first {
-	//				_ = gc9a01.writeMem(line)
-	//				first = false
-	//			} else {
-	//				_ = gc9a01.writeMemCont(line)
-	//			}
-	//		}
-	//	}
-	//
-	//	time.Sleep(time.Millisecond * 250)
-	//}
 }

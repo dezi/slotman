@@ -62,7 +62,9 @@ func TestDisplay() {
 
 		for x := 0; x < 240; x++ {
 
-			off = 0
+			if x%chunk == 0 {
+				off = 0
+			}
 
 			for y := 0; y < 240; y++ {
 				if x < y {

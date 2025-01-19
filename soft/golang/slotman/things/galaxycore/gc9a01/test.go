@@ -35,11 +35,12 @@ func TestDisplay() {
 		return
 	}
 
-	rgbImage, imageType, err := image.Decode(f)
+	rgbImage, _, err := image.Decode(f)
 	_ = f.Close()
 
-	_ = rgbImage
-	log.Printf("############## imageType=%s", imageType)
+	log.Printf("Profil wid=%d hei=%d",
+		rgbImage.Bounds().Size().X,
+		rgbImage.Bounds().Size().Y)
 
 	rawImage := make([]byte, ScreenWidth*ScreenHeight*3)
 

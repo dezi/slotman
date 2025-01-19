@@ -55,9 +55,9 @@ func TestDisplay() {
 		//	}
 		//}
 
-		off := 0
-
 		for x := 0; x < 240; x++ {
+
+			off := 0
 
 			for y := 0; y < 240; y++ {
 				if x < y {
@@ -74,14 +74,14 @@ func TestDisplay() {
 				off++
 			}
 
-			//if x == 0 {
-			//	_ = gc9a01.WriteMem(line)
-			//} else {
-			//	_ = gc9a01.WriteMemCont(line)
-			//}
+			if x == 0 {
+				_ = gc9a01.WriteMem(line)
+			} else {
+				_ = gc9a01.WriteMemCont(line)
+			}
 		}
 
-		_ = gc9a01.WriteMem(line)
+		//_ = gc9a01.WriteMem(line)
 
 		time.Sleep(time.Millisecond * 250)
 	}

@@ -33,7 +33,7 @@ func TestDisplay() {
 	log.Printf("Display GC8A01 test patterns.")
 
 	color := make([]byte, 3)
-	line := make([]byte, 3*240*240)
+	line := make([]byte, 3*240)
 	_ = line
 
 	for {

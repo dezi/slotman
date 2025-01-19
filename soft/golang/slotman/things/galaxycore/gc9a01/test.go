@@ -3,6 +3,7 @@ package gc9a01
 import (
 	"math/rand"
 	"slotman/utils/log"
+	"time"
 )
 
 var gc9a01 *GC9A01
@@ -82,5 +83,6 @@ func TestDisplay() {
 			}
 		}
 
+		time.Sleep(time.Millisecond * 250)
 	}
 }

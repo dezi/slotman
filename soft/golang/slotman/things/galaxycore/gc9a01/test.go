@@ -1,6 +1,7 @@
 package gc9a01
 
 import (
+	"math/rand"
 	"slotman/utils/log"
 )
 
@@ -35,25 +36,8 @@ func TestDisplay() {
 	for {
 
 		// Triangle
-		color[0] = 0xFF
-		color[1] = 0xFF
-		for x := 0; x < 240; x++ {
-			for y := 0; y < 240; y++ {
-				if x < y {
-					color[2] = 0xFF
-				} else {
-					color[2] = 0x00
-				}
-				if x == 0 && y == 0 {
-					_ = gc9a01.WriteMem(color)
-				} else {
-					_ = gc9a01.WriteMemCont(color)
-				}
-			}
-		}
-
-		color[0] = 0x80
-		color[1] = 0x80
+		color[0] = byte(rand.Int31())
+		color[1] = byte(rand.Int31())
 		for x := 0; x < 240; x++ {
 			for y := 0; y < 240; y++ {
 				if x < y {

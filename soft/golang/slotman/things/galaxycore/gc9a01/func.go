@@ -46,9 +46,9 @@ func (se *GC9A01) OpenSensor() (err error) {
 
 	for {
 		se.dcPin.SetLow()
-		time.Sleep(time.Second)
+		time.Sleep(time.Second * 5)
 		se.dcPin.SetHigh()
-		time.Sleep(time.Second)
+		time.Sleep(time.Second * 2)
 	}
 
 	return

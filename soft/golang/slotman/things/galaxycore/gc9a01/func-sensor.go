@@ -38,15 +38,19 @@ func (se *GC9A01) OpenSensor() (err error) {
 	_ = spiDev.SetBitsPerWord(8)
 	_ = spiDev.SetSpeed(80000000)
 
+	se.spi = spiDev
+
 	err = se.Initialize()
 	if err != nil {
-		_ = spiDev.Close()
+		_ = se.spi.Close()
+		se.spi = nil
 		return
 	}
 
 	err = gc9a01.SetFrame(Frame{X0: 0, Y0: 0, X1: screenWidth - 1, Y1: screenHeight - 1})
 	if err != nil {
-		_ = spiDev.Close()
+		_ = se.spi.Close()
+		se.spi = nil
 		return
 	}
 

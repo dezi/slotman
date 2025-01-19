@@ -75,8 +75,8 @@ func (spi *Device) Send(request []byte) (result []byte, err error) {
 		return
 	}
 
-	var wBuffer [128]byte
-	var rBuffer [128]byte
+	var wBuffer [1024]byte
+	var rBuffer [1024]byte
 
 	if len(request) > len(wBuffer) {
 		return nil, errors.New("request size to large")

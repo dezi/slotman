@@ -10,7 +10,7 @@ import (
 	"strings"
 )
 
-func (se *GC9A01) LoadImage(path string) (img image.Image, err error) {
+func (se *GC9A01) LoadScaledImage(path string) (img image.Image, err error) {
 
 	fd, err := os.Open(path)
 	if err != nil {

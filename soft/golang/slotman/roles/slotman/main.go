@@ -2,7 +2,7 @@ package main
 
 import (
 	"slotman/services/impl/provider"
-	"slotman/things/galaxycore/gc9a01"
+	"slotman/services/impl/slotdisplay"
 	"slotman/utils/daemon"
 	"slotman/utils/exitter"
 )
@@ -16,9 +16,11 @@ func startup() {
 	//_ = logger.StartService()
 	_ = provider.StartService()
 
-	go gc9a01.TestDisplay()
+	_ = slotdisplay.StartService()
 
 	_ = exitter.StartService()
+
+	_ = slotdisplay.StopService()
 
 	_ = provider.StopService()
 	//_ = logger.StopService()

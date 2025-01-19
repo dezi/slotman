@@ -31,7 +31,7 @@ func TestDisplay() {
 
 	_ = gc9a01.SetOrientation(2)
 
-	img, err := gc9a01.LoadImage("/home/liesa/dezi.profil.jpg")
+	img, err := gc9a01.LoadScaledImage("/home/liesa/dezi.profil.jpg")
 
 	log.Printf("Profil wid=%d hei=%d", img.Bounds().Size().X, img.Bounds().Size().Y)
 
@@ -55,7 +55,7 @@ func TestDisplay() {
 		return
 	}
 
-	time.Sleep(time.Second * 5)
+	time.Sleep(time.Second * 10)
 
 	rawImage := make([]byte, ScreenWidth*ScreenHeight*3)
 

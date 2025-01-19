@@ -35,7 +35,8 @@ func (se *GC9A01) OpenSensor() (err error) {
 
 	_ = se.spi.SetMode(0)
 	_ = se.spi.SetBitsPerWord(8)
-	_ = se.spi.SetSpeed(8000000)
+	//_ = se.spi.SetSpeed(8000000)
+	_ = se.spi.SetSpeed(250000000)
 
 	se.dcPin, err = gpio.GetPin(25)
 	if err != nil {
@@ -43,13 +44,6 @@ func (se *GC9A01) OpenSensor() (err error) {
 	}
 
 	se.dcPin.SetOutput()
-
-	//for {
-	//	se.dcPin.SetLow()
-	//	time.Sleep(time.Second * 5)
-	//	se.dcPin.SetHigh()
-	//	time.Sleep(time.Second * 2)
-	//}
 
 	return
 }

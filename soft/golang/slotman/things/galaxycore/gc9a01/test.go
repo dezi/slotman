@@ -36,6 +36,11 @@ func TestDisplay() {
 	}
 
 	rgbImage, _, err := image.Decode(f)
+	if err != nil {
+		log.Cerror(err)
+		return
+	}
+
 	_ = f.Close()
 
 	log.Printf("Profil wid=%d hei=%d",

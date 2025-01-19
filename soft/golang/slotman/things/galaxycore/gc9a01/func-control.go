@@ -1,20 +1,73 @@
 package gc9a01
 
-import "errors"
+import (
+	"errors"
+	"image"
+)
 
-func (se *GC9A01) BlipFullRawImage(image []byte) (err error) {
+func (se *GC9A01) BlipFullImage(img image.Image) (err error) {
 
-	if len(image) != screenWidth*screenHeight*3 {
+	if img.Bounds().Size().X != ScreenWidth ||
+		img.Bounds().Size().Y != ScreenHeight {
 		err = errors.New("invalid image size")
 		return
 	}
 
-	err = gc9a01.SetFrame(Frame{X0: 0, Y0: 0, X1: screenWidth - 1, Y1: screenHeight - 1})
+	rgba, ok := img.(*image.RGBA)
+	if !ok {
+		err = errors.New("image not rgba")
+		return
+	}
+
+	wid := rgba.Bounds().Size().X
+	hei := rgba.Bounds().Size().Y
+	pix := rgba.Pix
+	raw := make([]byte, wid*hei*3)
+
+	src := 0
+	dst := 0
+
+	for x := 0; x < wid; x++ {
+
+		stride := src
+
+		for y := 0; y < hei; y++ {
+
+			raw[dst] = pix[stride]
+			stride++
+			dst++
+
+			raw[dst] = pix[stride]
+			stride++
+			dst++
+
+			raw[dst] = pix[stride]
+			stride++
+			dst++
+
+			stride++
+		}
+
+		src += rgba.Stride
+	}
+
+	err = se.BlipFullImageRaw(raw)
+	return
+}
+
+func (se *GC9A01) BlipFullImageRaw(image []byte) (err error) {
+
+	if len(image) != ScreenWidth*ScreenHeight*3 {
+		err = errors.New("invalid image size")
+		return
+	}
+
+	err = gc9a01.SetFrame(Frame{X0: 0, Y0: 0, X1: ScreenWidth - 1, Y1: ScreenHeight - 1})
 	if err != nil {
 		return
 	}
 
-	chunkSize := screenWidth * 4 * 3
+	chunkSize := ScreenWidth * 4 * 3
 
 	for chunkPos := 0; chunkPos < len(image); chunkPos += chunkSize {
 		if chunkPos == 0 {
@@ -54,14 +107,14 @@ func (se *GC9A01) SetFrame(frame Frame) (err error) {
 	data[2] = byte(frame.X1 >> 8)
 	data[3] = byte(frame.X1)
 
-	_ = se.writeCommandBytes(COL_ADDR_SET, data[:]...)
+	_ = se.writeCommandBytes(CommandColAddrSet, data[:]...)
 
 	data[0] = byte(frame.Y0 >> 8)
 	data[1] = byte(frame.Y0)
 	data[2] = byte(frame.Y1 >> 8)
 	data[3] = byte(frame.Y1)
 
-	_ = se.writeCommandBytes(ROW_ADDR_SET, data[:]...)
+	_ = se.writeCommandBytes(CommandRowAddrSet, data[:]...)
 
 	return
 }
@@ -87,7 +140,7 @@ func (se *GC9A01) Initialize() (err error) {
 	_ = se.writeCommandBytes(0x8F, 0xFF)
 	_ = se.writeCommandBytes(0xB6, 0x00, 0x00)
 	_ = se.writeCommandBytes(0x36, 0x18)
-	_ = se.writeCommandBytes(COLOR_MODE, COLOR_MODE_18_BIT)
+	_ = se.writeCommandBytes(CommandColorMode, byte(ColorMode18Bit))
 	_ = se.writeCommandBytes(0x90, 0x08, 0x08, 0x08, 0x08)
 	_ = se.writeCommandBytes(0xBD, 0x06)
 	_ = se.writeCommandBytes(0xBC, 0x00)

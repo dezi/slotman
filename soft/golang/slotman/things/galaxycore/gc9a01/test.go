@@ -1,7 +1,9 @@
 package gc9a01
 
 import (
+	"image"
 	"math/rand"
+	"os"
 	"slotman/utils/log"
 	"time"
 )
@@ -21,13 +23,25 @@ func TestDisplay() {
 
 	log.Printf("Display GC8A01 device SPI0-0 opened.")
 
-	_ = gc9a01.SetFrame(Frame{X0: 0, Y0: 0, X1: screenWidth - 1, Y1: screenHeight - 1})
+	_ = gc9a01.SetFrame(Frame{X0: 0, Y0: 0, X1: ScreenWidth - 1, Y1: ScreenHeight - 1})
 
 	log.Printf("Display GC8A01 test patterns.")
 
 	_ = gc9a01.SetOrientation(2)
 
-	image := make([]byte, screenWidth*screenHeight*3)
+	f, err := os.Open("/home/liesa/dezi.profil.jpg")
+	if err != nil {
+		log.Cerror(err)
+		return
+	}
+
+	rgbImage, imageType, err := image.Decode(f)
+	_ = f.Close()
+
+	_ = rgbImage
+	log.Printf("############## imageType=%s", imageType)
+
+	rawImage := make([]byte, ScreenWidth*ScreenHeight*3)
 
 	for {
 
@@ -37,24 +51,24 @@ func TestDisplay() {
 
 		off := 0
 
-		for x := 0; x < screenWidth; x++ {
-			for y := 0; y < screenHeight; y++ {
+		for x := 0; x < ScreenWidth; x++ {
+			for y := 0; y < ScreenHeight; y++ {
 				if x < y {
 					color[2] = 0xFF
 				} else {
 					color[2] = 0x00
 				}
 
-				image[off] = color[0]
+				rawImage[off] = color[0]
 				off++
-				image[off] = color[1]
+				rawImage[off] = color[1]
 				off++
-				image[off] = color[2]
+				rawImage[off] = color[2]
 				off++
 			}
 		}
 
-		err = gc9a01.BlipFullRawImage(image)
+		err = gc9a01.BlipFullImageRaw(rawImage)
 
 		time.Sleep(time.Millisecond * 250)
 	}

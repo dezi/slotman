@@ -55,7 +55,6 @@ func controlLoop() {
 				controlProvider.DoControlTask()
 				bestTask.isInGo = false
 			}()
-
 		}
 
 		if doExit {

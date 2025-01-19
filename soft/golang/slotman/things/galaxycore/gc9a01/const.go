@@ -9,18 +9,24 @@ package gc9a01
 // https://github.com/adafruit/Adafruit_GC9A01A
 //
 
+type Command byte
+type ColorMode byte
+
+//goland:noinspection GoUnusedConst
 const (
-	COL_ADDR_SET      byte = 0x2A
-	ROW_ADDR_SET      byte = 0x2B
-	MEM_WR            byte = 0x2C
-	COLOR_MODE        byte = 0x3A
-	COLOR_MODE_12_BIT byte = 0x03
-	COLOR_MODE_16_BIT byte = 0x05
-	COLOR_MODE_18_BIT byte = 0x06
-	MEM_WR_CONT       byte = 0x3C
+	CommandColAddrSet Command = 0x2A
+	CommandRowAddrSet Command = 0x2B
+
+	CommandColorMode Command   = 0x3A
+	ColorMode12Bit   ColorMode = 0x03
+	ColorMode16Bit   ColorMode = 0x05
+	ColorMode18Bit   ColorMode = 0x06
+
+	CommandMemWr     Command = 0x2C
+	CommandMemWrCont Command = 0x3C
 )
 
 const (
-	screenWidth  = 240
-	screenHeight = 240
+	ScreenWidth  = 240
+	ScreenHeight = 240
 )

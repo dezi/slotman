@@ -44,26 +44,3 @@ func (se *GC9A01) OpenSensor() (err error) {
 
 	return
 }
-
-func (se *GC9A01) SetFrame(frame Frame) (err error) {
-
-	var data [4]byte
-
-	data[0] = byte(frame.X0 >> 8)
-	data[1] = byte(frame.X0)
-	data[2] = byte(frame.X1 >> 8)
-	data[3] = byte(frame.X1)
-
-	_ = se.writeCommand(COL_ADDR_SET)
-	_ = se.writeBytes(data[:])
-
-	data[0] = byte(frame.Y0 >> 8)
-	data[1] = byte(frame.Y0)
-	data[2] = byte(frame.Y1 >> 8)
-	data[3] = byte(frame.Y1)
-
-	_ = se.writeCommand(ROW_ADDR_SET)
-	_ = se.writeBytes(data[:])
-
-	return
-}

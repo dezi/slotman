@@ -1,6 +1,10 @@
 package gc9a01
 
 import (
+	"github.com/fogleman/gg"
+	"github.com/golang/freetype/truetype"
+	"golang.org/x/image/font/gofont/goregular"
+	"image"
 	"math/rand"
 	"slotman/utils/log"
 	"time"
@@ -29,11 +33,23 @@ func TestDisplay() {
 
 	img, err := gc9a01.LoadImage("/home/liesa/dezi.profil.jpg")
 
-	log.Printf("Profil wid=%d hei=%d",
-		img.Bounds().Size().X,
-		img.Bounds().Size().Y)
+	log.Printf("Profil wid=%d hei=%d", img.Bounds().Size().X, img.Bounds().Size().Y)
 
-	//gg.NewContextForRGBA()
+	dc := gg.NewContextForRGBA(img.(*image.RGBA))
+	dc.SetRGB255(0x80, 0x00, 0x00)
+
+	font, err := truetype.Parse(goregular.TTF)
+	if err != nil {
+		panic("")
+	}
+
+	face := truetype.NewFace(font, &truetype.Options{
+		Size: 40,
+	})
+
+	dc.SetFontFace(face)
+
+	dc.DrawStringAnchored("P. Zierahn", 100, 100, 0.0, 0.0)
 
 	err = gc9a01.BlipFullImage(img)
 	if err != nil {

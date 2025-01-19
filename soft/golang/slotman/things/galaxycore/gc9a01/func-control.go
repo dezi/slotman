@@ -4,7 +4,6 @@ import (
 	"errors"
 	"golang.org/x/image/draw"
 	"image"
-	"slotman/utils/log"
 )
 
 func (se *GC9A01) BlipFullImage(img image.Image) (err error) {
@@ -12,7 +11,11 @@ func (se *GC9A01) BlipFullImage(img image.Image) (err error) {
 	if img.Bounds().Size().X != ScreenWidth ||
 		img.Bounds().Size().Y != ScreenHeight {
 
-		rgb := image.NewRGBA(image.Rect(0, 0, 240, 240))
+		//
+		// Resize image.
+		//
+
+		rgb := image.NewRGBA(image.Rect(0, 0, ScreenWidth, ScreenHeight))
 		draw.BiLinear.Scale(rgb, rgb.Bounds(), img, img.Bounds(), draw.Src, nil)
 		img = rgb
 	}
@@ -61,7 +64,6 @@ func (se *GC9A01) BlipFullImage(img image.Image) (err error) {
 		src += rgba.Stride
 	}
 
-	log.Printf("########### row= [ %02x ]", raw[0:240*3])
 	err = se.BlipFullImageRaw(raw)
 	return
 }

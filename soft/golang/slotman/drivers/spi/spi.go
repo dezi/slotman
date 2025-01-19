@@ -35,6 +35,7 @@ var (
 	globalLock sync.Mutex
 )
 
+//goland:noinspection GoUnusedExportedFunction
 func GetDevicePaths() (devicePaths []string, err error) {
 
 	for _, devicePath := range validDevicePaths {
@@ -75,8 +76,8 @@ func (spi *Device) Send(request []byte) (result []byte, err error) {
 		return
 	}
 
-	var wBuffer [1024]byte
-	var rBuffer [1024]byte
+	var wBuffer [256 * 1024]byte
+	var rBuffer [256 * 1024]byte
 
 	if len(request) > len(wBuffer) {
 		return nil, errors.New("request size to large")

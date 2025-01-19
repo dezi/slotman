@@ -32,7 +32,7 @@ func TestDisplay() {
 
 	log.Printf("Display GC8A01 test patterns.")
 
-	chunk := 3
+	chunk := 1
 
 	line := make([]byte, 3*240*chunk)
 
@@ -58,6 +58,8 @@ func TestDisplay() {
 		//}
 
 		off := 0
+		first := true
+
 		for x := 0; x < 240; x++ {
 
 			if x%chunk == 0 {
@@ -80,8 +82,9 @@ func TestDisplay() {
 			}
 
 			if x+1%chunk == 0 {
-				if x == 0 {
+				if first {
 					_ = gc9a01.WriteMem(line)
+					first = false
 				} else {
 					_ = gc9a01.WriteMemCont(line)
 				}

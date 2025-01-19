@@ -237,3 +237,37 @@ Output of the i2cdetect tool on Raspberry Pi terminal.
 [<img src="images/raspberry-pi-hat-step-08-e.png" width="400"/>](images/raspberry-pi-hat-step-08-e.png)
 
 Good job!!!
+
+Step 9
+======
+
+Addendum:
+
+We want to use the SPI-0 breakout for a nice display
+device GC9A01. (https://www.amazon.de/dp/B0CFXVD9HX)
+
+These devices need another control pin named DC. 
+So we need to add another wire to the board.
+
+[<img src="images/raspberry-pi-hat-step-09-a.jpg" width="400"/>](images/raspberry-pi-hat-step-09-a.jpg)
+
+The wire goes to the unconnected last pin of the SPI-0 connector.
+
+[<img src="images/raspberry-pi-hat-step-09-b.jpg" width="400"/>](images/raspberry-pi-hat-step-09-b.jpg)
+
+The extra wire is now attached to GPIO pin 25.
+
+[<img src="images/raspberry-pi-hat-step-09-c.jpg" width="400"/>](images/raspberry-pi-hat-step-09-c.jpg)
+
+The SPI-0 connector pins from left to right:
+
+- 3.3V
+- GND
+- SCLK (GPIO 11 SCLK SPI 0)
+- MISO (GPIO 9 MISO SPI 0)
+- MOSI (GPIO 10 MOSI SPI 0)
+- CE0 (GPIO 8 Chip Enabled-CE0 SPI 0)
+- CE1 (GPIO 7 Chip Enabled-CE1 SPI 0)
+- DC (GPIO 25 )
+
+[<img src="images/raspberry-pi-hat-gpio-pins.jpg" width="400"/>](images/raspberry-pi-hat-gpio-pins.jpg)

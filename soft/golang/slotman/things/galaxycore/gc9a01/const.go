@@ -6,6 +6,7 @@ package gc9a01
 // https://dronebotworkshop.com/gc9a01/
 //
 // https://github.com/carlfriess/GC9A01_demo
+// https://github.com/adafruit/Adafruit_GC9A01A
 //
 
 const (

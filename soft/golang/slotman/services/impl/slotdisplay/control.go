@@ -1,7 +1,7 @@
 package slotdisplay
 
 import (
-	"slotman/goodies/logos"
+	"slotman/goodies/images"
 	"slotman/things/galaxycore/gc9a01"
 	"slotman/utils/log"
 )
@@ -13,7 +13,7 @@ func (sv *Service) DoControlTask() {
 
 func (sv *Service) displayTeam() {
 
-	img, err := logos.GetScaledTeamLogo(sv.teamDefs[sv.teamIndex].Logo, 240)
+	img, err := images.GetScaledTeamLogo(sv.teamDefs[sv.teamIndex].Logo, 240)
 	if err != nil {
 		log.Cerror(err)
 		return

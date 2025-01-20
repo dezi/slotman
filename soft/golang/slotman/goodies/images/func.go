@@ -1,9 +1,10 @@
-package logos
+package images
 
 import (
 	"golang.org/x/image/draw"
 	"image"
 	"image/png"
+	"path/filepath"
 	"slotman/utils/log"
 )
 
@@ -14,7 +15,7 @@ func GetAllTeams() (teams []Team) {
 
 func GetScaledTeamLogo(logo string, size int) (img *image.RGBA, err error) {
 
-	input, err := embedFs.Open(logo)
+	input, err := embedFs.Open(filepath.Join("embeds", logo))
 	if err != nil {
 		log.Cerror(err)
 		return

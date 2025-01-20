@@ -4,7 +4,7 @@ import (
 	"github.com/golang/freetype/truetype"
 	"golang.org/x/image/font"
 	"golang.org/x/image/font/gofont/goregular"
-	"slotman/goodies/logos"
+	"slotman/goodies/images"
 	"slotman/services/iface/slotdisplay"
 	"slotman/services/impl/provider"
 	"slotman/things/galaxycore/gc9a01"
@@ -21,7 +21,7 @@ type Service struct {
 	faceRegularNormal font.Face
 	faceRegularLarge  font.Face
 
-	teamDefs  []logos.Team
+	teamDefs  []images.Team
 	teamIndex int
 }
 
@@ -47,7 +47,7 @@ func StartService() (err error) {
 		singleTon.fontRegular,
 		&truetype.Options{Size: 40})
 
-	singleTon.teamDefs = logos.GetAllTeams()
+	singleTon.teamDefs = images.GetAllTeams()
 
 	provider.SetProvider(singleTon)
 

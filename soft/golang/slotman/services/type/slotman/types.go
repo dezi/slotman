@@ -1,0 +1,55 @@
+package slotman
+
+import "slotman/utils/simple"
+
+type Message struct {
+	What string `json:"what"`
+}
+
+type Tracks struct {
+	What string `json:"what,omitempty"`
+	Mode string `json:"mode,omitempty"`
+
+	Tracks int `json:"tracks"`
+}
+
+type Pilot struct {
+	What string `json:"what,omitempty"`
+	Mode string `json:"mode,omitempty"`
+
+	AppUuid simple.UUIDHex `json:"appUuid"`
+
+	FirstName string `json:"firstName"`
+	LastName  string `json:"lastName"`
+	Team      string `json:"team"`
+	CarModel  string `json:"carModel"`
+	MinSpeed  int    `json:"minSpeed"`
+	MaxSpeed  int    `json:"maxSpeed"`
+}
+
+type Race struct {
+	What string `json:"what,omitempty"`
+	Mode string `json:"mode,omitempty"`
+
+	Title string `json:"title"`
+
+	Tracks int `json:"tracks"`
+	Rounds int `json:"rounds"`
+}
+
+type Controller struct {
+	What string `json:"what,omitempty"`
+	Mode string `json:"mode,omitempty"`
+
+	Controller    int  `json:"controller"`
+	IsCalibrating bool `json:"isCalibrating"`
+
+	MinValue int `json:"minValue"`
+	MaxValue int `json:"maxValue"`
+}
+
+type Setup struct {
+	Tracks Tracks
+	Race   Race
+	Pilots map[simple.UUIDHex]*Pilot
+}

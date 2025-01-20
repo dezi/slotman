@@ -1,6 +1,7 @@
 package gc9a01
 
 import (
+	"errors"
 	"slotman/drivers/gpio"
 	"slotman/drivers/spi"
 )
@@ -19,6 +20,11 @@ func (se *GC9A01) Open() (err error) {
 
 	//shaData := fmt.Sprintf("%s|%s|%s|%s", identity.GetBoxIdentity(), se.Model, se.Vendor, se.DevicePath)
 	//se.Uuid = simple.UuidHexFromSha256([]byte(shaData))
+
+	if !gpio.HasGpio() {
+		err = errors.New("no gpio available")
+		return
+	}
 
 	se.dcPin, err = gpio.GetPin(25)
 	if err != nil {

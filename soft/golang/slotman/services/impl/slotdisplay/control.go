@@ -8,10 +8,10 @@ import (
 
 func (sv *Service) DoControlTask() {
 	sv.checkDisplays()
-	sv.displayTeam()
+	sv.displayTeams()
 }
 
-func (sv *Service) displayTeam() {
+func (sv *Service) displayTeams() {
 
 	img, err := images.GetScaledTeamLogo(sv.teamDefs[sv.teamIndex].Logo, 240)
 	if err != nil {
@@ -19,30 +19,36 @@ func (sv *Service) displayTeam() {
 		return
 	}
 
-	_ = sv.turnDisplay1.Initialize()
-	_ = sv.turnDisplay1.BlipFullImage(img)
+	if sv.turnDisplay1 != nil {
+		_ = sv.turnDisplay1.Initialize()
+		_ = sv.turnDisplay1.BlipFullImage(img)
+	}
 
-	_ = sv.turnDisplay2.Initialize()
-	_ = sv.turnDisplay2.BlipFullImage(img)
+	if sv.turnDisplay2 != nil {
+		_ = sv.turnDisplay2.Initialize()
+		_ = sv.turnDisplay2.BlipFullImage(img)
+	}
 
-	sv.teamIndex++
+	sv.teamIndex = (sv.teamIndex + 1) % len(sv.teamDefs)
 }
 
 func (sv *Service) checkDisplays() {
 
 	if sv.turnDisplay1 == nil {
-		sv.turnDisplay1 = gc9a01.NewGC9A01("/dev/spidev0.0", 25)
-		_ = sv.turnDisplay1.Open()
+		turnDisplay1 := gc9a01.NewGC9A01("/dev/spidev0.0", 25)
+		tryErr := turnDisplay1.Open()
+		if tryErr == nil {
+			sv.turnDisplay1 = turnDisplay1
+		}
 	}
 
 	if sv.turnDisplay2 == nil {
-		sv.turnDisplay2 = gc9a01.NewGC9A01("/dev/spidev0.1", 25)
-		_ = sv.turnDisplay2.Open()
+		turnDisplay2 := gc9a01.NewGC9A01("/dev/spidev0.1", 25)
+		tryErr := turnDisplay2.Open()
+		if tryErr == nil {
+			sv.turnDisplay2 = turnDisplay2
+		}
 	}
-
-	//
-	// Re-initialize every 60 seconds.
-	//
 
 	//img, err := sv.turnDisplay1.LoadScaledImage("/home/liesa/dezi.profil.jpg")
 	//if err != nil {

@@ -24,6 +24,8 @@ func (sv *Service) displayTeam() {
 
 	_ = sv.turnDisplay2.Initialize()
 	_ = sv.turnDisplay2.BlipFullImage(img)
+
+	sv.teamIndex++
 }
 
 func (sv *Service) checkDisplays() {

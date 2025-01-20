@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"path/filepath"
 	"slotman/services/type/slotman"
-	"slotman/utils/log"
 	"slotman/utils/simple"
 	"strings"
 )
@@ -61,14 +60,22 @@ var (
 	}
 )
 
-func (sv *Service) loadMockupPilotProfile(pilot string) (base64Img string, err error) {
+func (sv *Service) loadMockupPilotProfile(pilotFirstname, pilotLastName string) (base64Img string, err error) {
 
-	file := fmt.Sprintf("profile-%s.jpg", strings.ToLower(pilot))
+	lowFirst := strings.ToLower(pilotFirstname)
+	lowLast := strings.ToLower(pilotLastName)
+
+	file := fmt.Sprintf("profile-%s-%s.jpg", lowFirst, lowLast)
 
 	data, err := embedFs.ReadFile(filepath.Join("embeds", file))
 	if err != nil {
-		log.Cerror(err)
-		return
+
+		file = fmt.Sprintf("profile-%s.jpg", lowFirst)
+
+		data, err = embedFs.ReadFile(filepath.Join("embeds", file))
+		if err != nil {
+			return
+		}
 	}
 
 	base64Img = "data:image/jpeg;base64, " + base64.StdEncoding.EncodeToString([]byte(data))

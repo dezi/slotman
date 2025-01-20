@@ -29,7 +29,9 @@ func (sv *Service) loadMockups() {
 		mockupPilot.Team = allTeams[teamIndex].Name
 		mockupPilot.Car = allTeams[teamIndex].Car
 
-		mockupPilot.ProfilePic, _ = sv.loadMockupPilotProfile(mockupPilot.FirstName)
+		mockupPilot.ProfilePic, _ = sv.loadMockupPilotProfile(
+			mockupPilot.FirstName,
+			mockupPilot.LastName)
 
 		sv.UpdatePilot(mockupPilot)
 	}

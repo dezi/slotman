@@ -1,7 +1,7 @@
-package slotdisplay
+package turner
 
 import (
-	"slotman/goodies/images"
+	"slotman/goodies/teamdefs"
 	"slotman/things/galaxycore/gc9a01"
 	"slotman/utils/log"
 )
@@ -13,7 +13,9 @@ func (sv *Service) DoControlTask() {
 
 func (sv *Service) displayTeams() {
 
-	img, err := images.GetScaledTeamLogo(sv.teamDefs[sv.teamIndex].Logo, 240)
+	sv.teamIndex = (sv.teamIndex + 1) % len(sv.teamDefs)
+
+	img, err := teamdefs.GetScaledTeamLogo(sv.teamDefs[sv.teamIndex].Logo, 240)
 	if err != nil {
 		log.Cerror(err)
 		return
@@ -28,8 +30,6 @@ func (sv *Service) displayTeams() {
 		_ = sv.turnDisplay2.Initialize()
 		_ = sv.turnDisplay2.BlipFullImage(img)
 	}
-
-	sv.teamIndex = (sv.teamIndex + 1) % len(sv.teamDefs)
 }
 
 func (sv *Service) checkDisplays() {

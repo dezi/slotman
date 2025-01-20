@@ -1,54 +1,61 @@
 package pilots
 
 import (
-	"slotman/goodies/images"
+	"encoding/base64"
+	"fmt"
+	"path/filepath"
 	"slotman/services/type/slotman"
+	"slotman/utils/log"
 	"slotman/utils/simple"
+	"strings"
 )
 
 var (
-	mockups = []slotman.Pilot{
+	mockupPilots = []*slotman.Pilot{
 		{
-			AppUuid:   simple.NewUuidHex(),
-			FirstName: "Dennis",
-			LastName:  "Zierahn",
-			Team:      images.GetAllTeams()[0].Name,
-			CarModel:  images.GetAllTeams()[0].Car,
+			AppUuid:    simple.NewUuidHex(),
+			FirstName:  "Dennis",
+			LastName:   "Zierahn",
+			ProfilePic: "",
 		},
 		{
 			AppUuid:   simple.NewUuidHex(),
 			FirstName: "Patrick",
 			LastName:  "Zierahn",
-			Team:      images.GetAllTeams()[1].Name,
-			CarModel:  images.GetAllTeams()[1].Car,
 		},
 		{
 			AppUuid:   simple.NewUuidHex(),
 			FirstName: "Lukas",
 			LastName:  "Zierahn",
-			Team:      images.GetAllTeams()[2].Name,
-			CarModel:  images.GetAllTeams()[2].Car,
 		},
 		{
 			AppUuid:   simple.NewUuidHex(),
 			FirstName: "Kim",
 			LastName:  "Zierahn",
-			Team:      images.GetAllTeams()[3].Name,
-			CarModel:  images.GetAllTeams()[3].Car,
 		},
 		{
 			AppUuid:   simple.NewUuidHex(),
 			FirstName: "Susi",
 			LastName:  "Brandt",
-			Team:      images.GetAllTeams()[4].Name,
-			CarModel:  images.GetAllTeams()[4].Car,
 		},
 		{
 			AppUuid:   simple.NewUuidHex(),
 			FirstName: "Omar",
 			LastName:  "Müller",
-			Team:      images.GetAllTeams()[5].Name,
-			CarModel:  images.GetAllTeams()[5].Car,
 		},
 	}
 )
+
+func (sv *Service) loadMockupPilotProfile(pilot string) (base64Img string, err error) {
+
+	file := fmt.Sprintf("profile-%s.jpg", strings.ToLower(pilot))
+
+	data, err := embedFs.ReadFile(filepath.Join("embeds", file))
+	if err != nil {
+		log.Cerror(err)
+		return
+	}
+
+	base64Img = "data:image/jpeg;base64, " + base64.StdEncoding.EncodeToString([]byte(data))
+	return
+}

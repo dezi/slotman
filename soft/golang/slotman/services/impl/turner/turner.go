@@ -1,11 +1,11 @@
-package slotdisplay
+package turner
 
 import (
 	"github.com/golang/freetype/truetype"
 	"golang.org/x/image/font"
 	"golang.org/x/image/font/gofont/goregular"
-	"slotman/goodies/images"
-	"slotman/services/iface/slotdisplay"
+	"slotman/goodies/teamdefs"
+	"slotman/services/iface/turner"
 	"slotman/services/impl/provider"
 	"slotman/things/galaxycore/gc9a01"
 	"slotman/utils/log"
@@ -21,7 +21,7 @@ type Service struct {
 	faceRegularNormal font.Face
 	faceRegularLarge  font.Face
 
-	teamDefs  []images.Team
+	teamDefs  []teamdefs.Team
 	teamIndex int
 }
 
@@ -47,7 +47,7 @@ func StartService() (err error) {
 		singleTon.fontRegular,
 		&truetype.Options{Size: 40})
 
-	singleTon.teamDefs = images.GetAllTeams()
+	singleTon.teamDefs = teamdefs.GetAllTeams()
 
 	provider.SetProvider(singleTon)
 
@@ -70,7 +70,7 @@ func StopService() (err error) {
 }
 
 func (sv *Service) GetName() (name provider.Provider) {
-	return slotdisplay.Provider
+	return turner.Provider
 }
 
 func (sv *Service) GetControlOptions() (interval time.Duration) {

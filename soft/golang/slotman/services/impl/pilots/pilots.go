@@ -1,13 +1,23 @@
 package pilots
 
 import (
-	"slotman/services/iface/slotdisplay"
+	"image"
+	"slotman/services/iface/pilots"
 	"slotman/services/impl/provider"
+	"slotman/services/type/slotman"
 	"slotman/utils/log"
+	"slotman/utils/simple"
+	"sync"
 	"time"
 )
 
 type Service struct {
+	pilots map[simple.UUIDHex]*slotman.Pilot
+
+	pilotProfileFull  map[simple.UUIDHex]*image.RGBA
+	pilotProfileSmall map[simple.UUIDHex]*image.RGBA
+
+	mapsLock sync.Mutex
 }
 
 var (
@@ -21,6 +31,10 @@ func StartService() (err error) {
 	}
 
 	singleTon = &Service{}
+
+	singleTon.pilots = make(map[simple.UUIDHex]*slotman.Pilot)
+	singleTon.pilotProfileFull = make(map[simple.UUIDHex]*image.RGBA)
+	singleTon.pilotProfileSmall = make(map[simple.UUIDHex]*image.RGBA)
 
 	provider.SetProvider(singleTon)
 
@@ -43,7 +57,7 @@ func StopService() (err error) {
 }
 
 func (sv *Service) GetName() (name provider.Provider) {
-	return slotdisplay.Provider
+	return pilots.Provider
 }
 
 func (sv *Service) GetControlOptions() (interval time.Duration) {

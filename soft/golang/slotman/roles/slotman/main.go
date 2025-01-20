@@ -1,8 +1,9 @@
 package main
 
 import (
+	"slotman/services/impl/pilots"
 	"slotman/services/impl/provider"
-	"slotman/services/impl/slotdisplay"
+	"slotman/services/impl/turner"
 	"slotman/utils/daemon"
 	"slotman/utils/exitter"
 )
@@ -16,11 +17,13 @@ func startup() {
 	//_ = logger.StartService()
 	_ = provider.StartService()
 
-	_ = slotdisplay.StartService()
+	_ = pilots.StartService()
+	_ = turner.StartService()
 
 	_ = exitter.StartService()
 
-	_ = slotdisplay.StopService()
+	_ = pilots.StopService()
+	_ = turner.StopService()
 
 	_ = provider.StopService()
 	//_ = logger.StopService()

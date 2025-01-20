@@ -22,9 +22,14 @@ type Pilot struct {
 	FirstName string `json:"firstName"`
 	LastName  string `json:"lastName"`
 	Team      string `json:"team"`
-	CarModel  string `json:"carModel"`
-	MinSpeed  int    `json:"minSpeed"`
-	MaxSpeed  int    `json:"maxSpeed"`
+	Car       string `json:"car"`
+
+	MinSpeed int `json:"minSpeed"`
+	MaxSpeed int `json:"maxSpeed"`
+
+	ProfilePic string `json:"profilePic"`
+
+	IsMockup bool `json:"-"`
 }
 
 type Race struct {

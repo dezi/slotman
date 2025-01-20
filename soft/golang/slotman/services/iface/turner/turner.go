@@ -1,9 +1,9 @@
-package slotdisplay
+package turner
 
 import "slotman/services/impl/provider"
 
 const (
-	Provider provider.Provider = "serviceSlotDisplay"
+	Provider provider.Provider = "serviceTurner"
 )
 
 type Interface interface {

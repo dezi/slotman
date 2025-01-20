@@ -1,4 +1,4 @@
-package images
+package teamdefs
 
 import "embed"
 

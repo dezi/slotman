@@ -15,7 +15,7 @@ func NewGC9A01(devicePath string, dcPinNo byte) (rc *GC9A01) {
 	return
 }
 
-func (se *GC9A01) OpenSensor() (err error) {
+func (se *GC9A01) Open() (err error) {
 
 	//shaData := fmt.Sprintf("%s|%s|%s|%s", identity.GetBoxIdentity(), se.Model, se.Vendor, se.DevicePath)
 	//se.Uuid = simple.UuidHexFromSha256([]byte(shaData))

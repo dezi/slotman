@@ -12,7 +12,7 @@ func TestDisplay() {
 
 	//gc9a01 = NewGC9A01("/dev/spidev0.0", 25)
 	//
-	//err := gc9a01.OpenSensor()
+	//err := gc9a01.Open()
 	//if err != nil {
 	//	return
 	//}

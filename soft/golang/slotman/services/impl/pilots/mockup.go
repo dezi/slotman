@@ -43,6 +43,21 @@ var (
 			FirstName: "Omar",
 			LastName:  "Müller",
 		},
+		{
+			AppUuid:   simple.NewUuidHex(),
+			FirstName: "Lewis",
+			LastName:  "Hamilton",
+		},
+		{
+			AppUuid:   simple.NewUuidHex(),
+			FirstName: "Max",
+			LastName:  "Verstappen",
+		},
+		{
+			AppUuid:   simple.NewUuidHex(),
+			FirstName: "Fernando",
+			LastName:  "Alonso",
+		},
 	}
 )
 

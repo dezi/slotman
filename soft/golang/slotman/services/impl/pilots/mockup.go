@@ -46,7 +46,7 @@ var (
 		{
 			AppUuid:   simple.NewUuidHex(),
 			FirstName: "Omar",
-			LastName:  "Hairani",
+			LastName:  "Müller",
 			Team:      images.GetAllTeams()[5].Name,
 			CarModel:  images.GetAllTeams()[5].Car,
 		},

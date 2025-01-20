@@ -1,8 +1,9 @@
 package pilots
 
 func (sv *Service) DoControlTask() {
+	sv.loadMockups()
 }
 
-func (sv *Service) displayTeam() {
+func (sv *Service) loadMockups() {
 
 }

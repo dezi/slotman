@@ -2,8 +2,6 @@ package slotdisplay
 
 import (
 	"github.com/fogleman/gg"
-	"github.com/golang/freetype/truetype"
-	"golang.org/x/image/font/gofont/goregular"
 	"image"
 	"slotman/things/galaxycore/gc9a01"
 	"slotman/utils/log"
@@ -41,17 +39,8 @@ func (sv *Service) checkDisplays() {
 
 	dc := gg.NewContextForRGBA(img.(*image.RGBA))
 	dc.SetRGB255(0xff, 0xff, 0xff)
-
-	font, err := truetype.Parse(goregular.TTF)
-	if err != nil {
-		panic("")
-	}
-
-	face := truetype.NewFace(font, &truetype.Options{Size: 24})
-
-	dc.SetFontFace(face)
-
-	dc.DrawStringAnchored("P. Zierahn", 50, 200, 0.0, 0.0)
+	dc.SetFontFace(sv.faceRegularNormal)
+	dc.DrawStringAnchored("P. Zierahn", 120, 200, 0.5, 0.0)
 
 	err = sv.turnDisplay1.BlipFullImage(img)
 	if err != nil {

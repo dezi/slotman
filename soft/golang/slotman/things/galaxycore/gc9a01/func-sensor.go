@@ -4,6 +4,8 @@ import (
 	"errors"
 	"slotman/drivers/gpio"
 	"slotman/drivers/spi"
+	"slotman/utils/log"
+	"time"
 )
 
 func NewGC9A01(devicePath string, dcPinNo byte) (rc *GC9A01) {
@@ -31,7 +33,17 @@ func (se *GC9A01) Open() (err error) {
 		return
 	}
 
-	se.dcPin.SetOutput()
+	for {
+		se.dcPin.SetOutput()
+
+		se.dcPin.SetHigh()
+		log.Printf("############## is high")
+		time.Sleep(time.Second * 5)
+
+		se.dcPin.SetLow()
+		log.Printf("############## is low")
+		time.Sleep(time.Second * 5)
+	}
 
 	spiDev := spi.NewDevice(se.DevicePath)
 

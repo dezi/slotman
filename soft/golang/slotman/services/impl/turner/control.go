@@ -39,6 +39,8 @@ func (sv *Service) checkDisplays() {
 		tryErr := turnDisplay1.Open()
 		if tryErr == nil {
 			sv.turnDisplay1 = turnDisplay1
+		} else {
+			log.Cerror(tryErr)
 		}
 	}
 
@@ -47,6 +49,8 @@ func (sv *Service) checkDisplays() {
 		tryErr := turnDisplay2.Open()
 		if tryErr == nil {
 			sv.turnDisplay2 = turnDisplay2
+		} else {
+			log.Cerror(tryErr)
 		}
 	}
 

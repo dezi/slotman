@@ -35,7 +35,7 @@ func (sv *Service) displayTeams() {
 func (sv *Service) checkDisplays() {
 
 	if sv.turnDisplay1 == nil {
-		turnDisplay1 := gc9a01.NewGC9A01("/dev/spidev0.0", 25)
+		turnDisplay1 := gc9a01.NewGC9A01("/dev/spidev1.0", 25)
 		tryErr := turnDisplay1.Open()
 		if tryErr == nil {
 			sv.turnDisplay1 = turnDisplay1
@@ -43,7 +43,7 @@ func (sv *Service) checkDisplays() {
 	}
 
 	if sv.turnDisplay2 == nil {
-		turnDisplay2 := gc9a01.NewGC9A01("/dev/spidev0.1", 25)
+		turnDisplay2 := gc9a01.NewGC9A01("/dev/spidev1.1", 25)
 		tryErr := turnDisplay2.Open()
 		if tryErr == nil {
 			sv.turnDisplay2 = turnDisplay2

@@ -9,6 +9,11 @@ type Team struct {
 var (
 	allTeams = []Team{
 		{
+			Name: "Alpine",
+			Logo: "logo-alpine.png",
+			Car:  "????",
+		},
+		{
 			Name: "Aston Martin",
 			Logo: "logo-aston-martin.png",
 			Car:  "Aston Martin AMR24",
@@ -17,6 +22,11 @@ var (
 			Name: "Ferrari",
 			Logo: "logo-ferrari.png",
 			Car:  "Ferrari F1-75",
+		},
+		{
+			Name: "Haas",
+			Logo: "logo-haas.png",
+			Car:  "???",
 		},
 		{
 			Name: "McLaren",
@@ -29,9 +39,19 @@ var (
 			Car:  "Mercedes-AMG F1 W11 EQ Performance",
 		},
 		{
+			Name: "Racing Bulls",
+			Logo: "logo-racing-bulls.png",
+			Car:  "???",
+		},
+		{
 			Name: "Red Bull-Oracle",
 			Logo: "logo-red-bull-oracle.png",
 			Car:  "Red Bull Racing RB16B",
+		},
+		{
+			Name: "Sauber",
+			Logo: "logo-sauber.png",
+			Car:  "???",
 		},
 		{
 			Name: "Williams-Martini",

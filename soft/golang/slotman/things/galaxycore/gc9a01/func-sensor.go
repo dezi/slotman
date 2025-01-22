@@ -31,8 +31,9 @@ func (se *GC9A01) Open() (err error) {
 		return
 	}
 
+	se.dcPin.SetOutput()
+
 	//for {
-	//	se.dcPin.SetOutput()
 	//
 	//	se.dcPin.SetHigh()
 	//	log.Printf("############## is high")

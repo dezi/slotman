@@ -53,7 +53,7 @@ func (se *GC9A01) Open() (err error) {
 
 	_ = spiDev.SetMode(0)
 	_ = spiDev.SetBitsPerWord(8)
-	_ = spiDev.SetSpeed(80000000)
+	_ = spiDev.SetSpeed(40000000)
 
 	se.spi = spiDev
 

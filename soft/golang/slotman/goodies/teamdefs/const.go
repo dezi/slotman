@@ -11,7 +11,7 @@ var (
 		{
 			Name: "Alpine",
 			Logo: "logo-alpine.png",
-			Car:  "????",
+			Car:  "Alpine A521",
 		},
 		{
 			Name: "Aston Martin",
@@ -26,7 +26,7 @@ var (
 		{
 			Name: "Haas",
 			Logo: "logo-haas.png",
-			Car:  "???",
+			Car:  "Haas VF-24",
 		},
 		{
 			Name: "McLaren",
@@ -41,7 +41,7 @@ var (
 		{
 			Name: "Racing Bulls",
 			Logo: "logo-racing-bulls.png",
-			Car:  "???",
+			Car:  "Racing Bulls AT04",
 		},
 		{
 			Name: "Red Bull-Oracle",
@@ -51,7 +51,7 @@ var (
 		{
 			Name: "Sauber",
 			Logo: "logo-sauber.png",
-			Car:  "???",
+			Car:  "Kick Sauber C44",
 		},
 		{
 			Name: "Williams-Martini",

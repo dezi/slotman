@@ -12,10 +12,9 @@ import (
 var (
 	mockupPilots = []*slotman.Pilot{
 		{
-			AppUuid:    simple.NewUuidHex(),
-			FirstName:  "Dennis",
-			LastName:   "Zierahn",
-			ProfilePic: "",
+			AppUuid:   simple.NewUuidHex(),
+			FirstName: "Dennis",
+			LastName:  "Zierahn",
 		},
 		{
 			AppUuid:   simple.NewUuidHex(),
@@ -44,8 +43,15 @@ var (
 		},
 		{
 			AppUuid:   simple.NewUuidHex(),
+			FirstName: "Alex",
+			LastName:  "Albon",
+			Team:      "Williams-Martini",
+		},
+		{
+			AppUuid:   simple.NewUuidHex(),
 			FirstName: "Lewis",
 			LastName:  "Hamilton",
+			Team:      "Mercedes-AMG",
 		},
 		{
 			AppUuid:   simple.NewUuidHex(),

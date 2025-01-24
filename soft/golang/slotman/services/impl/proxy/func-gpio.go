@@ -9,6 +9,8 @@ func (sv *Service) GpioHasGpio() (ok bool, err error) {
 		return
 	}
 
+	_ = target
+
 	return
 }
 

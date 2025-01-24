@@ -11,7 +11,7 @@ import (
 
 func (sv *Service) handleWs(w http.ResponseWriter, r *http.Request) {
 
-	if !strings.HasPrefix(r.URL.String(), "/ws/") {
+	if !strings.HasPrefix(r.URL.String(), "/ws") {
 		http.NotFound(w, r)
 		return
 	}

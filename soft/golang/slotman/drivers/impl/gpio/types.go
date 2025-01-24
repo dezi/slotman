@@ -5,6 +5,6 @@ import (
 )
 
 type Pin struct {
-	Pin   rpio.Pin
-	PinNo uint8
+	pin   rpio.Pin
+	pinNo uint8
 }

@@ -1,8 +1,8 @@
 package gc9a01
 
 import (
+	"slotman/drivers/impl/gpio"
 	"slotman/drivers/impl/spi"
-	"slotman/drivers/types/gpio"
 	"slotman/utils/simple"
 )
 

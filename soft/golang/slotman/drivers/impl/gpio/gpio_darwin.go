@@ -1,7 +1,5 @@
 package gpio
 
-import gpio2 "slotman/drivers/types/gpio"
-
 func HasGpio() (ok bool) {
 
 	//prx, err := proxy.GetInstance()
@@ -14,30 +12,30 @@ func HasGpio() (ok bool) {
 	return
 }
 
-func (pin *gpio2.Pin) Open() (err error) {
+func (pin *Pin) Open() (err error) {
 	return
 }
 
-func (pin *gpio2.Pin) Close() (err error) {
+func (pin *Pin) Close() (err error) {
 	return
 }
 
-func (pin *gpio2.Pin) SetOutput() (err error) {
+func (pin *Pin) SetOutput() (err error) {
 	return
 }
 
-func (pin *gpio2.Pin) SetInput() (err error) {
+func (pin *Pin) SetInput() (err error) {
 	return
 }
 
-func (pin *gpio2.Pin) SetLow() (err error) {
+func (pin *Pin) SetLow() (err error) {
 	return
 }
 
-func (pin *gpio2.Pin) SetHigh() (err error) {
+func (pin *Pin) SetHigh() (err error) {
 	return
 }
 
-func (pin *gpio2.Pin) GetState() (state gpio2.State, err error) {
+func (pin *Pin) GetState() (state State, err error) {
 	return
 }

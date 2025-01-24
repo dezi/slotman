@@ -2,7 +2,10 @@ package gc9a01
 
 func (se *GC9A01) writeCommand(cmd Command) (err error) {
 
-	se.dcPin.SetLow()
+	err = se.dcPin.SetLow()
+	if err != nil {
+		return
+	}
 
 	_, err = se.spi.Send([]byte{byte(cmd)})
 
@@ -19,7 +22,10 @@ func (se *GC9A01) writeCommandBytes(cmd Command, data ...byte) (err error) {
 
 func (se *GC9A01) writeByte(data byte) (err error) {
 
-	se.dcPin.SetHigh()
+	err = se.dcPin.SetHigh()
+	if err != nil {
+		return
+	}
 
 	_, err = se.spi.Send([]byte{data})
 
@@ -28,7 +34,10 @@ func (se *GC9A01) writeByte(data byte) (err error) {
 
 func (se *GC9A01) writeBytes(data []byte) (err error) {
 
-	se.dcPin.SetHigh()
+	err = se.dcPin.SetHigh()
+	if err != nil {
+		return
+	}
 
 	_, err = se.spi.Send(data)
 

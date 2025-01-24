@@ -2,16 +2,20 @@ package proxy
 
 import (
 	"slotman/drivers/iface/gpio"
+	"slotman/services/type/proxy"
+	"slotman/utils/log"
 )
 
 func (sv *Service) GpioHasGpio() (ok bool, err error) {
 
-	target, err := sv.getTarget()
-	if err != nil {
-		return
+	log.Printf("############# GpioHasGpio request")
+
+	message := proxy.Gpio{
+		Area: proxy.AreaGpio,
+		What: proxy.GpioWhatHasGpio,
 	}
 
-	_ = target
+	err = sv.WriteMessage(message)
 
 	return
 }

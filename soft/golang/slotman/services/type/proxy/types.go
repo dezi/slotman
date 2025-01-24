@@ -8,8 +8,6 @@ const (
 
 type Message struct {
 	Area Area
-	What string
-	Path string
 }
 
 type GpioWhat string
@@ -19,10 +17,23 @@ const (
 )
 
 type Gpio struct {
+
+	//
+	// Routing part.
+	//
+
 	Area Area
 	What GpioWhat
 
+	//
+	// Request part.
+	//
+
 	PinNo string `json:",omitempty"`
+
+	//
+	// Response part.
+	//
 
 	Ok bool `json:",omitempty"`
 }

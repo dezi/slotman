@@ -6,6 +6,7 @@ type Area string
 
 const (
 	AreaGpio Area = "gpio"
+	AreaSpi  Area = "spi"
 )
 
 type Message struct {
@@ -45,6 +46,48 @@ type Gpio struct {
 	//
 
 	State gpio.State `json:",omitempty"`
+
+	Ok  bool  `json:",omitempty"`
+	Err error `json:",omitempty"`
+}
+
+type SpiWhat string
+
+const (
+	SpiWhatOpen     SpiWhat = "spi.open"
+	SpiWhatClose    SpiWhat = "spi.close"
+	SpiWhatSetMode  SpiWhat = "spi.set.mode"
+	SpiWhatSetBpw   SpiWhat = "spi.set.bpw"
+	SpiWhatSetSpeed SpiWhat = "spi.set.speed"
+	SpiWhatSend     SpiWhat = "spi.send"
+)
+
+type Spi struct {
+
+	//
+	// Routing part.
+	//
+
+	Area Area
+	What SpiWhat
+
+	//
+	// Request part.
+	//
+
+	Device string `json:",omitempty"`
+
+	//
+	// Response part.
+	//
+
+	Mode  uint8  `json:",omitempty"`
+	Bpw   uint8  `json:",omitempty"`
+	Speed uint32 `json:",omitempty"`
+
+	Paths []string `json:",omitempty"`
+	Send  []byte   `json:",omitempty"`
+	Recv  []byte   `json:",omitempty"`
 
 	Ok  bool  `json:",omitempty"`
 	Err error `json:",omitempty"`

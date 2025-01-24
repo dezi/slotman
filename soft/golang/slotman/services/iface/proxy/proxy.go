@@ -27,6 +27,11 @@ type Interface interface {
 	GpioSetHigh(pin gpio.Gpio) (err error)
 
 	GpioGetState(pin gpio.Gpio) (state gpio.State, err error)
+
+	//
+	// SPI interface.
+	//
+
 }
 
 func GetInstance() (iface Interface, err error) {

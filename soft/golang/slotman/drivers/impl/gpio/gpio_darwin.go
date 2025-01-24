@@ -39,21 +39,56 @@ func (pin *Pin) Close() (err error) {
 }
 
 func (pin *Pin) SetOutput() (err error) {
+
+	prx, err := proxy.GetInstance()
+	if err != nil {
+		return
+	}
+
+	err = prx.GpioSetOutput(pin)
 	return
 }
 
 func (pin *Pin) SetInput() (err error) {
+
+	prx, err := proxy.GetInstance()
+	if err != nil {
+		return
+	}
+
+	err = prx.GpioSetInput(pin)
 	return
 }
 
 func (pin *Pin) SetLow() (err error) {
+
+	prx, err := proxy.GetInstance()
+	if err != nil {
+		return
+	}
+
+	err = prx.GpioSetLow(pin)
 	return
 }
 
 func (pin *Pin) SetHigh() (err error) {
+
+	prx, err := proxy.GetInstance()
+	if err != nil {
+		return
+	}
+
+	err = prx.GpioSetHigh(pin)
 	return
 }
 
 func (pin *Pin) GetState() (state gpio.State, err error) {
+
+	prx, err := proxy.GetInstance()
+	if err != nil {
+		return
+	}
+
+	state, err = prx.GpioGetState(pin)
 	return
 }

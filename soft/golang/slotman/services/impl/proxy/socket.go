@@ -78,6 +78,8 @@ func (sv *Service) handleWs(w http.ResponseWriter, r *http.Request) {
 		switch message.Area {
 		case proxy.AreaGpio:
 			resBytes, err = sv.handleGpio(reqBytes)
+		case proxy.AreaSpi:
+			resBytes, err = sv.handleSpi(reqBytes)
 		}
 
 		if err != nil {

@@ -1,5 +1,12 @@
 package gpio
 
+type State uint8
+
+const (
+	Low State = iota
+	High
+)
+
 type Gpio interface {
 	Open() (err error)
 	Close() (err error)

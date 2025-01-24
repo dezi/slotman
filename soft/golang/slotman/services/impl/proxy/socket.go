@@ -21,12 +21,6 @@ func (sv *Service) handleWs(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	parts := strings.Split(r.URL.String(), "/")
-	if len(parts) != 3 {
-		http.NotFound(w, r)
-		return
-	}
-
 	sender := r.RemoteAddr
 
 	log.Printf("Started websocket sender=%s...", sender)

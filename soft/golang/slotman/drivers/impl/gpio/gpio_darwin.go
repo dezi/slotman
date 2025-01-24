@@ -1,14 +1,18 @@
 package gpio
 
+import (
+	"slotman/drivers/iface/gpio"
+	"slotman/services/iface/proxy"
+)
+
 func HasGpio() (ok bool) {
 
-	//prx, err := proxy.GetInstance()
-	//if err != nil {
-	//	return
-	//}
+	prx, err := proxy.GetInstance()
+	if err != nil {
+		return
+	}
 
-	//_ = prx
-	//ok, err = prx.GpioHasGpio()
+	ok, err = prx.GpioHasGpio()
 	return
 }
 
@@ -36,6 +40,6 @@ func (pin *Pin) SetHigh() (err error) {
 	return
 }
 
-func (pin *Pin) GetState() (state State, err error) {
+func (pin *Pin) GetState() (state gpio.State, err error) {
 	return
 }

@@ -10,10 +10,10 @@ var (
 	doExit       bool
 	controlGroup sync.WaitGroup
 
-	providers     map[Provider]BaseProvider
+	providers     map[Service]BaseService
 	providerMutex sync.Mutex
 
-	controlTasks map[Provider]*controlTask
+	controlTasks map[Service]*controlTask
 	controlMutex sync.Mutex
 )
 
@@ -23,8 +23,8 @@ func StartService() (err error) {
 		return
 	}
 
-	providers = make(map[Provider]BaseProvider)
-	controlTasks = make(map[Provider]*controlTask)
+	providers = make(map[Service]BaseService)
+	controlTasks = make(map[Service]*controlTask)
 
 	controlGroup.Add(1)
 	go controlLoop()

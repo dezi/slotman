@@ -12,7 +12,7 @@ func controlLoop() {
 
 		var bestDue int64
 		var bestTask *controlTask
-		var bestProvider Provider
+		var bestProvider Service
 
 		controlMutex.Lock()
 
@@ -39,7 +39,7 @@ func controlLoop() {
 			baseProvider := providers[bestProvider]
 			providerMutex.Unlock()
 
-			controlProvider, ok := baseProvider.(ControlProvider)
+			controlProvider, ok := baseProvider.(ControlService)
 
 			if !ok {
 				continue

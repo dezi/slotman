@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-func SetProvider(provider BaseProvider) {
+func SetProvider(provider BaseService) {
 
 	providerMutex.Lock()
 	providers[provider.GetName()] = provider
@@ -14,7 +14,7 @@ func SetProvider(provider BaseProvider) {
 
 	controlMutex.Lock()
 
-	if control, ok := provider.(ControlProvider); ok {
+	if control, ok := provider.(ControlService); ok {
 
 		interval := control.GetControlOptions()
 
@@ -28,7 +28,7 @@ func SetProvider(provider BaseProvider) {
 	controlMutex.Unlock()
 }
 
-func UnsetProvider(provider BaseProvider) {
+func UnsetProvider(provider BaseService) {
 
 	providerMutex.Lock()
 	delete(providers, provider.GetName())
@@ -39,7 +39,7 @@ func UnsetProvider(provider BaseProvider) {
 	controlMutex.Unlock()
 }
 
-func GetProvider(providerName Provider) (provider BaseProvider, err error) {
+func GetProvider(providerName Service) (provider BaseService, err error) {
 
 	providerMutex.Lock()
 	provider, ok := providers[providerName]
@@ -53,7 +53,7 @@ func GetProvider(providerName Provider) (provider BaseProvider, err error) {
 	return
 }
 
-func ErrNotFound(providerName Provider) (err error) {
+func ErrNotFound(providerName Service) (err error) {
 	err = errors.New(fmt.Sprintf("provider <%s> not found", providerName))
 	return
 }

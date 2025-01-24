@@ -69,8 +69,8 @@ func StopService() (err error) {
 	return
 }
 
-func (sv *Service) GetName() (name provider.Provider) {
-	return turner.Provider
+func (sv *Service) GetName() (name provider.Service) {
+	return turner.Service
 }
 
 func (sv *Service) GetControlOptions() (interval time.Duration) {

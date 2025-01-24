@@ -3,23 +3,23 @@ package pilots
 import "slotman/services/impl/provider"
 
 const (
-	Provider provider.Provider = "servicePilots"
+	Service provider.Service = "servicePilots"
 )
 
 type Interface interface {
-	GetName() (name provider.Provider)
+	GetName() (name provider.Service)
 }
 
 func GetInstance() (iface Interface, err error) {
 
-	baseProvider, err := provider.GetProvider(Provider)
+	baseProvider, err := provider.GetProvider(Service)
 	if err != nil {
 		return
 	}
 
 	iface = baseProvider.(Interface)
 	if iface == nil {
-		err = provider.ErrNotFound(Provider)
+		err = provider.ErrNotFound(Service)
 		return
 	}
 

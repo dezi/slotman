@@ -1,9 +1,9 @@
-package turner
+package proxy
 
 import "slotman/services/impl/provider"
 
 const (
-	Service provider.Service = "serviceTurner"
+	Service provider.Service = "serviceProxy<"
 )
 
 type Interface interface {

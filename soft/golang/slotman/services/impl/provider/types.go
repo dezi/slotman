@@ -2,7 +2,7 @@ package provider
 
 import "time"
 
-type Provider string
+type Service string
 
 type controlTask struct {
 	isInGo   bool
@@ -10,12 +10,12 @@ type controlTask struct {
 	interval time.Duration
 }
 
-type BaseProvider interface {
-	GetName() (name Provider)
+type BaseService interface {
+	GetName() (name Service)
 }
 
-type ControlProvider interface {
-	GetName() (name Provider)
+type ControlService interface {
+	GetName() (name Service)
 	GetControlOptions() (interval time.Duration)
 	DoControlTask()
 }

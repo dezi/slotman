@@ -2,8 +2,10 @@ package gc9a01
 
 import (
 	"errors"
+	"fmt"
 	"slotman/drivers/gpio"
 	"slotman/drivers/spi"
+	"slotman/utils/simple"
 )
 
 func NewGC9A01(devicePath string, dcPinNo byte) (rc *GC9A01) {
@@ -18,8 +20,8 @@ func NewGC9A01(devicePath string, dcPinNo byte) (rc *GC9A01) {
 
 func (se *GC9A01) Open() (err error) {
 
-	//shaData := fmt.Sprintf("%s|%s|%s|%s", identity.GetBoxIdentity(), se.Model, se.Vendor, se.DevicePath)
-	//se.Uuid = simple.UuidHexFromSha256([]byte(shaData))
+	shaData := fmt.Sprintf("%s|%s|%s|%s", simple.ZeroUuidHex(), se.Model, se.Vendor, se.DevicePath)
+	se.Uuid = simple.UuidHexFromSha256([]byte(shaData))
 
 	if !gpio.HasGpio() {
 		err = errors.New("no gpio available")
@@ -53,7 +55,6 @@ func (se *GC9A01) Open() (err error) {
 
 	_ = spiDev.SetMode(0)
 	_ = spiDev.SetBitsPerWord(8)
-	//_ = spiDev.SetSpeed(80000000)
 	_ = spiDev.SetSpeed(40000000)
 
 	se.spi = spiDev

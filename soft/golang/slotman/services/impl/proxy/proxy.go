@@ -1,23 +1,22 @@
-package pilots
+package proxy
 
 import (
-	"image"
-	"slotman/services/iface/pilots"
+	"github.com/gorilla/websocket"
+	"net/http"
+	"slotman/services/iface/proxy"
 	"slotman/services/impl/provider"
-	"slotman/services/type/slotman"
 	"slotman/utils/log"
-	"slotman/utils/simple"
 	"sync"
 	"time"
 )
 
 type Service struct {
-	pilots map[simple.UUIDHex]*slotman.Pilot
+	httpMux     *http.ServeMux
+	httpServer  *http.Server
+	httpRunning bool
 
-	pilotProfileFull  map[simple.UUIDHex]*image.RGBA
-	pilotProfileSmall map[simple.UUIDHex]*image.RGBA
-
-	mapsLock sync.Mutex
+	webSockets map[string]*websocket.Conn
+	mapsLock   sync.Mutex
 }
 
 var (
@@ -32,9 +31,7 @@ func StartService() (err error) {
 
 	singleTon = &Service{}
 
-	singleTon.pilots = make(map[simple.UUIDHex]*slotman.Pilot)
-	singleTon.pilotProfileFull = make(map[simple.UUIDHex]*image.RGBA)
-	singleTon.pilotProfileSmall = make(map[simple.UUIDHex]*image.RGBA)
+	singleTon.webSockets = make(map[string]*websocket.Conn)
 
 	provider.SetProvider(singleTon)
 
@@ -49,6 +46,10 @@ func StopService() (err error) {
 
 	provider.UnsetProvider(singleTon)
 
+	log.Printf("Stopping service...")
+
+	_ = singleTon.stopServers()
+
 	log.Printf("Stopped service.")
 
 	singleTon = nil
@@ -57,10 +58,10 @@ func StopService() (err error) {
 }
 
 func (sv *Service) GetName() (name provider.Service) {
-	return pilots.Service
+	return proxy.Service
 }
 
 func (sv *Service) GetControlOptions() (interval time.Duration) {
-	interval = time.Second * 10
+	interval = time.Second * 60
 	return
 }

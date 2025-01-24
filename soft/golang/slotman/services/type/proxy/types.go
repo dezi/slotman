@@ -14,6 +14,8 @@ type GpioWhat string
 
 const (
 	GpioWhatHasGpio GpioWhat = "gpio.hasGpio"
+	GpioWhatOpen    GpioWhat = "gpio.open"
+	GpioWhatClose   GpioWhat = "gpio.close"
 )
 
 type Gpio struct {

@@ -30,10 +30,48 @@ func (sv *Service) GpioHasGpio() (ok bool, err error) {
 }
 
 func (sv *Service) GpioOpen(pin gpio.Gpio) (err error) {
+
+	req := proxy.Gpio{
+		Area: proxy.AreaGpio,
+		What: proxy.GpioWhatOpen,
+	}
+
+	var resBytes []byte
+	resBytes, err = sv.ProxyRequest(req)
+	if err != nil {
+		return
+	}
+
+	res := proxy.Gpio{}
+	err = json.Unmarshal(resBytes, &res)
+	if err != nil {
+		return
+	}
+
+	err = res.Err
 	return
 }
 
 func (sv *Service) GpioClose(pin gpio.Gpio) (err error) {
+
+	req := proxy.Gpio{
+		Area: proxy.AreaGpio,
+		What: proxy.GpioWhatClose,
+	}
+
+	var resBytes []byte
+	resBytes, err = sv.ProxyRequest(req)
+	if err != nil {
+		return
+	}
+
+	res := proxy.Gpio{}
+	err = json.Unmarshal(resBytes, &res)
+	if err != nil {
+		return
+	}
+
+	err = res.Err
 	return
 }
 

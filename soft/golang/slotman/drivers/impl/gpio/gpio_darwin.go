@@ -28,6 +28,13 @@ func (pin *Pin) Open() (err error) {
 }
 
 func (pin *Pin) Close() (err error) {
+
+	prx, err := proxy.GetInstance()
+	if err != nil {
+		return
+	}
+
+	err = prx.GpioClose(pin)
 	return
 }
 

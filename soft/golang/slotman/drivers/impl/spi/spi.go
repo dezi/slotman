@@ -3,7 +3,7 @@ package spi
 import (
 	"errors"
 	"os"
-	"slotman/drivers/ioctl"
+	"slotman/drivers/impl/ioctl"
 	"sync"
 	"unsafe"
 )

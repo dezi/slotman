@@ -1,6 +1,8 @@
 package proxy
 
-import "slotman/drivers/gpio"
+import (
+	"slotman/drivers/types/gpio"
+)
 
 func (sv *Service) GpioHasGpio() (ok bool, err error) {
 

@@ -1,7 +1,7 @@
 package proxy
 
 import (
-	"slotman/drivers/gpio"
+	"slotman/drivers/types/gpio"
 	"slotman/services/impl/provider"
 )
 

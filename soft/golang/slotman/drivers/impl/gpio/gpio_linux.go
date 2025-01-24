@@ -3,6 +3,7 @@ package gpio
 import (
 	"github.com/stianeikeland/go-rpio/v4"
 	"os"
+	gpio2 "slotman/drivers/types/gpio"
 	"slotman/utils/log"
 )
 
@@ -16,7 +17,7 @@ func HasGpio() (ok bool) {
 	return
 }
 
-func (pin *Pin) Open() (err error) {
+func (pin *gpio2.Pin) Open() (err error) {
 
 	if !isOpen {
 
@@ -39,31 +40,31 @@ func (pin *Pin) Open() (err error) {
 	return
 }
 
-func (pin *Pin) Close() (err error) {
+func (pin *gpio2.Pin) Close() (err error) {
 	return
 }
 
-func (pin *Pin) SetOutput() (err error) {
+func (pin *gpio2.Pin) SetOutput() (err error) {
 	pin.pin.Output()
 	return
 }
 
-func (pin *Pin) SetInput() (err error) {
+func (pin *gpio2.Pin) SetInput() (err error) {
 	pin.pin.Input()
 	return
 }
 
-func (pin *Pin) SetLow() (err error) {
+func (pin *gpio2.Pin) SetLow() (err error) {
 	pin.pin.Low()
 	return
 }
 
-func (pin *Pin) SetHigh() (err error) {
+func (pin *gpio2.Pin) SetHigh() (err error) {
 	pin.pin.High()
 	return
 }
 
-func (pin *Pin) GetState() (state State, err error) {
-	state = State(pin.pin.Read())
+func (pin *gpio2.Pin) GetState() (state gpio2.State, err error) {
+	state = gpio2.State(pin.pin.Read())
 	return
 }

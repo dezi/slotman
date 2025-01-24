@@ -1,7 +1,7 @@
 package spi
 
 import (
-	"slotman/drivers/ioctl"
+	"slotman/drivers/impl/ioctl"
 	"unsafe"
 )
 

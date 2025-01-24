@@ -1,25 +1,31 @@
 package proxy
 
 import (
+	"encoding/json"
 	"slotman/drivers/iface/gpio"
 	"slotman/services/type/proxy"
-	"slotman/utils/log"
 )
 
 func (sv *Service) GpioHasGpio() (ok bool, err error) {
-
-	log.Printf("############# GpioHasGpio req")
 
 	req := proxy.Gpio{
 		Area: proxy.AreaGpio,
 		What: proxy.GpioWhatHasGpio,
 	}
 
-	var res []byte
-	res, err = sv.ProxyRequest(req)
+	var resBytes []byte
+	resBytes, err = sv.ProxyRequest(req)
+	if err != nil {
+		return
+	}
 
-	log.Printf("############# GpioHasGpio res=%s", string(res))
+	res := proxy.Gpio{}
+	err = json.Unmarshal(resBytes, &res)
+	if err != nil {
+		return
+	}
 
+	ok, err = res.Ok, res.Err
 	return
 }
 

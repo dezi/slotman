@@ -64,7 +64,7 @@ func (sv *Service) handleWs(w http.ResponseWriter, r *http.Request) {
 			continue
 		}
 
-		log.Printf("Rcv reqBytes=%sd", string(reqBytes))
+		log.Printf("Recv reqBytes=%s", string(reqBytes))
 
 		message := proxy.Message{}
 		err = json.Unmarshal(reqBytes, &message)
@@ -85,7 +85,7 @@ func (sv *Service) handleWs(w http.ResponseWriter, r *http.Request) {
 			break
 		}
 
-		log.Printf("Snd resBytes=%sd", string(resBytes))
+		log.Printf("Send resBytes=%s", string(resBytes))
 
 		err = ws.WriteMessage(websocket.TextMessage, resBytes)
 		if err != nil {

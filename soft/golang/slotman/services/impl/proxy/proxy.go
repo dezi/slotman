@@ -15,7 +15,9 @@ type Service struct {
 	httpServer  *http.Server
 	httpRunning bool
 
-	webSockets map[string]*websocket.Conn
+	webServer *websocket.Conn
+
+	webClients map[string]*websocket.Conn
 	mapsLock   sync.Mutex
 }
 
@@ -31,7 +33,7 @@ func StartService() (err error) {
 
 	singleTon = &Service{}
 
-	singleTon.webSockets = make(map[string]*websocket.Conn)
+	singleTon.webClients = make(map[string]*websocket.Conn)
 
 	provider.SetProvider(singleTon)
 

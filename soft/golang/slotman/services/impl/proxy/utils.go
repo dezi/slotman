@@ -2,8 +2,11 @@ package proxy
 
 import (
 	"errors"
+	"github.com/gorilla/websocket"
+	"net/url"
 	"os"
 	"slotman/services/type/proxy"
+	"slotman/utils/log"
 )
 
 func (sv *Service) getTarget() (target string, err error) {
@@ -14,10 +17,19 @@ func (sv *Service) getTarget() (target string, err error) {
 	}
 
 	target, ok := proxy.ProxyTargets[hostName]
-	if ok {
+	if !ok {
+		err = errors.New("no proxy target for host")
 		return
 	}
 
-	err = errors.New("no proxy target for host")
+	wsUrl := url.URL{Scheme: "ws", Host: target, Path: "/ws"}
+	log.Printf("Connecting wsUrl=%s", wsUrl.String())
+
+	sv.webServer, _, err = websocket.DefaultDialer.Dial(wsUrl.String(), nil)
+	if err != nil {
+		log.Cerror(err)
+		return
+	}
+
 	return
 }

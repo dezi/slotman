@@ -47,11 +47,11 @@ func (sv *Service) handleWs(w http.ResponseWriter, r *http.Request) {
 
 	sv.mapsLock.Lock()
 
-	if sv.webSockets[sender] != nil {
-		_ = sv.webSockets[sender].Close()
+	if sv.webClients[sender] != nil {
+		_ = sv.webClients[sender].Close()
 	}
 
-	sv.webSockets[sender] = ws
+	sv.webClients[sender] = ws
 
 	sv.mapsLock.Unlock()
 
@@ -93,9 +93,9 @@ func (sv *Service) handleWs(w http.ResponseWriter, r *http.Request) {
 
 	sv.mapsLock.Lock()
 
-	if sv.webSockets[sender] == ws {
+	if sv.webClients[sender] == ws {
 		_ = ws.Close()
-		delete(sv.webSockets, sender)
+		delete(sv.webClients, sender)
 	}
 
 	sv.mapsLock.Unlock()

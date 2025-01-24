@@ -9,7 +9,8 @@ func HasGpio() (ok bool) {
 		return
 	}
 
-	ok, err = prx.GpioHasGpio()
+	_ = prx
+	//ok, err = prx.GpioHasGpio()
 	return
 }
 

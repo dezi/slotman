@@ -35,7 +35,7 @@ func (pin *Pin) Open() (err error) {
 		return
 	}
 
-	pin.pin = rpio.Pin(pinNo)
+	pin.pin = rpio.Pin(pin.pinNo)
 	return
 }
 

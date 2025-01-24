@@ -47,6 +47,21 @@ func (sv *Service) handleGpio(reqBytes []byte) (resBytes []byte, err error) {
 
 	case proxy.GpioWhatClose:
 		req.Err = gpioDev.Close()
+
+	case proxy.GpioWhatSetInput:
+		req.Err = gpioDev.SetInput()
+
+	case proxy.GpioWhatSetOutput:
+		req.Err = gpioDev.SetOutput()
+
+	case proxy.GpioWhatSetLow:
+		req.Err = gpioDev.SetLow()
+
+	case proxy.GpioWhatSetHigh:
+		req.Err = gpioDev.SetHigh()
+
+	case proxy.GpioWhatGetState:
+		req.State, req.Err = gpioDev.GetState()
 	}
 
 	req.Ok = req.Err == nil

@@ -20,6 +20,8 @@ func (sv *Service) handleGpio(reqBytes []byte) (resBytes []byte, err error) {
 	switch req.What {
 	case proxy.GpioWhatHasGpio:
 		req.Ok, req.Err = gpio.HasGpio()
+	case proxy.GpioWhatOpen:
+	case proxy.GpioWhatClose:
 	}
 
 	resBytes, err = json.Marshal(req)

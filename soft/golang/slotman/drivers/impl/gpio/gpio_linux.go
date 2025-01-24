@@ -11,7 +11,7 @@ var (
 	isOpen bool
 )
 
-func HasGpio() (ok bool) {
+func HasGpio() (ok bool, err error) {
 	_, tryErr := os.Stat("/dev/gpiomem")
 	ok = tryErr == nil
 	return

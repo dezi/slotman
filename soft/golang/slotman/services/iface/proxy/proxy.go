@@ -1,6 +1,9 @@
 package proxy
 
-import "slotman/services/impl/provider"
+import (
+	"slotman/drivers/gpio"
+	"slotman/services/impl/provider"
+)
 
 const (
 	Service provider.Service = "serviceProxy<"
@@ -8,6 +11,22 @@ const (
 
 type Interface interface {
 	GetName() (name provider.Service)
+
+	//
+	// GPIO interface.
+	//
+
+	GpioHasGpio() (ok bool, err error)
+
+	GpioOpen(pin gpio.Gpio) (err error)
+	GpioClose(pin gpio.Gpio) (err error)
+
+	GpioSetOutput(pin gpio.Gpio) (err error)
+	GpioSetInput(pin gpio.Gpio) (err error)
+	GpioSetLow(pin gpio.Gpio) (err error)
+	GpioSetHigh(pin gpio.Gpio) (err error)
+
+	GpioGetState(pin gpio.Gpio) (state gpio.State, err error)
 }
 
 func GetInstance() (iface Interface, err error) {

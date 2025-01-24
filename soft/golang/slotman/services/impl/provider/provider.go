@@ -1,6 +1,7 @@
 package provider
 
 import (
+	"os"
 	"slotman/utils/log"
 	"sync"
 )
@@ -31,7 +32,9 @@ func StartService() (err error) {
 
 	initialized = true
 
-	log.Printf("Started service.")
+	hostName, _ := os.Hostname()
+
+	log.Printf("Started service on host=%s.", hostName)
 
 	return
 }

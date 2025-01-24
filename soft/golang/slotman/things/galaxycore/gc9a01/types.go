@@ -18,7 +18,7 @@ type GC9A01 struct {
 	IsStarted bool
 
 	dcPinNo byte
-	dcPin   *gpio.Pin
+	dcPin   gpio.Gpio
 	spi     *spi.Device
 
 	handler Handler

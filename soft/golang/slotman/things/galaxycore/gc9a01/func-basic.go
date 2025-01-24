@@ -28,7 +28,9 @@ func (se *GC9A01) Open() (err error) {
 		return
 	}
 
-	se.dcPin, err = gpio.GetPin(25)
+	se.dcPin = gpio.NewPin(25)
+
+	err = se.dcPin.Open()
 	if err != nil {
 		return
 	}

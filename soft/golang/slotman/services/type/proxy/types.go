@@ -1,5 +1,7 @@
 package proxy
 
 type Message struct {
-	What string `json:"what"`
+	Area string
+	What string
+	Path string
 }

@@ -17,6 +17,13 @@ func HasGpio() (ok bool, err error) {
 }
 
 func (pin *Pin) Open() (err error) {
+
+	prx, err := proxy.GetInstance()
+	if err != nil {
+		return
+	}
+
+	err = prx.GpioOpen(pin)
 	return
 }
 

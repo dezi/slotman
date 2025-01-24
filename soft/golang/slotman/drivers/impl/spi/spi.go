@@ -3,7 +3,6 @@ package spi
 import (
 	"errors"
 	"os"
-	"slotman/drivers/impl/ioctl"
 	"sync"
 	"unsafe"
 )
@@ -14,8 +13,6 @@ import (
 
 type Device struct {
 	Path string
-	Bus  int
-	Chip int
 
 	file  *os.File
 	mode  uint8
@@ -99,7 +96,7 @@ func (spi *Device) Send(request []byte) (result []byte, err error) {
 
 	globalLock.Lock()
 
-	err = ioctl.IOCTL(file.Fd(), SdIoctlWrCustomMessage(1), uintptr(unsafe.Pointer(&transfer)))
+	err = IOCTL(file.Fd(), SdIoctlWrCustomMessage(1), uintptr(unsafe.Pointer(&transfer)))
 
 	globalLock.Unlock()
 
@@ -120,7 +117,7 @@ func (spi *Device) SetMode(mode uint8) (err error) {
 
 	spi.mode = mode
 
-	err = ioctl.IOCTL(spi.file.Fd(), SdIoctlWrMode(), uintptr(unsafe.Pointer(&mode)))
+	err = IOCTL(spi.file.Fd(), SdIoctlWrMode(), uintptr(unsafe.Pointer(&mode)))
 	if err != nil {
 		err = errors.New("error setting spi mode")
 		return err
@@ -133,7 +130,7 @@ func (spi *Device) SetBitsPerWord(bpw uint8) (err error) {
 
 	spi.bpw = bpw
 
-	err = ioctl.IOCTL(spi.file.Fd(), SdIoctlWrBitsPerWord(), uintptr(unsafe.Pointer(&bpw)))
+	err = IOCTL(spi.file.Fd(), SdIoctlWrBitsPerWord(), uintptr(unsafe.Pointer(&bpw)))
 	if err != nil {
 		err = errors.New("error setting bits per word")
 		return
@@ -146,7 +143,7 @@ func (spi *Device) SetSpeed(speed uint32) (err error) {
 
 	spi.speed = speed
 
-	err = ioctl.IOCTL(spi.file.Fd(), SdIoctlWrMaxSpeedHz(), uintptr(unsafe.Pointer(&speed)))
+	err = IOCTL(spi.file.Fd(), SdIoctlWrMaxSpeedHz(), uintptr(unsafe.Pointer(&speed)))
 	if err != nil {
 		err = errors.New("error setting speed")
 		return

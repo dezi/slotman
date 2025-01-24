@@ -2,6 +2,7 @@ package spi
 
 import (
 	"slotman/drivers/impl/ioctl"
+	"syscall"
 	"unsafe"
 )
 
@@ -77,4 +78,12 @@ func SdMessageSize(n uintptr) (size uintptr) {
 		size = n * unsafe.Sizeof(SdIoctlTransfer{})
 	}
 	return
+}
+
+func IOCTL(fd, op, arg uintptr) error {
+	_, _, ep := syscall.Syscall(syscall.SYS_IOCTL, fd, op, arg)
+	if ep != 0 {
+		return ep
+	}
+	return nil
 }

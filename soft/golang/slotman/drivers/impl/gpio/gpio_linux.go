@@ -3,6 +3,7 @@ package gpio
 import (
 	"github.com/stianeikeland/go-rpio/v4"
 	"os"
+	"slotman/drivers/iface/gpio"
 	"slotman/utils/log"
 )
 
@@ -63,7 +64,7 @@ func (pin *Pin) SetHigh() (err error) {
 	return
 }
 
-func (pin *Pin) GetState() (state State, err error) {
-	state = State(pin.pin.Read())
+func (pin *Pin) GetState() (state gpio.State, err error) {
+	state = gpio.State(pin.pin.Read())
 	return
 }

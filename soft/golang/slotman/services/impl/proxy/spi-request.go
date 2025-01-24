@@ -59,7 +59,7 @@ func (sv *Service) SpiSetMode(spi spi.Spi, mode uint8) (err error) {
 	return
 }
 
-func (sv *Service) SetBitsPerWord(spi spi.Spi, bpw uint8) (err error) {
+func (sv *Service) SpiSetBitsPerWord(spi spi.Spi, bpw uint8) (err error) {
 
 	req := &proxy.Spi{
 		Area: proxy.AreaSpi,
@@ -76,7 +76,7 @@ func (sv *Service) SetBitsPerWord(spi spi.Spi, bpw uint8) (err error) {
 	return
 }
 
-func (sv *Service) SetSpeed(spi spi.Spi, speed uint32) (err error) {
+func (sv *Service) SpiSetSpeed(spi spi.Spi, speed uint32) (err error) {
 
 	req := &proxy.Spi{
 		Area:  proxy.AreaSpi,

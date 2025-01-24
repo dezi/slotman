@@ -2,6 +2,7 @@ package proxy
 
 import (
 	"slotman/drivers/iface/gpio"
+	"slotman/drivers/iface/spi"
 	"slotman/services/impl/provider"
 )
 
@@ -32,6 +33,16 @@ type Interface interface {
 	// SPI interface.
 	//
 
+	SpiGetDevicePaths() (devicePaths []string, err error)
+
+	SpiOpen(spi spi.Spi) (err error)
+	SpiClose(spi spi.Spi) (err error)
+
+	SpiSetMode(spi spi.Spi, mode uint8) (err error)
+	SpiSetBitsPerWord(spi spi.Spi, bpw uint8) (err error)
+	SpiSetSpeed(spi spi.Spi, speed uint32) (err error)
+
+	SpiSend(spi spi.Spi, request []byte) (result []byte, err error)
 }
 
 func GetInstance() (iface Interface, err error) {

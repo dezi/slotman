@@ -11,8 +11,6 @@ import (
 
 func (sv *Service) handleWs(w http.ResponseWriter, r *http.Request) {
 
-	log.Printf("########### handleWs=%s...", r.URL.String())
-
 	if !strings.HasPrefix(r.URL.String(), "/ws") {
 		http.NotFound(w, r)
 		return
@@ -66,7 +64,7 @@ func (sv *Service) handleWs(w http.ResponseWriter, r *http.Request) {
 			continue
 		}
 
-		//log.Printf("Message mType=%d jsonBytes=%sd", mType, string(jsonBytes))
+		log.Printf("Message mType=%d jsonBytes=%sd", mType, string(jsonBytes))
 
 		message := proxy.Message{}
 		err = json.Unmarshal(jsonBytes, &message)
@@ -75,15 +73,7 @@ func (sv *Service) handleWs(w http.ResponseWriter, r *http.Request) {
 			break
 		}
 
-		switch message.What {
-		//case "race":
-		//	err = sv.handleRace(appId, ws, jsonBytes)
-		//case "pilot":
-		//	err = sv.handlePilot(appId, ws, jsonBytes)
-		//case "tracks":
-		//	err = sv.handleTracks(appId, ws, jsonBytes)
-		//case "controller":
-		//	err = sv.handleController(appId, ws, jsonBytes)
+		switch message.Area {
 		}
 	}
 

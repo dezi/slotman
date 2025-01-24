@@ -34,7 +34,7 @@ func StartService() (err error) {
 
 	hostName, _ := os.Hostname()
 
-	log.Printf("Started service on host=%s.", hostName)
+	log.Printf("Started service on host=<%s>", hostName)
 
 	return
 }

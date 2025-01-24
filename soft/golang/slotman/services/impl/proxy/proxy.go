@@ -15,7 +15,8 @@ type Service struct {
 	httpServer  *http.Server
 	httpRunning bool
 
-	webServer *websocket.Conn
+	webServerConn *websocket.Conn
+	webServerLock sync.Mutex
 
 	webClients map[string]*websocket.Conn
 	mapsLock   sync.Mutex

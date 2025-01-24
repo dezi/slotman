@@ -41,7 +41,7 @@ func (sv *Service) startHTTP() (err error) {
 
 	sv.httpMux = &http.ServeMux{}
 	sv.httpMux.HandleFunc("/", sv.handleIndex)
-	sv.httpMux.HandleFunc("/ws/", sv.handleWs)
+	sv.httpMux.HandleFunc("/ws", sv.handleWs)
 
 	sv.httpServer = &http.Server{
 		ReadHeaderTimeout: 5 * time.Second,

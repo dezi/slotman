@@ -11,6 +11,8 @@ type Gpio interface {
 	Open() (err error)
 	Close() (err error)
 
+	GetPinNo() (pinNo uint8)
+
 	SetOutput() (err error)
 	SetInput() (err error)
 	SetLow() (err error)

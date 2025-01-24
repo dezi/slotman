@@ -8,3 +8,8 @@ func NewPin(pinNo uint8) (pin *Pin) {
 
 	return
 }
+
+func (pin *Pin) GetPinNo() (pinNo uint8) {
+	pinNo = pin.PinNo
+	return
+}

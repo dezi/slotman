@@ -3,6 +3,7 @@ package proxy
 import (
 	"github.com/gorilla/websocket"
 	"net/http"
+	"slotman/drivers/impl/gpio"
 	"slotman/services/iface/proxy"
 	"slotman/services/impl/provider"
 	"slotman/utils/log"
@@ -14,6 +15,9 @@ type Service struct {
 	httpMux     *http.ServeMux
 	httpServer  *http.Server
 	httpRunning bool
+
+	gpioDevMap  map[uint8]*gpio.Pin
+	gpioDevLock sync.Mutex
 
 	webServerConn *websocket.Conn
 	webServerLock sync.Mutex
@@ -33,6 +37,8 @@ func StartService() (err error) {
 	}
 
 	singleTon = &Service{}
+
+	singleTon.gpioDevMap = make(map[uint8]*gpio.Pin)
 
 	singleTon.webClients = make(map[string]*websocket.Conn)
 

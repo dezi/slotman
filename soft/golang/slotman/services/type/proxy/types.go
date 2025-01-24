@@ -31,7 +31,7 @@ type Gpio struct {
 	// Request part.
 	//
 
-	PinNo string `json:",omitempty"`
+	PinNo uint8 `json:",omitempty"`
 
 	//
 	// Response part.

@@ -5,7 +5,7 @@ import (
 	"slotman/services/iface/proxy"
 )
 
-func HasGpio() (ok bool) {
+func HasGpio() (ok bool, err error) {
 
 	prx, err := proxy.GetInstance()
 	if err != nil {

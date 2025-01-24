@@ -8,14 +8,17 @@ import (
 
 func (sv *Service) GpioHasGpio() (ok bool, err error) {
 
-	log.Printf("############# GpioHasGpio request")
+	log.Printf("############# GpioHasGpio req")
 
-	message := proxy.Gpio{
+	req := proxy.Gpio{
 		Area: proxy.AreaGpio,
 		What: proxy.GpioWhatHasGpio,
 	}
 
-	err = sv.WriteMessage(message)
+	var res []byte
+	res, err = sv.ProxyRequest(req)
+
+	log.Printf("############# GpioHasGpio res=%s", string(res))
 
 	return
 }

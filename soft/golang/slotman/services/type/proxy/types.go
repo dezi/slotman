@@ -35,5 +35,6 @@ type Gpio struct {
 	// Response part.
 	//
 
-	Ok bool `json:",omitempty"`
+	Ok  bool  `json:",omitempty"`
+	Err error `json:",omitempty"`
 }

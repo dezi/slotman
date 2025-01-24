@@ -51,11 +51,11 @@ func (sv *Service) handleWs(w http.ResponseWriter, r *http.Request) {
 
 	var mType int
 	var tryErr error
-	var jsonBytes []byte
+	var reqBytes []byte
 
 	for {
 
-		mType, jsonBytes, tryErr = ws.ReadMessage()
+		mType, reqBytes, tryErr = ws.ReadMessage()
 		if tryErr != nil {
 			break
 		}
@@ -64,16 +64,31 @@ func (sv *Service) handleWs(w http.ResponseWriter, r *http.Request) {
 			continue
 		}
 
-		log.Printf("Message mType=%d jsonBytes=%sd", mType, string(jsonBytes))
+		log.Printf("Message mType=%d reqBytes=%sd", mType, string(reqBytes))
 
 		message := proxy.Message{}
-		err = json.Unmarshal(jsonBytes, &message)
+		err = json.Unmarshal(reqBytes, &message)
 		if err != nil {
 			log.Cerror(err)
 			break
 		}
 
+		var resBytes []byte
+
 		switch message.Area {
+		case proxy.AreaGpio:
+			resBytes, err = sv.handleGpio(reqBytes)
+		}
+
+		if err != nil {
+			log.Cerror(err)
+			break
+		}
+
+		err = ws.WriteMessage(websocket.TextMessage, resBytes)
+		if err != nil {
+			log.Cerror(err)
+			break
 		}
 	}
 

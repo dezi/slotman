@@ -10,7 +10,7 @@ import (
 	"slotman/utils/log"
 )
 
-func (sv *Service) WriteMessage(message interface{}) (err error) {
+func (sv *Service) ProxyRequest(req interface{}) (res []byte, err error) {
 
 	sv.webServerLock.Lock()
 	defer sv.webServerLock.Unlock()
@@ -41,22 +41,28 @@ func (sv *Service) WriteMessage(message interface{}) (err error) {
 		log.Printf("Connected wsUrl=%s", wsUrl.String())
 	}
 
-	messageBytes, err := json.Marshal(message)
+	reqBytes, err := json.Marshal(req)
 	if err != nil {
 		return
 	}
 
-	log.Printf("########### WriteMessage messageBytes=%s", string(messageBytes))
+	log.Printf("ProxyRequest req=%s", string(reqBytes))
 
-	err = sv.webServerConn.WriteMessage(websocket.TextMessage, messageBytes)
-	if err == nil {
+	err = sv.webServerConn.WriteMessage(websocket.TextMessage, reqBytes)
+	if err != nil {
+		log.Cerror(err)
+		_ = sv.webServerConn.Close()
+		sv.webServerConn = nil
 		return
 	}
 
-	log.Cerror(err)
-
-	_ = sv.webServerConn.Close()
-	sv.webServerConn = nil
+	var mType int
+	mType, res, err = sv.webServerConn.ReadMessage()
+	if mType != websocket.TextMessage {
+		err = errors.New("wrong message type received")
+		log.Cerror(err)
+		return
+	}
 
 	return
 }

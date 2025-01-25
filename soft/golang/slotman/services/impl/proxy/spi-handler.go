@@ -61,7 +61,7 @@ func (sv *Service) handleSpi(reqBytes []byte) (resBytes []byte, err error) {
 
 	case proxy.SpiWhatSend:
 		req.Recv, req.Err = spiDev.Send(req.Send)
-		log.Printf("SPI  Send send=%d dev=%s err=%v", len(req.Send), spiDev.GetDevice(), err)
+		//log.Printf("SPI  Send send=%d dev=%s err=%v", len(req.Send), spiDev.GetDevice(), err)
 		req.Send = nil
 	}
 

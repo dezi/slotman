@@ -64,7 +64,7 @@ func (sv *Service) ProxyRequest(req interface{}) (res []byte, err error) {
 		return
 	}
 
-	log.Printf("ProxyRequest res=%s", string(res))
+	//log.Printf("ProxyRequest res=%s", string(res))
 
 	return
 }

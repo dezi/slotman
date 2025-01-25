@@ -38,30 +38,30 @@ func (sv *Service) handleSpi(reqBytes []byte) (resBytes []byte, err error) {
 
 	case proxy.SpiWhatOpen:
 		req.Err = spiDev.Open()
-		log.Printf("SPI Open dev=%sd err=%v", spiDev.GetDevice(), err)
+		log.Printf("SPI  Open dev=%s err=%v", spiDev.GetDevice(), err)
 
 	case proxy.SpiWhatClose:
 		req.Err = spiDev.Close()
-		log.Printf("SPI Close dev=%sd err=%v", spiDev.GetDevice(), err)
+		log.Printf("SPI  Close dev=%s err=%v", spiDev.GetDevice(), err)
 
 	case proxy.SpiWhatSetMode:
 		req.Err = spiDev.SetMode(req.Mode)
-		log.Printf("SPI SetMode mode=%d dev=%sd err=%v", req.Mode, spiDev.GetDevice(), err)
+		log.Printf("SPI  SetMode mode=%d dev=%s err=%v", req.Mode, spiDev.GetDevice(), err)
 		req.Mode = 0
 
 	case proxy.SpiWhatSetBpw:
 		req.Err = spiDev.SetBitsPerWord(req.Bpw)
-		log.Printf("SPI SetBpw ppw=%d dev=%sd err=%v", req.Bpw, spiDev.GetDevice(), err)
+		log.Printf("SPI  SetBpw ppw=%d dev=%s err=%v", req.Bpw, spiDev.GetDevice(), err)
 		req.Bpw = 0
 
 	case proxy.SpiWhatSetSpeed:
 		req.Err = spiDev.SetSpeed(req.Speed)
-		log.Printf("SPI SetSpeed speed=%d dev=%sd err=%v", req.Speed, spiDev.GetDevice(), err)
+		log.Printf("SPI  SetSpeed speed=%d dev=%s err=%v", req.Speed, spiDev.GetDevice(), err)
 		req.Speed = 0
 
 	case proxy.SpiWhatSend:
 		req.Recv, req.Err = spiDev.Send(req.Send)
-		log.Printf("SPI SetSpeed send=%d dev=%sd err=%v", len(req.Send), spiDev.GetDevice(), err)
+		log.Printf("SPI  SetSpeed send=%d dev=%s err=%v", len(req.Send), spiDev.GetDevice(), err)
 		req.Send = nil
 	}
 

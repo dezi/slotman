@@ -10,7 +10,7 @@ import (
 	"slotman/utils/log"
 )
 
-func (sv *Service) ProxyRequest(req interface{}) (res []byte, err error) {
+func (sv *Service) proxyRequest(req interface{}) (res []byte, err error) {
 
 	sv.webServerLock.Lock()
 	defer sv.webServerLock.Unlock()
@@ -46,7 +46,7 @@ func (sv *Service) ProxyRequest(req interface{}) (res []byte, err error) {
 		return
 	}
 
-	//log.Printf("ProxyRequest req=%s", string(reqBytes))
+	//log.Printf("proxyRequest req=%s", string(reqBytes))
 
 	err = sv.webServerConn.WriteMessage(websocket.TextMessage, reqBytes)
 	if err != nil {
@@ -64,7 +64,7 @@ func (sv *Service) ProxyRequest(req interface{}) (res []byte, err error) {
 		return
 	}
 
-	//log.Printf("ProxyRequest res=%s", string(res))
+	//log.Printf("proxyRequest res=%s", string(res))
 
 	return
 }

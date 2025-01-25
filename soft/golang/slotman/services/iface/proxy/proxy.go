@@ -3,7 +3,9 @@ package proxy
 import (
 	"slotman/drivers/iface/gpio"
 	"slotman/drivers/iface/spi"
+	"slotman/drivers/iface/uart"
 	"slotman/services/impl/provider"
+	"time"
 )
 
 const (
@@ -43,6 +45,20 @@ type Interface interface {
 	SpiSetSpeed(spi spi.Spi, speed uint32) (err error)
 
 	SpiSend(spi spi.Spi, request []byte) (response []byte, err error)
+
+	//
+	// UART interface.
+	//
+
+	UartGetDevicePaths() (devicePaths []string, err error)
+
+	UartOpen(uart uart.Uart) (err error)
+	UartClose(uart uart.Uart) (err error)
+
+	UartSetReadTimeout(uart uart.Uart, timeout time.Duration) (err error)
+
+	UartRead(uart uart.Uart, data []byte) (xfer int, err error)
+	UartWrite(uart uart.Uart, data []byte) (xfer int, err error)
 }
 
 func GetInstance() (iface Interface, err error) {

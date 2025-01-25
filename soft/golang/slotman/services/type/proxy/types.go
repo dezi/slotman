@@ -1,12 +1,16 @@
 package proxy
 
-import "slotman/drivers/iface/gpio"
+import (
+	"slotman/drivers/iface/gpio"
+	"time"
+)
 
 type Area string
 
 const (
 	AreaGpio Area = "gpio"
 	AreaSpi  Area = "spi"
+	AreaUart Area = "uart"
 )
 
 type Message struct {
@@ -78,17 +82,59 @@ type Spi struct {
 
 	Device string `json:",omitempty"`
 
-	//
-	// Response part.
-	//
-
 	Mode  uint8  `json:",omitempty"`
 	Bpw   uint8  `json:",omitempty"`
 	Speed uint32 `json:",omitempty"`
 
+	//
+	// Response part.
+	//
+
 	Paths []string `json:",omitempty"`
 	Send  []byte   `json:",omitempty"`
 	Recv  []byte   `json:",omitempty"`
+
+	Ok  bool  `json:",omitempty"`
+	Err error `json:",omitempty"`
+}
+
+type UartWhat string
+
+const (
+	UartWhatGetDevicePaths UartWhat = "uart.get.device-paths"
+	UartWhatOpen           UartWhat = "uart.open"
+	UartWhatClose          UartWhat = "uart.close"
+	UartWhatSetReadTimeout UartWhat = "uart.set.read.timeout"
+	UartWhatRead           UartWhat = "uart.send"
+	UartWhatWrite          UartWhat = "uart.send"
+)
+
+type Uart struct {
+
+	//
+	// Routing part.
+	//
+
+	Area Area
+	What UartWhat
+
+	//
+	// Request part.
+	//
+
+	Device string `json:",omitempty"`
+
+	TimeOut time.Duration `json:",omitempty"`
+
+	//
+	// Response part.
+	//
+
+	Paths []string `json:",omitempty"`
+
+	Write []byte `json:",omitempty"`
+	Read  []byte `json:",omitempty"`
+	Xfer  int    `json:",omitempty"`
 
 	Ok  bool  `json:",omitempty"`
 	Err error `json:",omitempty"`

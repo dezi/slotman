@@ -7,6 +7,7 @@ type Uart interface {
 	Close() (err error)
 
 	GetDevice() (device string)
+	GetBaudrate() (baudrate int)
 
 	SetReadTimeout(timeout time.Duration) (err error)
 

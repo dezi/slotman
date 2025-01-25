@@ -105,8 +105,8 @@ const (
 	UartWhatOpen           UartWhat = "uart.open"
 	UartWhatClose          UartWhat = "uart.close"
 	UartWhatSetReadTimeout UartWhat = "uart.set.read.timeout"
-	UartWhatRead           UartWhat = "uart.send"
-	UartWhatWrite          UartWhat = "uart.send"
+	UartWhatRead           UartWhat = "uart.write"
+	UartWhatWrite          UartWhat = "uart.read"
 )
 
 type Uart struct {
@@ -124,7 +124,8 @@ type Uart struct {
 
 	Device string `json:",omitempty"`
 
-	TimeOut time.Duration `json:",omitempty"`
+	Baudrate int           `json:",omitempty"`
+	TimeOut  time.Duration `json:",omitempty"`
 
 	//
 	// Response part.
@@ -134,6 +135,7 @@ type Uart struct {
 
 	Write []byte `json:",omitempty"`
 	Read  []byte `json:",omitempty"`
+	Size  int    `json:",omitempty"`
 	Xfer  int    `json:",omitempty"`
 
 	Ok  bool  `json:",omitempty"`

@@ -77,6 +77,7 @@ func (sv *Service) UartRead(uart uart.Uart, data []byte) (xfer int, err error) {
 	req := &proxy.Uart{
 		Area: proxy.AreaUart,
 		What: proxy.UartWhatRead,
+		Size: len(data),
 	}
 
 	res, err := sv.uartBuildRequest(req, uart)
@@ -111,6 +112,7 @@ func (sv *Service) uartBuildRequest(req *proxy.Uart, uart uart.Uart) (res *proxy
 
 	if uart != nil {
 		req.Device = uart.GetDevice()
+		req.Baudrate = uart.GetBaudrate()
 	}
 
 	var resBytes []byte

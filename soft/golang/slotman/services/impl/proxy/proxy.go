@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"slotman/drivers/impl/gpio"
 	"slotman/drivers/impl/spi"
+	"slotman/drivers/impl/uart"
 	"slotman/services/iface/proxy"
 	"slotman/services/impl/provider"
 	"slotman/utils/log"
@@ -22,6 +23,9 @@ type Service struct {
 
 	spiDevMap  map[string]*spi.Device
 	spiDevLock sync.Mutex
+
+	uartDevMap  map[string]*uart.Device
+	uartDevLock sync.Mutex
 
 	webServerConn *websocket.Conn
 	webServerLock sync.Mutex
@@ -44,6 +48,7 @@ func StartService() (err error) {
 
 	singleTon.gpioDevMap = make(map[uint8]*gpio.Pin)
 	singleTon.spiDevMap = make(map[string]*spi.Device)
+	singleTon.uartDevMap = make(map[string]*uart.Device)
 
 	singleTon.webClients = make(map[string]*websocket.Conn)
 

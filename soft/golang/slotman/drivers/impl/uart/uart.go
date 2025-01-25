@@ -11,3 +11,8 @@ func (uart *Device) GetDevice() (device string) {
 	device = uart.Path
 	return
 }
+
+func (uart *Device) GetBaudrate() (baudrate int) {
+	baudrate = uart.BaudRate
+	return
+}

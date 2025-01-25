@@ -1,4 +1,4 @@
-package ioctl
+package ioctlxx
 
 import "syscall"
 

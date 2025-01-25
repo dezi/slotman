@@ -46,7 +46,7 @@ func (sv *Service) ProxyRequest(req interface{}) (res []byte, err error) {
 		return
 	}
 
-	log.Printf("ProxyRequest req=%s", string(reqBytes))
+	//log.Printf("ProxyRequest req=%s", string(reqBytes))
 
 	err = sv.webServerConn.WriteMessage(websocket.TextMessage, reqBytes)
 	if err != nil {

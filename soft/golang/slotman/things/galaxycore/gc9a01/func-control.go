@@ -144,13 +144,13 @@ func (se *GC9A01) SetOrientation(orientation int) (err error) {
 
 	switch orientation {
 	case 0:
-		err = se.writeCommandBytes(0x36, 0x18)
+		err = se.writeCommandBytes(CommandOrientation, byte(Orientation0))
 	case 1:
-		err = se.writeCommandBytes(0x36, 0x28)
+		err = se.writeCommandBytes(CommandOrientation, byte(Orientation90))
 	case 2:
-		err = se.writeCommandBytes(0x36, 0x48)
+		err = se.writeCommandBytes(CommandOrientation, byte(Orientation180))
 	case 3:
-		err = se.writeCommandBytes(0x36, 0x88)
+		err = se.writeCommandBytes(CommandOrientation, byte(Orientation270))
 	default:
 		err = errors.New("wrong orientation")
 	}
@@ -199,7 +199,7 @@ func (se *GC9A01) Initialize() (err error) {
 	_ = se.writeCommandBytes(0x8E, 0xFF)
 	_ = se.writeCommandBytes(0x8F, 0xFF)
 	_ = se.writeCommandBytes(0xB6, 0x00, 0x00)
-	_ = se.writeCommandBytes(0x36, 0x18)
+	_ = se.writeCommandBytes(CommandOrientation, byte(Orientation180))
 	_ = se.writeCommandBytes(CommandColorMode, byte(ColorMode18Bit))
 	_ = se.writeCommandBytes(0x90, 0x08, 0x08, 0x08, 0x08)
 	_ = se.writeCommandBytes(0xBD, 0x06)

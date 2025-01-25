@@ -12,6 +12,7 @@ func (sv *Service) handleGpio(reqBytes []byte) (resBytes []byte, err error) {
 	sv.gpioDevLock.Lock()
 	defer sv.gpioDevLock.Unlock()
 
+	log.Printf("########### reqBytes=%s", string(reqBytes))
 	req := proxy.Gpio{}
 
 	err = json.Unmarshal(reqBytes, &req)

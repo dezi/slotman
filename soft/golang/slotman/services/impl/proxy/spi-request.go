@@ -7,6 +7,18 @@ import (
 )
 
 func (sv *Service) SpiGetDevicePaths() (devicePaths []string, err error) {
+
+	req := &proxy.Spi{
+		Area: proxy.AreaSpi,
+		What: proxy.SpiWhatGetDevicePaths,
+	}
+
+	res, err := sv.spiBuildRequest(req, nil)
+	if err != nil {
+		return
+	}
+
+	devicePaths, err = res.Paths, res.Err
 	return
 }
 
@@ -93,7 +105,7 @@ func (sv *Service) SpiSetSpeed(spi spi.Spi, speed uint32) (err error) {
 	return
 }
 
-func (sv *Service) SpiSend(spi spi.Spi, request []byte) (result []byte, err error) {
+func (sv *Service) SpiSend(spi spi.Spi, request []byte) (response []byte, err error) {
 
 	req := &proxy.Spi{
 		Area: proxy.AreaSpi,
@@ -106,7 +118,7 @@ func (sv *Service) SpiSend(spi spi.Spi, request []byte) (result []byte, err erro
 		return
 	}
 
-	result, err = res.Recv, res.Err
+	response, err = res.Recv, res.Err
 	return
 }
 

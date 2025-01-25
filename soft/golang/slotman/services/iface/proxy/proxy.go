@@ -42,7 +42,7 @@ type Interface interface {
 	SpiSetBitsPerWord(spi spi.Spi, bpw uint8) (err error)
 	SpiSetSpeed(spi spi.Spi, speed uint32) (err error)
 
-	SpiSend(spi spi.Spi, request []byte) (result []byte, err error)
+	SpiSend(spi spi.Spi, request []byte) (response []byte, err error)
 }
 
 func GetInstance() (iface Interface, err error) {

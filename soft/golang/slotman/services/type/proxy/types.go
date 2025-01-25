@@ -54,12 +54,13 @@ type Gpio struct {
 type SpiWhat string
 
 const (
-	SpiWhatOpen     SpiWhat = "spi.open"
-	SpiWhatClose    SpiWhat = "spi.close"
-	SpiWhatSetMode  SpiWhat = "spi.set.mode"
-	SpiWhatSetBpw   SpiWhat = "spi.set.bpw"
-	SpiWhatSetSpeed SpiWhat = "spi.set.speed"
-	SpiWhatSend     SpiWhat = "spi.send"
+	SpiWhatGetDevicePaths SpiWhat = "spi.get.device-paths"
+	SpiWhatOpen           SpiWhat = "spi.open"
+	SpiWhatClose          SpiWhat = "spi.close"
+	SpiWhatSetMode        SpiWhat = "spi.set.mode"
+	SpiWhatSetBpw         SpiWhat = "spi.set.bpw"
+	SpiWhatSetSpeed       SpiWhat = "spi.set.speed"
+	SpiWhatSend           SpiWhat = "spi.send"
 )
 
 type Spi struct {

@@ -24,6 +24,12 @@ func (sv *Service) handleSpi(reqBytes []byte) (resBytes []byte, err error) {
 	// Check for calls w/o device.
 	//
 
+	if req.What == proxy.SpiWhatGetDevicePaths {
+		req.Paths, req.Err = spi.GetDevicePaths()
+		resBytes, err = json.Marshal(req)
+		return
+	}
+
 	//
 	// Check and create device.
 	//

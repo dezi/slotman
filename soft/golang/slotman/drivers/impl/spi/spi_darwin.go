@@ -2,6 +2,17 @@ package spi
 
 import "slotman/services/iface/proxy"
 
+func GetDevicePaths() (devicePaths []string, err error) {
+
+	prx, err := proxy.GetInstance()
+	if err != nil {
+		return
+	}
+
+	devicePaths, err = prx.SpiGetDevicePaths()
+	return
+}
+
 func (spi *Device) Open() (err error) {
 
 	prx, err := proxy.GetInstance()
@@ -57,13 +68,13 @@ func (spi *Device) SetSpeed(speed uint32) (err error) {
 	return
 }
 
-func (spi *Device) Send(request []byte) (result []byte, err error) {
+func (spi *Device) Send(request []byte) (response []byte, err error) {
 
 	prx, err := proxy.GetInstance()
 	if err != nil {
 		return
 	}
 
-	result, err = prx.SpiSend(spi, request)
+	response, err = prx.SpiSend(spi, request)
 	return
 }

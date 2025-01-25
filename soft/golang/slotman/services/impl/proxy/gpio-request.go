@@ -19,7 +19,7 @@ func (sv *Service) GpioHasGpio() (ok bool, err error) {
 
 func (sv *Service) GpioOpen(pin gpio.Gpio) (err error) {
 
-	res, err := sv.gpioBuildRequest(proxy.GpioWhatOpen, nil)
+	res, err := sv.gpioBuildRequest(proxy.GpioWhatOpen, pin)
 	if err != nil {
 		return
 	}
@@ -30,7 +30,7 @@ func (sv *Service) GpioOpen(pin gpio.Gpio) (err error) {
 
 func (sv *Service) GpioClose(pin gpio.Gpio) (err error) {
 
-	res, err := sv.gpioBuildRequest(proxy.GpioWhatClose, nil)
+	res, err := sv.gpioBuildRequest(proxy.GpioWhatClose, pin)
 	if err != nil {
 		return
 	}

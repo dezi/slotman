@@ -55,11 +55,11 @@ func (sv *Service) handleGpio(reqBytes []byte) (resBytes []byte, err error) {
 		req.Err = gpioDev.SetOutput()
 
 	case proxy.GpioWhatSetLow:
-		log.Printf("Gpio set low  pin=%d", gpioDev.GetPinNo())
+		log.Printf("Gpio set low  pin=%d %d", gpioDev.GetPinNo(), req.PinNo)
 		req.Err = gpioDev.SetLow()
 
 	case proxy.GpioWhatSetHigh:
-		log.Printf("Gpio set high pin=%d", gpioDev.GetPinNo())
+		log.Printf("Gpio set high pin=%d %d", gpioDev.GetPinNo(), req.PinNo)
 		req.Err = gpioDev.SetHigh()
 
 	case proxy.GpioWhatGetState:

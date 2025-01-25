@@ -41,7 +41,7 @@ func (sv *Service) GpioClose(pin gpio.Gpio) (err error) {
 
 func (sv *Service) GpioSetOutput(pin gpio.Gpio) (err error) {
 
-	res, err := sv.gpioBuildRequest(proxy.GpioWhatSetOutput, nil)
+	res, err := sv.gpioBuildRequest(proxy.GpioWhatSetOutput, pin)
 	if err != nil {
 		return
 	}
@@ -52,7 +52,7 @@ func (sv *Service) GpioSetOutput(pin gpio.Gpio) (err error) {
 
 func (sv *Service) GpioSetInput(pin gpio.Gpio) (err error) {
 
-	res, err := sv.gpioBuildRequest(proxy.GpioWhatSetInput, nil)
+	res, err := sv.gpioBuildRequest(proxy.GpioWhatSetInput, pin)
 	if err != nil {
 		return
 	}
@@ -63,7 +63,7 @@ func (sv *Service) GpioSetInput(pin gpio.Gpio) (err error) {
 
 func (sv *Service) GpioSetLow(pin gpio.Gpio) (err error) {
 
-	res, err := sv.gpioBuildRequest(proxy.GpioWhatSetLow, nil)
+	res, err := sv.gpioBuildRequest(proxy.GpioWhatSetLow, pin)
 	if err != nil {
 		return
 	}
@@ -74,7 +74,7 @@ func (sv *Service) GpioSetLow(pin gpio.Gpio) (err error) {
 
 func (sv *Service) GpioSetHigh(pin gpio.Gpio) (err error) {
 
-	res, err := sv.gpioBuildRequest(proxy.GpioWhatSetHigh, nil)
+	res, err := sv.gpioBuildRequest(proxy.GpioWhatSetHigh, pin)
 	if err != nil {
 		return
 	}
@@ -85,7 +85,7 @@ func (sv *Service) GpioSetHigh(pin gpio.Gpio) (err error) {
 
 func (sv *Service) GpioGetState(pin gpio.Gpio) (state gpio.State, err error) {
 
-	res, err := sv.gpioBuildRequest(proxy.GpioWhatGetState, nil)
+	res, err := sv.gpioBuildRequest(proxy.GpioWhatGetState, pin)
 	if err != nil {
 		return
 	}

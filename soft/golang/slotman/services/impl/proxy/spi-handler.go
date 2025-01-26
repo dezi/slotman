@@ -2,12 +2,13 @@ package proxy
 
 import (
 	"encoding/json"
+	"fmt"
 	"slotman/drivers/impl/spi"
 	"slotman/services/type/proxy"
 	"slotman/utils/log"
 )
 
-func (sv *Service) handleSpi(reqBytes []byte) (resBytes []byte, err error) {
+func (sv *Service) handleSpi(sender string, reqBytes []byte) (resBytes []byte, err error) {
 
 	sv.spiDevLock.Lock()
 	defer sv.spiDevLock.Unlock()
@@ -25,7 +26,8 @@ func (sv *Service) handleSpi(reqBytes []byte) (resBytes []byte, err error) {
 	//
 
 	if req.What == proxy.SpiWhatGetDevicePaths {
-		req.Paths, req.Err = spi.GetDevicePaths()
+		req.Paths, req.NE = spi.GetDevicePaths()
+		log.Printf("SPI  GetDevicePaths paths=%v err=%v", req.Paths, req.NE)
 		resBytes, err = json.Marshal(req)
 		return
 	}
@@ -34,46 +36,52 @@ func (sv *Service) handleSpi(reqBytes []byte) (resBytes []byte, err error) {
 	// Check and create device.
 	//
 
-	spiDev := sv.spiDevMap[req.Device]
+	devAddr := fmt.Sprintf("%s-%d", sender, req.Device)
+
+	spiDev := sv.spiDevMap[devAddr]
 	if spiDev == nil {
 		spiDev = spi.NewDevice(req.Device)
-		sv.spiDevMap[req.Device] = spiDev
+		sv.spiDevMap[devAddr] = spiDev
 	}
 
 	switch req.What {
 
 	case proxy.SpiWhatOpen:
-		req.Err = spiDev.Open()
-		log.Printf("SPI  Open dev=%s err=%v", spiDev.GetDevice(), err)
+		req.NE = spiDev.Open()
+		log.Printf("SPI  Open dev=%s err=%v", spiDev.GetDevice(), req.NE)
 
 	case proxy.SpiWhatClose:
-		req.Err = spiDev.Close()
-		log.Printf("SPI  Close dev=%s err=%v", spiDev.GetDevice(), err)
+		req.NE = spiDev.Close()
+		log.Printf("SPI  Close dev=%s err=%v", spiDev.GetDevice(), req.NE)
 
 	case proxy.SpiWhatSetMode:
-		req.Err = spiDev.SetMode(req.Mode)
-		log.Printf("SPI  SetMode mode=%d dev=%s err=%v", req.Mode, spiDev.GetDevice(), err)
+		req.NE = spiDev.SetMode(req.Mode)
+		log.Printf("SPI  SetMode mode=%d dev=%s err=%v", req.Mode, spiDev.GetDevice(), req.NE)
 		req.Mode = 0
 
 	case proxy.SpiWhatSetBpw:
-		req.Err = spiDev.SetBitsPerWord(req.Bpw)
-		log.Printf("SPI  SetBpw ppw=%d dev=%s err=%v", req.Bpw, spiDev.GetDevice(), err)
+		req.NE = spiDev.SetBitsPerWord(req.Bpw)
+		log.Printf("SPI  SetBpw ppw=%d dev=%s err=%v", req.Bpw, spiDev.GetDevice(), req.NE)
 		req.Bpw = 0
 
 	case proxy.SpiWhatSetSpeed:
-		req.Err = spiDev.SetSpeed(req.Speed)
-		log.Printf("SPI  SetSpeed speed=%d dev=%s err=%v", req.Speed, spiDev.GetDevice(), err)
+		req.NE = spiDev.SetSpeed(req.Speed)
+		log.Printf("SPI  SetSpeed speed=%d dev=%s err=%v", req.Speed, spiDev.GetDevice(), req.NE)
 		req.Speed = 0
 
 	case proxy.SpiWhatSend:
-		req.Recv, req.Err = spiDev.Send(req.Send)
-		//log.Printf("SPI  Send send=%d dev=%s err=%v", len(req.Send), spiDev.GetDevice(), err)
+		req.Recv, req.NE = spiDev.Send(req.Send)
+		//log.Printf("SPI  Send send=%d dev=%s err=%v", len(req.Send), spiDev.GetDevice(), req.NE)
 		req.Send = nil
 	}
 
-	req.Ok = req.Err == nil
+	if req.NE == nil {
+		req.Ok = true
+	} else {
+		req.Ok = false
+		req.Err = req.NE.Error()
+	}
 
 	resBytes, err = json.Marshal(req)
-
 	return
 }

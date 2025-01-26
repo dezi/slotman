@@ -2,6 +2,7 @@ package proxy
 
 import (
 	"encoding/json"
+	"errors"
 	"slotman/drivers/iface/spi"
 	"slotman/services/type/proxy"
 )
@@ -13,12 +14,12 @@ func (sv *Service) SpiGetDevicePaths() (devicePaths []string, err error) {
 		What: proxy.SpiWhatGetDevicePaths,
 	}
 
-	res, err := sv.spiBuildRequest(req, nil)
+	res, err := sv.spiExecuteRequest(req, nil)
 	if err != nil {
 		return
 	}
 
-	devicePaths, err = res.Paths, res.Err
+	devicePaths, err = res.Paths, res.NE
 	return
 }
 
@@ -29,12 +30,12 @@ func (sv *Service) SpiOpen(spi spi.Spi) (err error) {
 		What: proxy.SpiWhatOpen,
 	}
 
-	res, err := sv.spiBuildRequest(req, spi)
+	res, err := sv.spiExecuteRequest(req, spi)
 	if err != nil {
 		return
 	}
 
-	err = res.Err
+	err = res.NE
 	return
 }
 
@@ -45,12 +46,12 @@ func (sv *Service) SpiClose(spi spi.Spi) (err error) {
 		What: proxy.SpiWhatClose,
 	}
 
-	res, err := sv.spiBuildRequest(req, spi)
+	res, err := sv.spiExecuteRequest(req, spi)
 	if err != nil {
 		return
 	}
 
-	err = res.Err
+	err = res.NE
 	return
 }
 
@@ -62,12 +63,12 @@ func (sv *Service) SpiSetMode(spi spi.Spi, mode uint8) (err error) {
 		Mode: mode,
 	}
 
-	res, err := sv.spiBuildRequest(req, spi)
+	res, err := sv.spiExecuteRequest(req, spi)
 	if err != nil {
 		return
 	}
 
-	err = res.Err
+	err = res.NE
 	return
 }
 
@@ -79,12 +80,12 @@ func (sv *Service) SpiSetBitsPerWord(spi spi.Spi, bpw uint8) (err error) {
 		Bpw:  bpw,
 	}
 
-	res, err := sv.spiBuildRequest(req, spi)
+	res, err := sv.spiExecuteRequest(req, spi)
 	if err != nil {
 		return
 	}
 
-	err = res.Err
+	err = res.NE
 	return
 }
 
@@ -96,12 +97,12 @@ func (sv *Service) SpiSetSpeed(spi spi.Spi, speed uint32) (err error) {
 		Speed: speed,
 	}
 
-	res, err := sv.spiBuildRequest(req, spi)
+	res, err := sv.spiExecuteRequest(req, spi)
 	if err != nil {
 		return
 	}
 
-	err = res.Err
+	err = res.NE
 	return
 }
 
@@ -113,16 +114,16 @@ func (sv *Service) SpiSend(spi spi.Spi, request []byte) (response []byte, err er
 		Send: request,
 	}
 
-	res, err := sv.spiBuildRequest(req, spi)
+	res, err := sv.spiExecuteRequest(req, spi)
 	if err != nil {
 		return
 	}
 
-	response, err = res.Recv, res.Err
+	response, err = res.Recv, res.NE
 	return
 }
 
-func (sv *Service) spiBuildRequest(req *proxy.Spi, spi spi.Spi) (res *proxy.Spi, err error) {
+func (sv *Service) spiExecuteRequest(req *proxy.Spi, spi spi.Spi) (res *proxy.Spi, err error) {
 
 	if spi != nil {
 		req.Device = spi.GetDevice()
@@ -139,6 +140,10 @@ func (sv *Service) spiBuildRequest(req *proxy.Spi, spi spi.Spi) (res *proxy.Spi,
 	if err != nil {
 		res = nil
 		return
+	}
+
+	if res.Err != "" {
+		res.NE = errors.New(res.Err)
 	}
 
 	return

@@ -2,12 +2,13 @@ package proxy
 
 import (
 	"encoding/json"
+	"fmt"
 	"slotman/drivers/impl/gpio"
 	"slotman/services/type/proxy"
 	"slotman/utils/log"
 )
 
-func (sv *Service) handleGpio(reqBytes []byte) (resBytes []byte, err error) {
+func (sv *Service) handleGpio(sender string, reqBytes []byte) (resBytes []byte, err error) {
 
 	sv.gpioDevLock.Lock()
 	defer sv.gpioDevLock.Unlock()
@@ -25,7 +26,8 @@ func (sv *Service) handleGpio(reqBytes []byte) (resBytes []byte, err error) {
 	//
 
 	if req.What == proxy.GpioWhatHasGpio {
-		req.Ok, req.Err = gpio.HasGpio()
+		req.Ok, req.NE = gpio.HasGpio()
+		log.Printf("GPIO HasGpio ok=%v err=%v", req.Ok, req.NE)
 		resBytes, err = json.Marshal(req)
 		return
 	}
@@ -34,44 +36,51 @@ func (sv *Service) handleGpio(reqBytes []byte) (resBytes []byte, err error) {
 	// Check and create device.
 	//
 
-	gpioDev := sv.gpioDevMap[req.PinNo]
+	devAddr := fmt.Sprintf("%s-%d", sender, req.PinNo)
+
+	gpioDev := sv.gpioDevMap[devAddr]
 	if gpioDev == nil {
 		gpioDev = gpio.NewPin(req.PinNo)
-		sv.gpioDevMap[req.PinNo] = gpioDev
+		sv.gpioDevMap[devAddr] = gpioDev
 	}
 
 	switch req.What {
 
 	case proxy.GpioWhatOpen:
-		req.Err = gpioDev.Open()
-		log.Printf("GPIO Open pin=%d err=%v", gpioDev.GetPinNo(), err)
+		req.NE = gpioDev.Open()
+		log.Printf("GPIO Open pin=%d err=%v", gpioDev.GetPinNo(), req.NE)
 
 	case proxy.GpioWhatClose:
-		req.Err = gpioDev.Close()
-		log.Printf("GPIO Close pin=%d err=%v", gpioDev.GetPinNo(), err)
+		req.NE = gpioDev.Close()
+		log.Printf("GPIO Close pin=%d err=%v", gpioDev.GetPinNo(), req.NE)
 
 	case proxy.GpioWhatSetInput:
-		req.Err = gpioDev.SetInput()
-		log.Printf("GPIO SetInput pin=%d err=%v", gpioDev.GetPinNo(), err)
+		req.NE = gpioDev.SetInput()
+		log.Printf("GPIO SetInput pin=%d err=%v", gpioDev.GetPinNo(), req.NE)
 
 	case proxy.GpioWhatSetOutput:
-		req.Err = gpioDev.SetOutput()
-		log.Printf("GPIO SetOutput pin=%d err=%v", gpioDev.GetPinNo(), err)
+		req.NE = gpioDev.SetOutput()
+		log.Printf("GPIO SetOutput pin=%d err=%v", gpioDev.GetPinNo(), req.NE)
 
 	case proxy.GpioWhatSetLow:
-		req.Err = gpioDev.SetLow()
-		//log.Printf("GPIO SetLow  pin=%d err=%v", gpioDev.GetPinNo(), err)
+		req.NE = gpioDev.SetLow()
+		//log.Printf("GPIO SetLow  pin=%d err=%v", gpioDev.GetPinNo(), req.NE)
 
 	case proxy.GpioWhatSetHigh:
-		req.Err = gpioDev.SetHigh()
-		//log.Printf("GPIO SetHigh pin=%d err=%v", gpioDev.GetPinNo(), err)
+		req.NE = gpioDev.SetHigh()
+		//log.Printf("GPIO SetHigh pin=%d err=%v", gpioDev.GetPinNo(), req.NE)
 
 	case proxy.GpioWhatGetState:
-		req.State, req.Err = gpioDev.GetState()
-		//log.Printf("GPIO GetState state=%d pin=%d err=%v", req.State, gpioDev.GetPinNo(), err)
+		req.State, req.NE = gpioDev.GetState()
+		//log.Printf("GPIO GetState state=%d pin=%d err=%v", req.State, gpioDev.GetPinNo(), req.NE)
 	}
 
-	req.Ok = req.Err == nil
+	if req.NE == nil {
+		req.Ok = true
+	} else {
+		req.Ok = false
+		req.Err = req.NE.Error()
+	}
 
 	resBytes, err = json.Marshal(req)
 	return

@@ -15,12 +15,12 @@ const (
 	ThingTypeIllumination ThingType = "illumination"
 	ThingTypeRfid         ThingType = "rfid"
 	ThingTypePressure     ThingType = "pressure"
+	ThingTypeHumidity     ThingType = "humidity"
 	ThingTypeTemperature  ThingType = "temperature"
 	ThingTypeRGBColor     ThingType = "rgb-color"
 	ThingTypeADConverter  ThingType = "ad-converter"
 	ThingTypeIOExpander   ThingType = "io-expander"
 	ThingTypeMotorDriver  ThingType = "motor-driver"
-	ThingTypeOledDisplay  ThingType = "oled-display"
 )
 
 type Thing interface {

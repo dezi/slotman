@@ -17,12 +17,10 @@ func startup() {
 	log.SetCallerLength(48)
 
 	_ = provider.StartService()
-
 	_ = proxy.StartService()
 
-	_ = exitter.StartService()
+	_ = exitter.WaitUntilTermination()
 
 	_ = proxy.StopService()
-
 	_ = provider.StopService()
 }

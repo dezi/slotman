@@ -2,8 +2,10 @@ package proxy
 
 import (
 	"encoding/json"
+	"errors"
 	"slotman/drivers/iface/uart"
 	"slotman/services/type/proxy"
+	"slotman/utils/log"
 	"time"
 )
 
@@ -14,12 +16,12 @@ func (sv *Service) UartGetDevicePaths() (devicePaths []string, err error) {
 		What: proxy.UartWhatGetDevicePaths,
 	}
 
-	res, err := sv.uartBuildRequest(req, nil)
+	res, err := sv.uartExecuteRequest(req, nil)
 	if err != nil {
 		return
 	}
 
-	devicePaths, err = res.Paths, res.Err
+	devicePaths, err = res.Paths, res.NE
 	return
 }
 
@@ -30,12 +32,12 @@ func (sv *Service) UartOpen(uart uart.Uart) (err error) {
 		What: proxy.UartWhatOpen,
 	}
 
-	res, err := sv.uartBuildRequest(req, uart)
+	res, err := sv.uartExecuteRequest(req, uart)
 	if err != nil {
 		return
 	}
 
-	err = res.Err
+	err = res.NE
 	return
 }
 
@@ -46,12 +48,12 @@ func (sv *Service) UartClose(uart uart.Uart) (err error) {
 		What: proxy.UartWhatClose,
 	}
 
-	res, err := sv.uartBuildRequest(req, uart)
+	res, err := sv.uartExecuteRequest(req, uart)
 	if err != nil {
 		return
 	}
 
-	err = res.Err
+	err = res.NE
 	return
 }
 
@@ -63,12 +65,12 @@ func (sv *Service) UartSetReadTimeout(uart uart.Uart, timeout time.Duration) (er
 		TimeOut: timeout,
 	}
 
-	res, err := sv.uartBuildRequest(req, uart)
+	res, err := sv.uartExecuteRequest(req, uart)
 	if err != nil {
 		return
 	}
 
-	err = res.Err
+	err = res.NE
 	return
 }
 
@@ -80,14 +82,14 @@ func (sv *Service) UartRead(uart uart.Uart, data []byte) (xfer int, err error) {
 		Size: len(data),
 	}
 
-	res, err := sv.uartBuildRequest(req, uart)
+	res, err := sv.uartExecuteRequest(req, uart)
 	if err != nil {
 		return
 	}
 
-	copy(data, req.Read)
+	copy(data, res.Read)
 
-	xfer, err = res.Xfer, res.Err
+	xfer, err = res.Xfer, res.NE
 	return
 }
 
@@ -99,16 +101,16 @@ func (sv *Service) UartWrite(uart uart.Uart, data []byte) (xfer int, err error) 
 		Write: data,
 	}
 
-	res, err := sv.uartBuildRequest(req, uart)
+	res, err := sv.uartExecuteRequest(req, uart)
 	if err != nil {
 		return
 	}
 
-	xfer, err = res.Xfer, res.Err
+	xfer, err = res.Xfer, res.NE
 	return
 }
 
-func (sv *Service) uartBuildRequest(req *proxy.Uart, uart uart.Uart) (res *proxy.Uart, err error) {
+func (sv *Service) uartExecuteRequest(req *proxy.Uart, uart uart.Uart) (res *proxy.Uart, err error) {
 
 	if uart != nil {
 		req.Device = uart.GetDevice()
@@ -124,8 +126,13 @@ func (sv *Service) uartBuildRequest(req *proxy.Uart, uart uart.Uart) (res *proxy
 	res = &proxy.Uart{}
 	err = json.Unmarshal(resBytes, &res)
 	if err != nil {
+		log.Printf("########## resBytes=%s", string(resBytes))
 		res = nil
 		return
+	}
+
+	if res.Err != "" {
+		res.NE = errors.New(res.Err)
 	}
 
 	return

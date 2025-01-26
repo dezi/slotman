@@ -2,6 +2,7 @@ package proxy
 
 import (
 	"slotman/drivers/iface/gpio"
+	"slotman/drivers/iface/i2c"
 	"slotman/drivers/iface/spi"
 	"slotman/drivers/iface/uart"
 	"slotman/services/impl/provider"
@@ -30,6 +31,21 @@ type Interface interface {
 	GpioSetHigh(pin gpio.Gpio) (err error)
 
 	GpioGetState(pin gpio.Gpio) (state gpio.State, err error)
+
+	//
+	// I2C interface.
+	//
+
+	I2cGetDevicePaths() (devicePaths []string, err error)
+
+	I2cOpen(i2c i2c.I2c) (err error)
+	I2cClose(i2c i2c.I2c) (err error)
+
+	I2cBeginTransaction(i2c i2c.I2c) (err error)
+	I2cEndTransaction(i2c i2c.I2c) (err error)
+
+	I2cWrite(i2c i2c.I2c, data []byte) (xfer int, err error)
+	I2cRead(i2c i2c.I2c, data []byte) (xfer int, err error)
 
 	//
 	// SPI interface.

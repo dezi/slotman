@@ -12,12 +12,16 @@ func GetDevicePaths() (devicePaths []string, err error) {
 
 func (uart *Device) Open() (err error) {
 
-	uart.port, err = serial.Open(uart.Path, &serial.Mode{
+	port, err := serial.Open(uart.Path, &serial.Mode{
 		BaudRate: uart.BaudRate,
 		DataBits: 8,
 		Parity:   serial.NoParity,
 		StopBits: serial.OneStopBit,
 	})
+
+	if err == nil {
+		uart.port = port
+	}
 
 	return
 }
@@ -27,17 +31,17 @@ func (uart *Device) Close() (err error) {
 	return
 }
 
-func (uart *Device) SetReadTimeout(t time.Duration) (err error) {
-	err = uart.port.SetReadTimeout(t)
+func (uart *Device) SetReadTimeout(timeout time.Duration) (err error) {
+	err = uart.port.SetReadTimeout(timeout)
 	return
 }
 
-func (uart *Device) Read(p []byte) (n int, err error) {
-	n, err = uart.port.Read(p)
+func (uart *Device) Read(data []byte) (xfer int, err error) {
+	xfer, err = uart.port.Read(data)
 	return
 }
 
-func (uart *Device) Write(p []byte) (n int, err error) {
-	n, err = uart.port.Write(p)
+func (uart *Device) Write(data []byte) (xfer int, err error) {
+	xfer, err = uart.port.Write(data)
 	return
 }

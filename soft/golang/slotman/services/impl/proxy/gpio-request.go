@@ -2,99 +2,100 @@ package proxy
 
 import (
 	"encoding/json"
+	"errors"
 	"slotman/drivers/iface/gpio"
 	"slotman/services/type/proxy"
 )
 
 func (sv *Service) GpioHasGpio() (ok bool, err error) {
 
-	res, err := sv.gpioBuildRequest(proxy.GpioWhatHasGpio, nil)
+	res, err := sv.gpioExecuteRequest(proxy.GpioWhatHasGpio, nil)
 	if err != nil {
 		return
 	}
 
-	ok, err = res.Ok, res.Err
+	ok, err = res.Ok, res.NE
 	return
 }
 
 func (sv *Service) GpioOpen(pin gpio.Gpio) (err error) {
 
-	res, err := sv.gpioBuildRequest(proxy.GpioWhatOpen, pin)
+	res, err := sv.gpioExecuteRequest(proxy.GpioWhatOpen, pin)
 	if err != nil {
 		return
 	}
 
-	err = res.Err
+	err = res.NE
 	return
 }
 
 func (sv *Service) GpioClose(pin gpio.Gpio) (err error) {
 
-	res, err := sv.gpioBuildRequest(proxy.GpioWhatClose, pin)
+	res, err := sv.gpioExecuteRequest(proxy.GpioWhatClose, pin)
 	if err != nil {
 		return
 	}
 
-	err = res.Err
+	err = res.NE
 	return
 }
 
 func (sv *Service) GpioSetOutput(pin gpio.Gpio) (err error) {
 
-	res, err := sv.gpioBuildRequest(proxy.GpioWhatSetOutput, pin)
+	res, err := sv.gpioExecuteRequest(proxy.GpioWhatSetOutput, pin)
 	if err != nil {
 		return
 	}
 
-	err = res.Err
+	err = res.NE
 	return
 }
 
 func (sv *Service) GpioSetInput(pin gpio.Gpio) (err error) {
 
-	res, err := sv.gpioBuildRequest(proxy.GpioWhatSetInput, pin)
+	res, err := sv.gpioExecuteRequest(proxy.GpioWhatSetInput, pin)
 	if err != nil {
 		return
 	}
 
-	err = res.Err
+	err = res.NE
 	return
 }
 
 func (sv *Service) GpioSetLow(pin gpio.Gpio) (err error) {
 
-	res, err := sv.gpioBuildRequest(proxy.GpioWhatSetLow, pin)
+	res, err := sv.gpioExecuteRequest(proxy.GpioWhatSetLow, pin)
 	if err != nil {
 		return
 	}
 
-	err = res.Err
+	err = res.NE
 	return
 }
 
 func (sv *Service) GpioSetHigh(pin gpio.Gpio) (err error) {
 
-	res, err := sv.gpioBuildRequest(proxy.GpioWhatSetHigh, pin)
+	res, err := sv.gpioExecuteRequest(proxy.GpioWhatSetHigh, pin)
 	if err != nil {
 		return
 	}
 
-	err = res.Err
+	err = res.NE
 	return
 }
 
 func (sv *Service) GpioGetState(pin gpio.Gpio) (state gpio.State, err error) {
 
-	res, err := sv.gpioBuildRequest(proxy.GpioWhatGetState, pin)
+	res, err := sv.gpioExecuteRequest(proxy.GpioWhatGetState, pin)
 	if err != nil {
 		return
 	}
 
-	state, err = res.State, res.Err
+	state, err = res.State, res.NE
 	return
 }
 
-func (sv *Service) gpioBuildRequest(what proxy.GpioWhat, pin gpio.Gpio) (res *proxy.Gpio, err error) {
+func (sv *Service) gpioExecuteRequest(what proxy.GpioWhat, pin gpio.Gpio) (res *proxy.Gpio, err error) {
 
 	req := &proxy.Gpio{
 		Area: proxy.AreaGpio,
@@ -116,6 +117,10 @@ func (sv *Service) gpioBuildRequest(what proxy.GpioWhat, pin gpio.Gpio) (res *pr
 	if err != nil {
 		res = nil
 		return
+	}
+
+	if res.Err != "" {
+		res.NE = errors.New(res.Err)
 	}
 
 	return

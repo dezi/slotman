@@ -24,7 +24,7 @@ func startup() {
 	_ = pilots.StartService()
 	_ = turner.StartService()
 
-	_ = exitter.StartService()
+	_ = exitter.WaitUntilTermination()
 
 	_ = pilots.StopService()
 	_ = turner.StopService()

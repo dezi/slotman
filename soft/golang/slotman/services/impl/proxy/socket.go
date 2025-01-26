@@ -21,10 +21,16 @@ func (sv *Service) handleWs(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	sender := r.RemoteAddr
+	addrParts := strings.Split(r.RemoteAddr, ":")
+	if len(addrParts) < 2 {
+		http.NotFound(w, r)
+		return
+	}
 
-	log.Printf("Started websocket sender=%s...", sender)
-	defer log.Printf("Stopped websocket sender=%s.", sender)
+	sender := strings.Join(addrParts[:len(addrParts)-1], ":")
+
+	log.Printf("Started websocket remoteAddr=%s...", r.RemoteAddr)
+	defer log.Printf("Stopped websocket remoteAddr=%s.", r.RemoteAddr)
 
 	upgrader := websocket.Upgrader{
 		ReadBufferSize:  2048,
@@ -39,15 +45,13 @@ func (sv *Service) handleWs(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	sv.mapsLock.Lock()
+	sv.deleteSocketConnect(sender)
 
-	if sv.webClients[sender] != nil {
-		_ = sv.webClients[sender].Close()
-	}
+	sv.webClientsLock.Lock()
 
-	sv.webClients[sender] = ws
+	sv.webClientsConns[sender] = ws
 
-	sv.mapsLock.Unlock()
+	sv.webClientsLock.Unlock()
 
 	var mType int
 	var tryErr error
@@ -77,11 +81,13 @@ func (sv *Service) handleWs(w http.ResponseWriter, r *http.Request) {
 
 		switch message.Area {
 		case proxy.AreaGpio:
-			resBytes, err = sv.handleGpio(reqBytes)
+			resBytes, err = sv.handleGpio(sender, reqBytes)
+		case proxy.AreaI2c:
+			resBytes, err = sv.handleI2c(sender, reqBytes)
 		case proxy.AreaSpi:
-			resBytes, err = sv.handleSpi(reqBytes)
+			resBytes, err = sv.handleSpi(sender, reqBytes)
 		case proxy.AreaUart:
-			resBytes, err = sv.handleUart(reqBytes)
+			resBytes, err = sv.handleUart(sender, reqBytes)
 		}
 
 		if err != nil {
@@ -98,12 +104,56 @@ func (sv *Service) handleWs(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	sv.mapsLock.Lock()
+	sv.deleteSocketConnect(sender)
+}
 
-	if sv.webClients[sender] == ws {
-		_ = ws.Close()
-		delete(sv.webClients, sender)
+func (sv *Service) deleteSocketConnect(sender string) {
+
+	sv.webClientsLock.Lock()
+	defer sv.webClientsLock.Unlock()
+
+	if sv.webClientsConns[sender] == nil {
+		return
 	}
 
-	sv.mapsLock.Unlock()
+	log.Printf("Delete socket sender=%s", sender)
+
+	_ = sv.webClientsConns[sender].Close()
+	delete(sv.webClientsConns, sender)
+
+	sv.gpioDevLock.Lock()
+
+	for oldSender, gpioDev := range sv.gpioDevMap {
+		if strings.HasPrefix(oldSender, sender) {
+			log.Printf("Delete GPIO sender=%s pin=%d", sender, gpioDev.GetPinNo())
+			_ = gpioDev.Close()
+			sv.gpioDevMap[oldSender] = nil
+		}
+	}
+
+	sv.gpioDevLock.Unlock()
+
+	sv.spiDevLock.Lock()
+
+	for oldSender, spiDev := range sv.spiDevMap {
+		if strings.HasPrefix(oldSender, sender) {
+			log.Printf("Delete SPI  sender=%s dev=%s", sender, spiDev.GetDevice())
+			_ = spiDev.Close()
+			sv.spiDevMap[oldSender] = nil
+		}
+	}
+
+	sv.spiDevLock.Unlock()
+
+	sv.uartDevLock.Lock()
+
+	for oldSender, uartDev := range sv.uartDevMap {
+		if strings.HasPrefix(oldSender, sender) {
+			log.Printf("Delete UART sender=%s dev=%s", sender, uartDev.GetDevice())
+			_ = uartDev.Close()
+			sv.uartDevMap[oldSender] = nil
+		}
+	}
+
+	sv.uartDevLock.Unlock()
 }

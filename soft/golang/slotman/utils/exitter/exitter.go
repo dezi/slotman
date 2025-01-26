@@ -8,7 +8,7 @@ import (
 type Handler struct {
 }
 
-func StartService() (err error) {
+func WaitUntilTermination() (err error) {
 	handler := &Handler{}
 	CaptureSignals(handler)
 	return

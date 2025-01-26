@@ -4,6 +4,7 @@ import (
 	"github.com/gorilla/websocket"
 	"net/http"
 	"slotman/drivers/impl/gpio"
+	"slotman/drivers/impl/i2c"
 	"slotman/drivers/impl/spi"
 	"slotman/drivers/impl/uart"
 	"slotman/services/iface/proxy"
@@ -18,8 +19,11 @@ type Service struct {
 	httpServer  *http.Server
 	httpRunning bool
 
-	gpioDevMap  map[uint8]*gpio.Pin
+	gpioDevMap  map[string]*gpio.Pin
 	gpioDevLock sync.Mutex
+
+	i2cDevMap  map[string]*i2c.Device
+	i2cDevLock sync.Mutex
 
 	spiDevMap  map[string]*spi.Device
 	spiDevLock sync.Mutex
@@ -30,8 +34,8 @@ type Service struct {
 	webServerConn *websocket.Conn
 	webServerLock sync.Mutex
 
-	webClients map[string]*websocket.Conn
-	mapsLock   sync.Mutex
+	webClientsConns map[string]*websocket.Conn
+	webClientsLock  sync.Mutex
 }
 
 var (
@@ -46,11 +50,12 @@ func StartService() (err error) {
 
 	singleTon = &Service{}
 
-	singleTon.gpioDevMap = make(map[uint8]*gpio.Pin)
+	singleTon.gpioDevMap = make(map[string]*gpio.Pin)
+	singleTon.i2cDevMap = make(map[string]*i2c.Device)
 	singleTon.spiDevMap = make(map[string]*spi.Device)
 	singleTon.uartDevMap = make(map[string]*uart.Device)
 
-	singleTon.webClients = make(map[string]*websocket.Conn)
+	singleTon.webClientsConns = make(map[string]*websocket.Conn)
 
 	provider.SetProvider(singleTon)
 

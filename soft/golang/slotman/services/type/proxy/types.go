@@ -9,6 +9,7 @@ type Area string
 
 const (
 	AreaGpio Area = "gpio"
+	AreaI2c  Area = "i2c"
 	AreaSpi  Area = "spi"
 	AreaUart Area = "uart"
 )
@@ -51,8 +52,54 @@ type Gpio struct {
 
 	State gpio.State `json:",omitempty"`
 
-	Ok  bool  `json:",omitempty"`
-	Err error `json:",omitempty"`
+	Ok  bool   `json:",omitempty"`
+	Err string `json:",omitempty"`
+
+	NE error `json:"-"`
+}
+
+type I2cWhat string
+
+const (
+	I2cWhatGetDevicePaths   I2cWhat = "i2c.get.device-paths"
+	I2cWhatOpen             I2cWhat = "i2c.open"
+	I2cWhatClose            I2cWhat = "i2c.close"
+	I2cWhatBeginTransaction I2cWhat = "i2c.begin.transaction"
+	I2cWhatEndTransaction   I2cWhat = "i2c.end.transaction"
+	I2cWhatWrite            I2cWhat = "i2c.write"
+	I2cWhatRead             I2cWhat = "i2c.read"
+)
+
+type I2c struct {
+
+	//
+	// Routing part.
+	//
+
+	Area Area
+	What I2cWhat
+
+	//
+	// Request part.
+	//
+
+	Device string `json:",omitempty"`
+	Addr   uint8  `json:",omitempty"`
+
+	//
+	// Response part.
+	//
+
+	Paths []string `json:",omitempty"`
+	Write []byte   `json:",omitempty"`
+	Read  []byte   `json:",omitempty"`
+	Size  int      `json:",omitempty"`
+	Xfer  int      `json:",omitempty"`
+
+	Ok  bool   `json:",omitempty"`
+	Err string `json:",omitempty"`
+
+	NE error `json:"-"`
 }
 
 type SpiWhat string
@@ -94,8 +141,10 @@ type Spi struct {
 	Send  []byte   `json:",omitempty"`
 	Recv  []byte   `json:",omitempty"`
 
-	Ok  bool  `json:",omitempty"`
-	Err error `json:",omitempty"`
+	Ok  bool   `json:",omitempty"`
+	Err string `json:",omitempty"`
+
+	NE error `json:"-"`
 }
 
 type UartWhat string
@@ -138,6 +187,8 @@ type Uart struct {
 	Size  int    `json:",omitempty"`
 	Xfer  int    `json:",omitempty"`
 
-	Ok  bool  `json:",omitempty"`
-	Err error `json:",omitempty"`
+	Ok  bool   `json:",omitempty"`
+	Err string `json:",omitempty"`
+
+	NE error `json:"-"`
 }

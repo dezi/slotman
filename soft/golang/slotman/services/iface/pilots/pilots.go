@@ -14,9 +14,9 @@ type Interface interface {
 	GetName() (name provider.Service)
 
 	GetAllPilots() (pilots []*slotman.Pilot)
+	GetScaledPilotPic(pilot *slotman.Pilot, size int) (img *image.RGBA, err error)
 
 	UpdatePilot(pilot *slotman.Pilot)
-	GetScaledPilotPic(pilot *slotman.Pilot, size int) (img *image.RGBA, err error)
 }
 
 func GetInstance() (iface Interface, err error) {

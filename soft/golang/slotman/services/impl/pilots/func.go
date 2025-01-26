@@ -3,8 +3,8 @@ package pilots
 import (
 	"golang.org/x/image/draw"
 	"image"
-	"slotman/goodies/imaging"
 	"slotman/services/type/slotman"
+	"slotman/utils/imaging"
 	"slotman/utils/log"
 	"slotman/utils/simple"
 )
@@ -23,7 +23,7 @@ func (sv *Service) GetAllPilots() (pilots []*slotman.Pilot) {
 
 func (sv *Service) GetScaledPilotPic(pilot *slotman.Pilot, size int) (img *image.RGBA, err error) {
 
-	src, err := decodeBaseImage(pilot.ProfilePic)
+	src, err := imaging.DecodeBase64Image(pilot.ProfilePic)
 	if err != nil {
 		log.Cerror(err)
 		return
@@ -47,7 +47,7 @@ func (sv *Service) UpdatePilot(pilot *slotman.Pilot) {
 
 	if pilot.ProfilePic != "" {
 
-		img, err := decodeBaseImage(pilot.ProfilePic)
+		img, err := imaging.DecodeBase64Image(pilot.ProfilePic)
 		if err != nil {
 
 			log.Cerror(err)

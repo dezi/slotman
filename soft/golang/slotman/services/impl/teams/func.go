@@ -7,8 +7,8 @@ import (
 	"image"
 	"image/png"
 	"path/filepath"
-	"slotman/goodies/imaging"
 	"slotman/services/type/slotman"
+	"slotman/utils/imaging"
 	"slotman/utils/log"
 )
 
@@ -39,7 +39,7 @@ func (sv *Service) GetTeam(name string) (team *slotman.Team, err error) {
 
 func (sv *Service) GetScaledTeamLogo(team *slotman.Team, size int) (img *image.RGBA, err error) {
 
-	src, err := decodeBaseImage(team.Logo)
+	src, err := imaging.DecodeBase64Image(team.Logo)
 	if err != nil {
 		log.Cerror(err)
 		return
@@ -86,7 +86,7 @@ func (sv *Service) UpdateTeam(team *slotman.Team) {
 
 	if team.Logo != "" {
 
-		img, err := decodeBaseImage(team.Logo)
+		img, err := imaging.DecodeBase64Image(team.Logo)
 		if err != nil {
 
 			log.Cerror(err)
@@ -109,7 +109,7 @@ func (sv *Service) UpdateTeam(team *slotman.Team) {
 
 	if team.CarPic != "" {
 
-		img, err := decodeBaseImage(team.CarPic)
+		img, err := imaging.DecodeBase64Image(team.CarPic)
 		if err != nil {
 
 			log.Cerror(err)

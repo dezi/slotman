@@ -45,6 +45,8 @@ func StartService() (err error) {
 	singleTon.pilotProfileFull = make(map[simple.UUIDHex]*image.RGBA)
 	singleTon.pilotProfileSmall = make(map[simple.UUIDHex]*image.RGBA)
 
+	singleTon.loadMockups()
+
 	provider.SetProvider(singleTon)
 
 	return

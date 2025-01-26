@@ -14,6 +14,9 @@ type Interface interface {
 	GetName() (name provider.Service)
 
 	GetAllTeams() (teams []*slotman.Team)
+
+	GetTeam(name string) (team *slotman.Team, err error)
+
 	GetScaledTeamLogo(team *slotman.Team, size int) (img *image.RGBA, err error)
 }
 

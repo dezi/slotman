@@ -17,6 +17,8 @@ type Team struct {
 	What string `json:"what,omitempty"`
 	Mode string `json:"mode,omitempty"`
 
+	Uuid simple.UUIDHex `json:"uuid"`
+
 	Name   string `json:"name"`
 	Logo   string `json:"logo"`
 	Car    string `json:"car"`
@@ -27,7 +29,7 @@ type Pilot struct {
 	What string `json:"what,omitempty"`
 	Mode string `json:"mode,omitempty"`
 
-	AppUuid simple.UUIDHex `json:"appUuid"`
+	Uuid simple.UUIDHex `json:"uuid"`
 
 	FirstName string `json:"firstName"`
 	LastName  string `json:"lastName"`

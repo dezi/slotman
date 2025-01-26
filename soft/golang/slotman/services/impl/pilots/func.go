@@ -40,10 +40,10 @@ func (sv *Service) UpdatePilot(pilot *slotman.Pilot) {
 	sv.mapsLock.Lock()
 	defer sv.mapsLock.Unlock()
 
-	sv.pilots[pilot.AppUuid] = pilot
+	sv.pilots[pilot.Uuid] = pilot
 
-	sv.pilotProfileFull[pilot.AppUuid] = nil
-	sv.pilotProfileSmall[pilot.AppUuid] = nil
+	sv.pilotProfileFull[pilot.Uuid] = nil
+	sv.pilotProfileSmall[pilot.Uuid] = nil
 
 	if pilot.ProfilePic != "" {
 
@@ -57,13 +57,13 @@ func (sv *Service) UpdatePilot(pilot *slotman.Pilot) {
 			var full *image.RGBA
 			full, err = imaging.ScaleToCircle(img, 240, 0, "")
 			if err == nil {
-				sv.pilotProfileFull[pilot.AppUuid] = full
+				sv.pilotProfileFull[pilot.Uuid] = full
 			}
 
 			var small *image.RGBA
 			small, err = imaging.ScaleToCircle(img, 40, 2, "ff0000")
 			if err == nil {
-				sv.pilotProfileSmall[pilot.AppUuid] = small
+				sv.pilotProfileSmall[pilot.Uuid] = small
 			}
 		}
 	}

@@ -1,131 +1,159 @@
 package pilots
 
 import (
+	"math/rand"
 	"slotman/services/type/slotman"
+	"slotman/utils/log"
 	"slotman/utils/simple"
 )
 
 var (
 	mockupPilots = []*slotman.Pilot{
 		{
-			AppUuid:   simple.NewUuidHex(),
 			FirstName: "Dennis",
 			LastName:  "Zierahn",
 		},
 		{
-			AppUuid:   simple.NewUuidHex(),
 			FirstName: "Patrick",
 			LastName:  "Zierahn",
 		},
 		{
-			AppUuid:   simple.NewUuidHex(),
 			FirstName: "Lukas",
 			LastName:  "Zierahn",
 		},
 		{
-			AppUuid:   simple.NewUuidHex(),
 			FirstName: "Kim",
 			LastName:  "Zierahn",
 		},
 		{
-			AppUuid:   simple.NewUuidHex(),
 			FirstName: "Susi",
 			LastName:  "Brandt",
 		},
 		{
-			AppUuid:   simple.NewUuidHex(),
 			FirstName: "Omar",
 			LastName:  "Müller",
 		},
 		{
-			AppUuid:   simple.NewUuidHex(),
 			FirstName: "Alex",
 			LastName:  "Albon",
 			Team:      "Williams-Martini",
 		},
 		{
-			AppUuid:   simple.NewUuidHex(),
 			FirstName: "Carlos",
 			LastName:  "Sainz",
 			Team:      "Ferrari",
 		},
 		{
-			AppUuid:   simple.NewUuidHex(),
 			FirstName: "Charles",
 			LastName:  "Leclerc",
 			Team:      "Ferrari",
 		},
 		{
-			AppUuid:   simple.NewUuidHex(),
 			FirstName: "Esteban",
 			LastName:  "Ocon",
 			Team:      "Alpine",
 		},
 		{
-			AppUuid:   simple.NewUuidHex(),
 			FirstName: "Fernando",
 			LastName:  "Alonso",
 			Team:      "Aston Martin",
 		},
 		{
-			AppUuid:   simple.NewUuidHex(),
 			FirstName: "George",
 			LastName:  "Russell",
 			Team:      "Mercedes-AMG",
 		},
 		{
-			AppUuid:   simple.NewUuidHex(),
 			FirstName: "Lance",
 			LastName:  "Stroll",
 			Team:      "Aston Martin",
 		},
 		{
-			AppUuid:   simple.NewUuidHex(),
 			FirstName: "Lando",
 			LastName:  "Norris",
 			Team:      "McLaren",
 		},
 		{
-			AppUuid:   simple.NewUuidHex(),
 			FirstName: "Lewis",
 			LastName:  "Hamilton",
 			Team:      "Mercedes-AMG",
 		},
 		{
-			AppUuid:   simple.NewUuidHex(),
 			FirstName: "Max",
 			LastName:  "Verstappen",
 			Team:      "Red Bull-Oracle",
 		},
 		{
-			AppUuid:   simple.NewUuidHex(),
 			FirstName: "Nico",
 			LastName:  "Hulkenberg",
 			Team:      "Haas",
 		},
 		{
-			AppUuid:   simple.NewUuidHex(),
 			FirstName: "Oliver",
 			LastName:  "Bearman",
 			Team:      "Ferrari",
 		},
 		{
-			AppUuid:   simple.NewUuidHex(),
 			FirstName: "Oscar",
 			LastName:  "Piastri",
 			Team:      "McLaren",
 		},
 		{
-			AppUuid:   simple.NewUuidHex(),
 			FirstName: "Pierre",
 			LastName:  "Gasly",
 			Team:      "Alpine",
 		},
 		{
-			AppUuid:   simple.NewUuidHex(),
 			FirstName: "Yuki",
 			LastName:  "Tsunoda",
 			Team:      "Racing Bulls",
 		},
 	}
 )
+
+func (sv *Service) loadMockups() {
+
+	if len(sv.pilots) > 0 {
+		return
+	}
+
+	log.Printf("Loading pilot mockups start...")
+	defer log.Printf("Loading pilot mockups done.")
+
+	var err error
+	var team *slotman.Team
+
+	allTeams := sv.tms.GetAllTeams()
+	teamIndex := rand.Int() % len(allTeams)
+
+	for _, mp := range mockupPilots {
+
+		mp.Uuid = simple.UuidHexFromSha256([]byte(mp.FirstName + "|" + mp.LastName))
+
+		teamIndex = (teamIndex + 1) % len(allTeams)
+
+		if mp.Team == "" {
+
+			mp.Team = allTeams[teamIndex].Name
+			mp.Car = allTeams[teamIndex].Car
+
+		} else {
+
+			team, err = sv.tms.GetTeam(mp.Team)
+			if err != nil {
+				log.Cerror(err)
+				continue
+			}
+
+			mp.Team = team.Name
+			mp.Car = team.Car
+		}
+
+		mp.ProfilePic, err = sv.loadMockupPilotProfile(
+			mp.FirstName,
+			mp.LastName)
+		log.Cerror(err)
+
+		sv.UpdatePilot(mp)
+	}
+}

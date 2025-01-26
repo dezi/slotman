@@ -1,6 +1,10 @@
 package teams
 
-import "slotman/services/type/slotman"
+import (
+	"slotman/services/type/slotman"
+	"slotman/utils/log"
+	"slotman/utils/simple"
+)
 
 var (
 	mockupTeams = []*slotman.Team{
@@ -66,3 +70,28 @@ var (
 		},
 	}
 )
+
+func (sv *Service) loadMockups() {
+
+	if len(sv.teams) > 0 {
+		return
+	}
+
+	log.Printf("Loading teams mockups start...")
+	defer log.Printf("Loading teams mockups done.")
+
+	var err error
+
+	for _, mt := range mockupTeams {
+
+		mt.Uuid = simple.UuidHexFromSha256([]byte(mt.Name))
+
+		mt.Logo, err = sv.loadMockupTeamLogo(mt.Name)
+		log.Cerror(err)
+
+		mt.CarPic, err = sv.loadMockupCarPic(mt.Name)
+		log.Cerror(err)
+
+		sv.UpdateTeam(mt)
+	}
+}

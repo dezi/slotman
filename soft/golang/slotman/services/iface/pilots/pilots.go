@@ -1,6 +1,10 @@
 package pilots
 
-import "slotman/services/impl/provider"
+import (
+	"image"
+	"slotman/services/impl/provider"
+	"slotman/services/type/slotman"
+)
 
 const (
 	Service provider.Service = "servicePilots"
@@ -8,6 +12,11 @@ const (
 
 type Interface interface {
 	GetName() (name provider.Service)
+
+	GetAllPilots() (pilots []*slotman.Pilot)
+
+	UpdatePilot(pilot *slotman.Pilot)
+	GetScaledPilotPic(pilot *slotman.Pilot, size int) (img *image.RGBA, err error)
 }
 
 func GetInstance() (iface Interface, err error) {

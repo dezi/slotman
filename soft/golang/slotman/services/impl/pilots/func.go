@@ -1,12 +1,39 @@
 package pilots
 
 import (
+	"golang.org/x/image/draw"
 	"image"
 	"slotman/goodies/imaging"
 	"slotman/services/type/slotman"
 	"slotman/utils/log"
 	"slotman/utils/simple"
 )
+
+func (sv *Service) GetAllPilots() (pilots []*slotman.Pilot) {
+
+	sv.mapsLock.Lock()
+	defer sv.mapsLock.Unlock()
+
+	for _, pilot := range sv.pilots {
+		pilots = append(pilots, pilot)
+	}
+
+	return
+}
+
+func (sv *Service) GetScaledPilotPic(pilot *slotman.Pilot, size int) (img *image.RGBA, err error) {
+
+	src, err := decodeBaseImage(pilot.ProfilePic)
+	if err != nil {
+		log.Cerror(err)
+		return
+	}
+
+	img = image.NewRGBA(image.Rect(0, 0, size, size))
+	draw.NearestNeighbor.Scale(img, img.Rect, src, src.Bounds(), draw.Over, nil)
+
+	return
+}
 
 func (sv *Service) UpdatePilot(pilot *slotman.Pilot) {
 

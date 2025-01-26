@@ -8,7 +8,6 @@ import (
 	"slotman/services/iface/teams"
 	"slotman/services/iface/turner"
 	"slotman/services/impl/provider"
-	"slotman/services/type/slotman"
 	"slotman/things/galaxycore/gc9a01"
 	"slotman/utils/log"
 	"time"
@@ -26,10 +25,10 @@ type Service struct {
 	faceRegularNormal font.Face
 	faceRegularLarge  font.Face
 
-	teams     []*slotman.Team
-	teamIndex int
+	teamIndex  int
+	pilotIndex int
 
-	pilots []*slotman.Pilot
+	loopCount int
 }
 
 var (
@@ -66,8 +65,6 @@ func StartService() (err error) {
 		singleTon.fontRegular,
 		&truetype.Options{Size: 40})
 
-	singleTon.teams = singleTon.tms.GetAllTeams()
-
 	provider.SetProvider(singleTon)
 
 	return
@@ -93,6 +90,6 @@ func (sv *Service) GetName() (name provider.Service) {
 }
 
 func (sv *Service) GetControlOptions() (interval time.Duration) {
-	interval = time.Second * 10
+	interval = time.Second * 5
 	return
 }

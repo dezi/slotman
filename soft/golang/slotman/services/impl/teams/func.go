@@ -15,9 +15,9 @@ func (sv *Service) GetAllTeams() (teams []*slotman.Team) {
 	return
 }
 
-func GetScaledTeamLogo(logo string, size int) (img *image.RGBA, err error) {
+func (sv *Service) GetScaledTeamLogo(team *slotman.Team, size int) (img *image.RGBA, err error) {
 
-	input, err := embedFs.Open(filepath.Join("embeds", logo))
+	input, err := embedFs.Open(filepath.Join("embeds", team.Logo))
 	if err != nil {
 		log.Cerror(err)
 		return

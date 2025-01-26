@@ -1,8 +1,10 @@
 package gc9a01
 
 import (
+	"image"
 	"slotman/drivers/iface/gpio"
 	"slotman/drivers/impl/spi"
+	"slotman/things"
 	"slotman/utils/simple"
 )
 
@@ -19,7 +21,7 @@ type GC9A01 struct {
 
 	dcPinNo byte
 	dcPin   gpio.Gpio
-	spi     *spi.Device
+	spiDev  *spi.Device
 
 	handler Handler
 	debug   bool
@@ -33,11 +35,19 @@ type Frame struct {
 }
 
 type Control interface {
+	SetHandler(handler Handler)
+
+	Initialize() (err error)
+
+	SetFrame(frame Frame) (err error)
+
+	BlipFullImage(img image.Image) (err error)
+	BlipFullImageRaw(image []byte) (err error)
 }
 
 type Handler interface {
-	//OnSensorOpened(sensor sensors.Sensor)
-	//OnSensorClosed(sensor sensors.Sensor)
-	//OnSensorStarted(sensor sensors.Sensor)
-	//OnSensorStopped(sensor sensors.Sensor)
+	OnThingOpened(thing things.Thing)
+	OnThingClosed(thing things.Thing)
+	OnThingStarted(thing things.Thing)
+	OnThingStopped(thing things.Thing)
 }

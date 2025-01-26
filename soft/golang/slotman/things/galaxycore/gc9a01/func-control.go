@@ -4,53 +4,10 @@ import (
 	"errors"
 	"golang.org/x/image/draw"
 	"image"
-	"image/jpeg"
-	"image/png"
-	"os"
-	"strings"
 )
 
-func (se *GC9A01) LoadScaledImage(path string) (img image.Image, err error) {
-
-	fd, err := os.Open(path)
-	if err != nil {
-		return
-	}
-
-	defer func() { _ = fd.Close() }()
-
-	if strings.HasSuffix(strings.ToLower(path), ".jpg") {
-		img, err = jpeg.Decode(fd)
-		if err != nil {
-			return
-		}
-	}
-
-	if strings.HasSuffix(strings.ToLower(path), ".png") {
-		img, err = png.Decode(fd)
-		if err != nil {
-			return
-		}
-	}
-
-	if img == nil {
-		err = errors.New("invalid image format")
-		return
-	}
-
-	if img.Bounds().Size().X != ScreenWidth ||
-		img.Bounds().Size().Y != ScreenHeight {
-
-		//
-		// Resize image.
-		//
-
-		rgb := image.NewRGBA(image.Rect(0, 0, ScreenWidth, ScreenHeight))
-		draw.BiLinear.Scale(rgb, rgb.Bounds(), img, img.Bounds(), draw.Src, nil)
-		img = rgb
-	}
-
-	return
+func (se *GC9A01) SetHandler(handler Handler) {
+	se.handler = handler
 }
 
 func (se *GC9A01) BlipFullImage(img image.Image) (err error) {
@@ -140,17 +97,17 @@ func (se *GC9A01) BlipFullImageRaw(image []byte) (err error) {
 	return
 }
 
-func (se *GC9A01) SetOrientation(orientation int) (err error) {
+func (se *GC9A01) SetOrientation(orientation Orientation) (err error) {
 
 	switch orientation {
 	case 0:
-		err = se.writeCommandBytes(CommandOrientation, byte(Orientation0))
+		err = se.writeCommandBytes(CommandOrientation, byte(OrientMode0))
 	case 1:
-		err = se.writeCommandBytes(CommandOrientation, byte(Orientation90))
+		err = se.writeCommandBytes(CommandOrientation, byte(OrientMode90))
 	case 2:
-		err = se.writeCommandBytes(CommandOrientation, byte(Orientation180))
+		err = se.writeCommandBytes(CommandOrientation, byte(OrientMode180))
 	case 3:
-		err = se.writeCommandBytes(CommandOrientation, byte(Orientation270))
+		err = se.writeCommandBytes(CommandOrientation, byte(OrientMode270))
 	default:
 		err = errors.New("wrong orientation")
 	}
@@ -199,7 +156,7 @@ func (se *GC9A01) Initialize() (err error) {
 	_ = se.writeCommandBytes(0x8E, 0xFF)
 	_ = se.writeCommandBytes(0x8F, 0xFF)
 	_ = se.writeCommandBytes(0xB6, 0x00, 0x00)
-	_ = se.writeCommandBytes(CommandOrientation, byte(Orientation180))
+	_ = se.writeCommandBytes(CommandOrientation, byte(OrientMode180))
 	_ = se.writeCommandBytes(CommandColorMode, byte(ColorMode18Bit))
 	_ = se.writeCommandBytes(0x90, 0x08, 0x08, 0x08, 0x08)
 	_ = se.writeCommandBytes(0xBD, 0x06)
@@ -234,15 +191,15 @@ func (se *GC9A01) Initialize() (err error) {
 
 	err = se.SetFrame(Frame{X0: 0, Y0: 0, X1: ScreenWidth - 1, Y1: ScreenHeight - 1})
 	if err != nil {
-		_ = se.spi.Close()
-		se.spi = nil
+		_ = se.spiDev.Close()
+		se.spiDev = nil
 		return
 	}
 
-	err = se.SetOrientation(2)
+	err = se.SetOrientation(Orientation180Degree)
 	if err != nil {
-		_ = se.spi.Close()
-		se.spi = nil
+		_ = se.spiDev.Close()
+		se.spiDev = nil
 		return
 	}
 

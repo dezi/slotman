@@ -21,6 +21,7 @@ const (
 	ThingTypeADConverter  ThingType = "ad-converter"
 	ThingTypeIOExpander   ThingType = "io-expander"
 	ThingTypeMotorDriver  ThingType = "motor-driver"
+	ThingTypeColorDisplay ThingType = "color-display"
 )
 
 type Thing interface {

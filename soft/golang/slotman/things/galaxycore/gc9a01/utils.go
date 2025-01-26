@@ -7,7 +7,7 @@ func (se *GC9A01) writeCommand(cmd Command) (err error) {
 		return
 	}
 
-	_, err = se.spi.Send([]byte{byte(cmd)})
+	_, err = se.spiDev.Send([]byte{byte(cmd)})
 
 	return
 }
@@ -27,7 +27,7 @@ func (se *GC9A01) writeByte(data byte) (err error) {
 		return
 	}
 
-	_, err = se.spi.Send([]byte{data})
+	_, err = se.spiDev.Send([]byte{data})
 
 	return
 }
@@ -39,7 +39,7 @@ func (se *GC9A01) writeBytes(data []byte) (err error) {
 		return
 	}
 
-	_, err = se.spi.Send(data)
+	_, err = se.spiDev.Send(data)
 
 	return
 }

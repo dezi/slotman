@@ -35,7 +35,10 @@ func (sv *Service) displayTeams() {
 func (sv *Service) checkDisplays() {
 
 	if sv.turnDisplay1 == nil {
+
 		turnDisplay1 := gc9a01.NewGC9A01("/dev/spidev0.0", 25)
+		turnDisplay1.SetHandler(sv)
+
 		tryErr := turnDisplay1.Open()
 		if tryErr == nil {
 			sv.turnDisplay1 = turnDisplay1
@@ -45,7 +48,10 @@ func (sv *Service) checkDisplays() {
 	}
 
 	if sv.turnDisplay2 == nil {
+
 		turnDisplay2 := gc9a01.NewGC9A01("/dev/spidev0.1", 25)
+		turnDisplay2.SetHandler(sv)
+
 		tryErr := turnDisplay2.Open()
 		if tryErr == nil {
 			sv.turnDisplay2 = turnDisplay2
@@ -53,22 +59,4 @@ func (sv *Service) checkDisplays() {
 			log.Cerror(tryErr)
 		}
 	}
-
-	//img, err := sv.turnDisplay1.LoadScaledImage("/home/liesa/dezi.profil.jpg")
-	//if err != nil {
-	//	return
-	//}
-	//
-	//log.Printf("Profil wid=%d hei=%d", img.Bounds().Size().X, img.Bounds().Size().Y)
-	//
-	//dc := gg.NewContextForRGBA(img.(*image.RGBA))
-	//dc.SetRGB255(0xff, 0xff, 0xff)
-	//dc.SetFontFace(sv.faceRegularNormal)
-	//dc.DrawStringAnchored("P. Zierahn", 120, 200, 0.5, 0.0)
-	//
-	//err = sv.turnDisplay1.BlipFullImage(img)
-	//if err != nil {
-	//	log.Cerror(err)
-	//	return
-	//}
 }

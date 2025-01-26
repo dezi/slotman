@@ -4,15 +4,20 @@ import (
 	"github.com/golang/freetype/truetype"
 	"golang.org/x/image/font"
 	"golang.org/x/image/font/gofont/goregular"
+	"slotman/services/iface/pilots"
+	"slotman/services/iface/teams"
 	"slotman/services/iface/turner"
 	"slotman/services/impl/provider"
-	teamdefs2 "slotman/services/impl/teams"
+	"slotman/services/type/slotman"
 	"slotman/things/galaxycore/gc9a01"
 	"slotman/utils/log"
 	"time"
 )
 
 type Service struct {
+	tms teams.Interface
+	plt pilots.Interface
+
 	turnDisplay1 *gc9a01.GC9A01
 	turnDisplay2 *gc9a01.GC9A01
 
@@ -21,8 +26,10 @@ type Service struct {
 	faceRegularNormal font.Face
 	faceRegularLarge  font.Face
 
-	teamDefs  []teamdefs2.Team
+	teams     []*slotman.Team
 	teamIndex int
+
+	pilots []*slotman.Pilot
 }
 
 var (
@@ -37,6 +44,18 @@ func StartService() (err error) {
 
 	singleTon = &Service{}
 
+	singleTon.tms, err = teams.GetInstance()
+	if err != nil {
+		log.Cerror(err)
+		return
+	}
+
+	singleTon.plt, err = pilots.GetInstance()
+	if err != nil {
+		log.Cerror(err)
+		return
+	}
+
 	singleTon.fontRegular, _ = truetype.Parse(goregular.TTF)
 
 	singleTon.faceRegularNormal = truetype.NewFace(
@@ -47,7 +66,7 @@ func StartService() (err error) {
 		singleTon.fontRegular,
 		&truetype.Options{Size: 40})
 
-	singleTon.teamDefs = teamdefs2.GetAllTeams()
+	singleTon.teams = singleTon.tms.GetAllTeams()
 
 	provider.SetProvider(singleTon)
 

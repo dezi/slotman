@@ -13,6 +13,16 @@ type Tracks struct {
 	Tracks int `json:"tracks"`
 }
 
+type Team struct {
+	What string `json:"what,omitempty"`
+	Mode string `json:"mode,omitempty"`
+
+	Name   string `json:"name"`
+	Logo   string `json:"logo"`
+	Car    string `json:"car"`
+	CarPic string `json:"carPic"`
+}
+
 type Pilot struct {
 	What string `json:"what,omitempty"`
 	Mode string `json:"mode,omitempty"`

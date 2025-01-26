@@ -2,7 +2,6 @@ package pilots
 
 import (
 	"math/rand"
-	"slotman/services/impl/teams"
 	"slotman/utils/log"
 )
 
@@ -19,7 +18,9 @@ func (sv *Service) loadMockups() {
 	log.Printf("Loading pilot mockups start...")
 	defer log.Printf("Loading pilot mockups done.")
 
-	allTeams := teams.GetAllTeams()
+	var err error
+
+	allTeams := sv.tms.GetAllTeams()
 	teamIndex := rand.Int() % len(allTeams)
 
 	for _, mockupPilot := range mockupPilots {
@@ -29,9 +30,10 @@ func (sv *Service) loadMockups() {
 		mockupPilot.Team = allTeams[teamIndex].Name
 		mockupPilot.Car = allTeams[teamIndex].Car
 
-		mockupPilot.ProfilePic, _ = sv.loadMockupPilotProfile(
+		mockupPilot.ProfilePic, err = sv.loadMockupPilotProfile(
 			mockupPilot.FirstName,
 			mockupPilot.LastName)
+		log.Cerror(err)
 
 		sv.UpdatePilot(mockupPilot)
 	}

@@ -3,6 +3,7 @@ package pilots
 import (
 	"image"
 	"slotman/services/iface/pilots"
+	"slotman/services/iface/teams"
 	"slotman/services/impl/provider"
 	"slotman/services/type/slotman"
 	"slotman/utils/log"
@@ -12,6 +13,8 @@ import (
 )
 
 type Service struct {
+	tms teams.Interface
+
 	pilots map[simple.UUIDHex]*slotman.Pilot
 
 	pilotProfileFull  map[simple.UUIDHex]*image.RGBA
@@ -31,6 +34,12 @@ func StartService() (err error) {
 	}
 
 	singleTon = &Service{}
+
+	singleTon.tms, err = teams.GetInstance()
+	if err != nil {
+		log.Cerror(err)
+		return
+	}
 
 	singleTon.pilots = make(map[simple.UUIDHex]*slotman.Pilot)
 	singleTon.pilotProfileFull = make(map[simple.UUIDHex]*image.RGBA)

@@ -6,11 +6,12 @@ import (
 	"image/png"
 	"path/filepath"
 	"slotman/goodies/imaging"
+	"slotman/services/type/slotman"
 	"slotman/utils/log"
 )
 
-func GetAllTeams() (teams []Team) {
-	teams = allTeams
+func (sv *Service) GetAllTeams() (teams []*slotman.Team) {
+	teams = mockupTeams
 	return
 }
 

@@ -13,9 +13,9 @@ func (sv *Service) DoControlTask() {
 
 func (sv *Service) displayTeams() {
 
-	sv.teamIndex = (sv.teamIndex + 1) % len(sv.teamDefs)
+	sv.teamIndex = (sv.teamIndex + 1) % len(sv.teams)
 
-	img, err := teams.GetScaledTeamLogo(sv.teamDefs[sv.teamIndex].Logo, 240)
+	img, err := teams.GetScaledTeamLogo(sv.teams[sv.teamIndex].Logo, 240)
 	if err != nil {
 		log.Cerror(err)
 		return

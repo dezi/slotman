@@ -4,9 +4,9 @@ import (
 	"github.com/golang/freetype/truetype"
 	"golang.org/x/image/font"
 	"golang.org/x/image/font/gofont/goregular"
-	"slotman/goodies/teamdefs"
 	"slotman/services/iface/turner"
 	"slotman/services/impl/provider"
+	teamdefs2 "slotman/services/impl/teams"
 	"slotman/things/galaxycore/gc9a01"
 	"slotman/utils/log"
 	"time"
@@ -21,7 +21,7 @@ type Service struct {
 	faceRegularNormal font.Face
 	faceRegularLarge  font.Face
 
-	teamDefs  []teamdefs.Team
+	teamDefs  []teamdefs2.Team
 	teamIndex int
 }
 
@@ -47,7 +47,7 @@ func StartService() (err error) {
 		singleTon.fontRegular,
 		&truetype.Options{Size: 40})
 
-	singleTon.teamDefs = teamdefs.GetAllTeams()
+	singleTon.teamDefs = teamdefs2.GetAllTeams()
 
 	provider.SetProvider(singleTon)
 

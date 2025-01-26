@@ -1,7 +1,7 @@
 package turner
 
 import (
-	"slotman/goodies/teamdefs"
+	"slotman/services/impl/teams"
 	"slotman/things/galaxycore/gc9a01"
 	"slotman/utils/log"
 )
@@ -15,7 +15,7 @@ func (sv *Service) displayTeams() {
 
 	sv.teamIndex = (sv.teamIndex + 1) % len(sv.teamDefs)
 
-	img, err := teamdefs.GetScaledTeamLogo(sv.teamDefs[sv.teamIndex].Logo, 240)
+	img, err := teams.GetScaledTeamLogo(sv.teamDefs[sv.teamIndex].Logo, 240)
 	if err != nil {
 		log.Cerror(err)
 		return

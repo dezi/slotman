@@ -1,4 +1,4 @@
-package teamdefs
+package teams
 
 import "embed"
 

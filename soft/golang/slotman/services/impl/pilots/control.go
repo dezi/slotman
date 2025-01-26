@@ -2,7 +2,7 @@ package pilots
 
 import (
 	"math/rand"
-	"slotman/goodies/teamdefs"
+	"slotman/services/impl/teams"
 	"slotman/utils/log"
 )
 
@@ -19,7 +19,7 @@ func (sv *Service) loadMockups() {
 	log.Printf("Loading pilot mockups start...")
 	defer log.Printf("Loading pilot mockups done.")
 
-	allTeams := teamdefs.GetAllTeams()
+	allTeams := teams.GetAllTeams()
 	teamIndex := rand.Int() % len(allTeams)
 
 	for _, mockupPilot := range mockupPilots {

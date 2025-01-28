@@ -10,6 +10,7 @@ import (
 	"slotman/services/iface/proxy"
 	"slotman/services/impl/provider"
 	"slotman/utils/log"
+	"slotman/utils/simple"
 	"sync"
 	"time"
 )
@@ -31,8 +32,11 @@ type Service struct {
 	uartDevMap  map[string]*uart.Device
 	uartDevLock sync.Mutex
 
-	webServerConn *websocket.Conn
-	webServerLock sync.Mutex
+	webServerConn     *websocket.Conn
+	webServerConnLock sync.Mutex
+
+	webServerChan     map[simple.UUIDHex]chan []byte
+	webServerChanLock sync.Mutex
 
 	webClientsConns map[string]*websocket.Conn
 	webClientsLock  sync.Mutex
@@ -56,6 +60,7 @@ func StartService() (err error) {
 	singleTon.uartDevMap = make(map[string]*uart.Device)
 
 	singleTon.webClientsConns = make(map[string]*websocket.Conn)
+	singleTon.webServerChan = make(map[simple.UUIDHex]chan []byte)
 
 	provider.SetProvider(singleTon)
 

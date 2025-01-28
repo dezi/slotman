@@ -1,9 +1,6 @@
 package proxy
 
-import (
-	"slotman/drivers/iface/gpio"
-	"time"
-)
+import "slotman/utils/simple"
 
 type Area string
 
@@ -15,180 +12,12 @@ const (
 )
 
 type Message struct {
+	Uuid simple.UUIDHex
 	Area Area
 }
 
-type GpioWhat string
-
-const (
-	GpioWhatHasGpio   GpioWhat = "gpio.hasGpio"
-	GpioWhatOpen      GpioWhat = "gpio.open"
-	GpioWhatClose     GpioWhat = "gpio.close"
-	GpioWhatSetInput  GpioWhat = "gpio.set.input"
-	GpioWhatSetOutput GpioWhat = "gpio.set.output"
-	GpioWhatSetLow    GpioWhat = "gpio.set.low"
-	GpioWhatSetHigh   GpioWhat = "gpio.set.high"
-	GpioWhatGetState  GpioWhat = "gpio.get.State"
-)
-
-type Gpio struct {
-
-	//
-	// Routing part.
-	//
-
-	Area Area
-	What GpioWhat
-
-	//
-	// Request part.
-	//
-
-	PinNo uint8 `json:",omitempty"`
-
-	//
-	// Response part.
-	//
-
-	State gpio.State `json:",omitempty"`
-
-	Ok  bool   `json:",omitempty"`
-	Err string `json:",omitempty"`
-
-	NE error `json:"-"`
-}
-
-type I2cWhat string
-
-const (
-	I2cWhatGetDevicePaths   I2cWhat = "i2c.get.device-paths"
-	I2cWhatOpen             I2cWhat = "i2c.open"
-	I2cWhatClose            I2cWhat = "i2c.close"
-	I2cWhatBeginTransaction I2cWhat = "i2c.begin.transaction"
-	I2cWhatEndTransaction   I2cWhat = "i2c.end.transaction"
-	I2cWhatWrite            I2cWhat = "i2c.write"
-	I2cWhatRead             I2cWhat = "i2c.read"
-)
-
-type I2c struct {
-
-	//
-	// Routing part.
-	//
-
-	Area Area
-	What I2cWhat
-
-	//
-	// Request part.
-	//
-
-	Device string `json:",omitempty"`
-	Addr   uint8  `json:",omitempty"`
-
-	//
-	// Response part.
-	//
-
-	Paths []string `json:",omitempty"`
-	Write []byte   `json:",omitempty"`
-	Read  []byte   `json:",omitempty"`
-	Size  int      `json:",omitempty"`
-	Xfer  int      `json:",omitempty"`
-
-	Ok  bool   `json:",omitempty"`
-	Err string `json:",omitempty"`
-
-	NE error `json:"-"`
-}
-
-type SpiWhat string
-
-const (
-	SpiWhatGetDevicePaths SpiWhat = "spi.get.device-paths"
-	SpiWhatOpen           SpiWhat = "spi.open"
-	SpiWhatClose          SpiWhat = "spi.close"
-	SpiWhatSetMode        SpiWhat = "spi.set.mode"
-	SpiWhatSetBpw         SpiWhat = "spi.set.bpw"
-	SpiWhatSetSpeed       SpiWhat = "spi.set.speed"
-	SpiWhatSend           SpiWhat = "spi.send"
-)
-
-type Spi struct {
-
-	//
-	// Routing part.
-	//
-
-	Area Area
-	What SpiWhat
-
-	//
-	// Request part.
-	//
-
-	Device string `json:",omitempty"`
-
-	Mode  uint8  `json:",omitempty"`
-	Bpw   uint8  `json:",omitempty"`
-	Speed uint32 `json:",omitempty"`
-
-	//
-	// Response part.
-	//
-
-	Paths []string `json:",omitempty"`
-	Send  []byte   `json:",omitempty"`
-	Recv  []byte   `json:",omitempty"`
-
-	Ok  bool   `json:",omitempty"`
-	Err string `json:",omitempty"`
-
-	NE error `json:"-"`
-}
-
-type UartWhat string
-
-const (
-	UartWhatGetDevicePaths UartWhat = "uart.get.device-paths"
-	UartWhatOpen           UartWhat = "uart.open"
-	UartWhatClose          UartWhat = "uart.close"
-	UartWhatSetReadTimeout UartWhat = "uart.set.read.timeout"
-	UartWhatRead           UartWhat = "uart.write"
-	UartWhatWrite          UartWhat = "uart.read"
-)
-
-type Uart struct {
-
-	//
-	// Routing part.
-	//
-
-	Area Area
-	What UartWhat
-
-	//
-	// Request part.
-	//
-
-	Device string `json:",omitempty"`
-
-	Baudrate int           `json:",omitempty"`
-	TimeOut  time.Duration `json:",omitempty"`
-
-	//
-	// Response part.
-	//
-
-	Paths []string `json:",omitempty"`
-
-	Write []byte `json:",omitempty"`
-	Read  []byte `json:",omitempty"`
-	Size  int    `json:",omitempty"`
-	Xfer  int    `json:",omitempty"`
-
-	Ok  bool   `json:",omitempty"`
-	Err string `json:",omitempty"`
-
-	NE error `json:"-"`
+type MessageIface interface {
+	GetUuid() (uuid simple.UUIDHex)
+	SetUuid(uuid simple.UUIDHex)
+	GetArea() (area Area)
 }

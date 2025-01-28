@@ -45,12 +45,10 @@ func (sv *Service) handleWs(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	sv.deleteSocketConnect(sender)
+	sv.deleteClientConnect(sender)
 
 	sv.webClientsLock.Lock()
-
 	sv.webClientsConns[sender] = ws
-
 	sv.webClientsLock.Unlock()
 
 	var mType int
@@ -95,8 +93,6 @@ func (sv *Service) handleWs(w http.ResponseWriter, r *http.Request) {
 			break
 		}
 
-		//log.Printf("Send resBytes=%s", string(resBytes))
-
 		err = ws.WriteMessage(websocket.TextMessage, resBytes)
 		if err != nil {
 			log.Cerror(err)
@@ -104,10 +100,10 @@ func (sv *Service) handleWs(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	sv.deleteSocketConnect(sender)
+	sv.deleteClientConnect(sender)
 }
 
-func (sv *Service) deleteSocketConnect(sender string) {
+func (sv *Service) deleteClientConnect(sender string) {
 
 	sv.webClientsLock.Lock()
 	defer sv.webClientsLock.Unlock()

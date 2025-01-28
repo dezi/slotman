@@ -28,6 +28,14 @@ func (sv *Service) handleGpio(sender string, reqBytes []byte) (resBytes []byte, 
 	if req.What == proxy.GpioWhatHasGpio {
 		req.Ok, req.NE = gpio.HasGpio()
 		log.Printf("GPIO HasGpio ok=%v err=%v", req.Ok, req.NE)
+
+		if req.NE == nil {
+			req.Ok = true
+		} else {
+			req.Ok = false
+			req.Err = req.NE.Error()
+		}
+
 		resBytes, err = json.Marshal(req)
 		return
 	}

@@ -14,14 +14,16 @@ import (
 func (sv *Service) proxyRequest(req proxy.MessageIface) (res []byte, err error) {
 
 	sv.webServerConnLock.Lock()
-	defer sv.webServerConnLock.Unlock()
 
 	if sv.webServerConn == nil {
 		err = sv.createConnect()
 		if err != nil {
+			sv.webServerConnLock.Unlock()
 			return
 		}
 	}
+
+	sv.webServerConnLock.Unlock()
 
 	uuid := simple.NewUuidHex()
 	resc := make(chan []byte, 1)
@@ -37,9 +39,12 @@ func (sv *Service) proxyRequest(req proxy.MessageIface) (res []byte, err error) 
 		return
 	}
 
-	log.Printf("proxyRequest req=%s", string(reqBytes))
+	//log.Printf("proxyRequest req=%s", string(reqBytes))
 
+	sv.webServerConnLock.Lock()
 	err = sv.webServerConn.WriteMessage(websocket.TextMessage, reqBytes)
+	sv.webServerConnLock.Unlock()
+
 	if err != nil {
 		log.Cerror(err)
 		_ = sv.webServerConn.Close()
@@ -101,10 +106,16 @@ func (sv *Service) connectReadLoop() {
 	var mType int
 	var res []byte
 	var err error
+	var conn *websocket.Conn
 
-	for sv.webServerConn != nil {
+	for {
 
-		mType, res, err = sv.webServerConn.ReadMessage()
+		conn = sv.webServerConn
+		if conn == nil {
+			break
+		}
+
+		mType, res, err = conn.ReadMessage()
 		if err != nil {
 			log.Cerror(err)
 			return

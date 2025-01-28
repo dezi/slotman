@@ -7,6 +7,7 @@ import (
 	"slotman/services/type/proxy"
 	"slotman/utils/log"
 	"strings"
+	"sync"
 )
 
 func (sv *Service) handleWs(w http.ResponseWriter, r *http.Request) {
@@ -54,6 +55,7 @@ func (sv *Service) handleWs(w http.ResponseWriter, r *http.Request) {
 	var mType int
 	var tryErr error
 	var reqBytes []byte
+	var wsLock sync.Mutex
 
 	for {
 
@@ -68,36 +70,40 @@ func (sv *Service) handleWs(w http.ResponseWriter, r *http.Request) {
 
 		//log.Printf("Recv reqBytes=%s", string(reqBytes))
 
-		message := proxy.Message{}
-		err = json.Unmarshal(reqBytes, &message)
-		if err != nil {
+		go func() {
+
+			message := proxy.Message{}
+			err = json.Unmarshal(reqBytes, &message)
+			if err != nil {
+				log.Cerror(err)
+				return
+			}
+
+			var resBytes []byte
+
+			switch message.Area {
+			case proxy.AreaGpio:
+				resBytes, err = sv.handleGpio(sender, reqBytes)
+			case proxy.AreaI2c:
+				resBytes, err = sv.handleI2c(sender, reqBytes)
+			case proxy.AreaSpi:
+				resBytes, err = sv.handleSpi(sender, reqBytes)
+			case proxy.AreaUart:
+				resBytes, err = sv.handleUart(sender, reqBytes)
+			}
+
+			if err != nil {
+				log.Cerror(err)
+				return
+			}
+
+			wsLock.Lock()
+
+			err = ws.WriteMessage(websocket.TextMessage, resBytes)
 			log.Cerror(err)
-			break
-		}
 
-		var resBytes []byte
-
-		switch message.Area {
-		case proxy.AreaGpio:
-			resBytes, err = sv.handleGpio(sender, reqBytes)
-		case proxy.AreaI2c:
-			resBytes, err = sv.handleI2c(sender, reqBytes)
-		case proxy.AreaSpi:
-			resBytes, err = sv.handleSpi(sender, reqBytes)
-		case proxy.AreaUart:
-			resBytes, err = sv.handleUart(sender, reqBytes)
-		}
-
-		if err != nil {
-			log.Cerror(err)
-			break
-		}
-
-		err = ws.WriteMessage(websocket.TextMessage, resBytes)
-		if err != nil {
-			log.Cerror(err)
-			break
-		}
+			wsLock.Unlock()
+		}()
 	}
 
 	sv.deleteClientConnect(sender)

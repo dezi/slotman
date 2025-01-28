@@ -6,6 +6,7 @@ import (
 	"slotman/drivers/impl/spi"
 	"slotman/things"
 	"slotman/utils/simple"
+	"sync"
 )
 
 type GC9A01 struct {
@@ -22,6 +23,9 @@ type GC9A01 struct {
 	dcPinNo byte
 	dcPin   gpio.Gpio
 	spiDev  *spi.Device
+
+	blipLast []byte
+	blipLock sync.Mutex
 
 	handler Handler
 	debug   bool

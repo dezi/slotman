@@ -131,7 +131,8 @@ func (se *ADS1115) ReadADConversion(input int) (value uint16, err error) {
 	}
 
 	//log.Printf("################ old config=%04x", config)
-	//
+
+	//log.Printf("################ old   os=%1x", (config>>OsShift)&OsMask)
 	//log.Printf("################ old  mux=%1x", (config>>MuxShift)&MuxMask)
 	//log.Printf("################ old gain=%1x", (config>>GainShift)&GainMask)
 	//log.Printf("################ old mode=%1x", (config>>ModeShift)&ModeMask)
@@ -140,11 +141,16 @@ func (se *ADS1115) ReadADConversion(input int) (value uint16, err error) {
 	config &= ^(OsMask << OsShift)
 	config |= OsWriteStart << OsShift
 
+	//config &= ^(ModeMask << ModeShift)
+	//config |= ModeSingleShot << OsShift
+
 	config &= ^(GainMask << GainShift)
 	config |= uint16(se.gains[input]) << GainShift
 
 	config &= ^(RateMask << RateShift)
 	config |= uint16(se.rates[input]) << RateShift
+
+	//log.Printf("################ new config=%04x", config)
 
 	config &= ^(MuxMask << MuxShift)
 

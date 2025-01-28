@@ -1,6 +1,7 @@
 package main
 
 import (
+	"slotman/services/impl/controls"
 	"slotman/services/impl/pilots"
 	"slotman/services/impl/provider"
 	"slotman/services/impl/proxy"
@@ -25,9 +26,11 @@ func startup() {
 	_ = teams.StartService()
 	_ = pilots.StartService()
 	_ = turner.StartService()
+	_ = controls.StartService()
 
 	_ = exitter.WaitUntilTermination()
 
+	_ = controls.StopService()
 	_ = turner.StopService()
 	_ = pilots.StopService()
 	_ = teams.StopService()

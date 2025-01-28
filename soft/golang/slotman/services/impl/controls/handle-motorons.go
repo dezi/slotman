@@ -79,7 +79,6 @@ func (sv *Service) SetSpeed(track int, percent float64, now bool) (err error) {
 
 	if motoron == nil {
 		err = errors.New(fmt.Sprintf("motoron %d not found", track))
-		log.Cerror(err)
 		return
 	}
 

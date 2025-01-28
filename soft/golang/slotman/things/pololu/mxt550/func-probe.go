@@ -35,7 +35,7 @@ func ProbeThings(busyDevicePaths []string, desiredAddresses []byte) (things []*M
 				continue
 			}
 
-			log.Printf("Probing MXT550 deviceAddrPath=%s", deviceAddrPath)
+			//log.Printf("Probing MXT550 deviceAddrPath=%s", deviceAddrPath)
 
 			mxt550 := NewMXT550(deviceAddrPath)
 

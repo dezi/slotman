@@ -44,8 +44,7 @@ func (sv *Service) speedControlHandler(track int) {
 			speedPcc = pcc.MinPercent + speed*(pcc.MaxPercent-pcc.MinPercent)/100
 		}
 
-		err := sv.SetSpeed(track, speedPcc, false)
-		log.Cerror(err)
+		_ = sv.SetSpeed(track, speedPcc, false)
 
 		if speed != 0 || time.Now().Unix()-lastTime.Unix() > 5 {
 			log.Printf("Speed track=%d speedPcc=%5.1f speed=%5.1f rawSpeed=%d", track, speedPcc, speed, rawSpeed)

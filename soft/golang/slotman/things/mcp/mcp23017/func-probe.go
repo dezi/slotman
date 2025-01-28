@@ -33,7 +33,7 @@ func ProbeThings(busyDevicePaths []string, desiredAddresses []byte) (things []*M
 				continue
 			}
 
-			log.Printf("Probing MCP23017 deviceAddrPath=%s", deviceAddrPath)
+			//log.Printf("Probing MCP23017 deviceAddrPath=%s", deviceAddrPath)
 
 			i2cDev := i2c.NewDevice(devicePath, address)
 			tryErr := i2cDev.Open()

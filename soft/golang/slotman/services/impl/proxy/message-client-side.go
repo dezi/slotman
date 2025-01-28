@@ -116,7 +116,7 @@ func (sv *Service) connectReadLoop() {
 			continue
 		}
 
-		log.Printf("proxyRequest res=%s", string(res))
+		//log.Printf("proxyRequest res=%s", string(res))
 
 		message := &proxy.Message{}
 		err = json.Unmarshal(res, message)
@@ -136,9 +136,10 @@ func (sv *Service) connectReadLoop() {
 			continue
 		}
 
-		log.Printf("########### out of band uuid=%s...", uuid)
 		//
 		// Handle out of band push message.
 		//
+
+		log.Printf("########### out of band uuid=%s...", uuid)
 	}
 }

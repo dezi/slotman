@@ -28,6 +28,14 @@ func (sv *Service) handleI2c(sender string, reqBytes []byte) (resBytes []byte, e
 	if req.What == proxy.I2cWhatGetDevicePaths {
 		req.Paths, req.NE = i2c.GetDevicePaths()
 		log.Printf("I2C  GetDevicePaths paths=%v err=%v", req.Paths, req.NE)
+
+		if req.NE == nil {
+			req.Ok = true
+		} else {
+			req.Ok = false
+			req.Err = req.NE.Error()
+		}
+
 		resBytes, err = json.Marshal(req)
 		return
 	}

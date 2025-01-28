@@ -28,6 +28,14 @@ func (sv *Service) handleSpi(sender string, reqBytes []byte) (resBytes []byte, e
 	if req.What == proxy.SpiWhatGetDevicePaths {
 		req.Paths, req.NE = spi.GetDevicePaths()
 		log.Printf("SPI  GetDevicePaths paths=%v err=%v", req.Paths, req.NE)
+
+		if req.NE == nil {
+			req.Ok = true
+		} else {
+			req.Ok = false
+			req.Err = req.NE.Error()
+		}
+
 		resBytes, err = json.Marshal(req)
 		return
 	}

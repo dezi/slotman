@@ -52,14 +52,11 @@ func (sv *Service) handleWs(w http.ResponseWriter, r *http.Request) {
 	sv.webClientsConns[sender] = ws
 	sv.webClientsLock.Unlock()
 
-	var mType int
-	var tryErr error
-	var reqBytes []byte
 	var wsLock sync.Mutex
 
 	for {
 
-		mType, reqBytes, tryErr = ws.ReadMessage()
+		mType, reqBytes, tryErr := ws.ReadMessage()
 		if tryErr != nil {
 			break
 		}
@@ -70,43 +67,47 @@ func (sv *Service) handleWs(w http.ResponseWriter, r *http.Request) {
 
 		//log.Printf("Recv reqBytes=%s", string(reqBytes))
 
-		go func() {
-
-			message := proxy.Message{}
-			err = json.Unmarshal(reqBytes, &message)
-			if err != nil {
-				log.Cerror(err)
-				return
-			}
-
-			var resBytes []byte
-
-			switch message.Area {
-			case proxy.AreaGpio:
-				resBytes, err = sv.handleGpio(sender, reqBytes)
-			case proxy.AreaI2c:
-				resBytes, err = sv.handleI2c(sender, reqBytes)
-			case proxy.AreaSpi:
-				resBytes, err = sv.handleSpi(sender, reqBytes)
-			case proxy.AreaUart:
-				resBytes, err = sv.handleUart(sender, reqBytes)
-			}
-
-			if err != nil {
-				log.Cerror(err)
-				return
-			}
-
-			wsLock.Lock()
-
-			err = ws.WriteMessage(websocket.TextMessage, resBytes)
-			log.Cerror(err)
-
-			wsLock.Unlock()
-		}()
+		go sv.executeClientMessage(sender, reqBytes, ws, &wsLock)
 	}
 
 	sv.deleteClientConnect(sender)
+}
+
+func (sv *Service) executeClientMessage(
+	sender string, reqBytes []byte,
+	ws *websocket.Conn, wsLock *sync.Mutex) {
+
+	message := proxy.Message{}
+	err := json.Unmarshal(reqBytes, &message)
+	if err != nil {
+		log.Cerror(err)
+		return
+	}
+
+	var resBytes []byte
+
+	switch message.Area {
+	case proxy.AreaGpio:
+		resBytes, err = sv.handleGpio(sender, reqBytes)
+	case proxy.AreaI2c:
+		resBytes, err = sv.handleI2c(sender, reqBytes)
+	case proxy.AreaSpi:
+		resBytes, err = sv.handleSpi(sender, reqBytes)
+	case proxy.AreaUart:
+		resBytes, err = sv.handleUart(sender, reqBytes)
+	}
+
+	if err != nil {
+		log.Cerror(err)
+		return
+	}
+
+	wsLock.Lock()
+
+	err = ws.WriteMessage(websocket.TextMessage, resBytes)
+	log.Cerror(err)
+
+	wsLock.Unlock()
 }
 
 func (sv *Service) deleteClientConnect(sender string) {

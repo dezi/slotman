@@ -3,7 +3,6 @@ package ads1115
 import (
 	"errors"
 	"slotman/things"
-	"slotman/utils/log"
 	"time"
 )
 
@@ -124,10 +123,7 @@ func (se *ADS1115) ReadADConversion(input int) (value uint16, err error) {
 		return
 	}
 
-	defer func() {
-		err = se.i2cDev.EndTransaction()
-		log.Cerror(err)
-	}()
+	defer func() { _ = se.i2cDev.EndTransaction() }()
 
 	config, err := se.i2cDev.ReadRegU16BE(byte(RegisterConfig))
 	if err != nil {

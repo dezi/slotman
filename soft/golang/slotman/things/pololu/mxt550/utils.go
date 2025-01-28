@@ -18,10 +18,7 @@ func (se *MXT550) sendCommand(cmd []byte) (err error) {
 		return
 	}
 
-	defer func() {
-		err = se.i2cDev.EndTransaction()
-		log.Cerror(err)
-	}()
+	defer func() { _ = se.i2cDev.EndTransaction() }()
 
 	sendCrc := (se.protocolOptions & 1 << MotoronProtocolOptionCrcForCommands) != 0
 	err = se.sendCommandCore(cmd, sendCrc)
@@ -41,10 +38,7 @@ func (se *MXT550) sendCommandCrc(cmd []byte) (err error) {
 		return
 	}
 
-	defer func() {
-		err = se.i2cDev.EndTransaction()
-		log.Cerror(err)
-	}()
+	defer func() { _ = se.i2cDev.EndTransaction() }()
 
 	err = se.sendCommandCore(cmd, true)
 
@@ -63,10 +57,7 @@ func (se *MXT550) sendCommandAndReadResponse(cmd []byte, length byte) (response 
 		return
 	}
 
-	defer func() {
-		err = se.i2cDev.EndTransaction()
-		log.Cerror(err)
-	}()
+	defer func() { _ = se.i2cDev.EndTransaction() }()
 
 	sendCrc := (se.protocolOptions & 1 << MotoronProtocolOptionCrcForCommands) != 0
 	err = se.sendCommandCore(cmd, sendCrc)

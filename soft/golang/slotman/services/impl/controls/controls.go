@@ -72,8 +72,7 @@ func (sv *Service) GetName() (name provider.Service) {
 	return controls.Service
 }
 
-func (sv *Service) GetControlOptions() (interval time.Duration, wantGo bool) {
+func (sv *Service) GetControlOptions() (interval time.Duration) {
 	interval = time.Second * 60
-	wantGo = true
 	return
 }

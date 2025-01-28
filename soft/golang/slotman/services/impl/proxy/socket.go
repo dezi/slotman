@@ -95,7 +95,7 @@ func (sv *Service) handleWs(w http.ResponseWriter, r *http.Request) {
 			break
 		}
 
-		//log.Printf("Send resBytes=%s", string(resBytes))
+		log.Printf("Send resBytes=%s", string(resBytes))
 
 		err = ws.WriteMessage(websocket.TextMessage, resBytes)
 		if err != nil {

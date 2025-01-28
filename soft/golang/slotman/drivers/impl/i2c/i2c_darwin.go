@@ -19,8 +19,6 @@ func GetDevicePaths() (devicePaths []string, err error) {
 
 	devicePaths, err = prx.I2cGetDevicePaths()
 	return
-
-	return
 }
 
 // Open I2C-connection.

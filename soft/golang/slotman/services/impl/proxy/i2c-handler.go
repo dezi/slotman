@@ -66,17 +66,17 @@ func (sv *Service) handleI2c(sender string, reqBytes []byte) (resBytes []byte, e
 
 	case proxy.I2cWhatWrite:
 		req.Xfer, req.NE = i2cDev.Write(req.Write)
-		log.Printf("I2C  Write write=%d xfer=%d dev=%s addr=%02x err=%v",
-			len(req.Write), req.Xfer, i2cDev.GetDevice(), i2cDev.GetAddr(), req.NE)
+		//log.Printf("I2C  Write write=%d xfer=%d dev=%s addr=%02x err=%v",
+		//	len(req.Write), req.Xfer, i2cDev.GetDevice(), i2cDev.GetAddr(), req.NE)
 		req.Write = nil
 
 	case proxy.I2cWhatRead:
 		req.Read = make([]byte, req.Size)
 		req.Xfer, req.NE = i2cDev.Read(req.Read)
 		req.Read = req.Read[:req.Xfer]
-		log.Printf("I2C  Read size=%d xfer=%d dev=%s addr=%02x err=%v",
-			req.Size, req.Xfer, i2cDev.GetDevice(), i2cDev.GetAddr(), req.NE)
-		log.Printf("I2C  Read [ %02x ]", req.Read)
+		//log.Printf("I2C  Read size=%d xfer=%d dev=%s addr=%02x err=%v",
+		//	req.Size, req.Xfer, i2cDev.GetDevice(), i2cDev.GetAddr(), req.NE)
+		//log.Printf("I2C  Read [ %02x ]", req.Read)
 	}
 
 	if req.NE == nil {

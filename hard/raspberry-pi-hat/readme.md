@@ -238,10 +238,8 @@ Output of the i2cdetect tool on Raspberry Pi terminal.
 
 Good job!!!
 
-Step 9
-======
-
-Addendum:
+Addendum Step 9
+===============
 
 We want to use the SPI-0 breakout for a nice display
 device GC9A01. (https://www.amazon.de/dp/B0CFXVD9HX)

@@ -127,6 +127,11 @@ func (sv *Service) deleteClientConnect(sender string) {
 	sv.gpioDevLock.Lock()
 
 	for oldSender, gpioDev := range sv.gpioDevMap {
+
+		if gpioDev == nil {
+			continue
+		}
+
 		if strings.HasPrefix(oldSender, sender) {
 			log.Printf("Delete GPIO sender=%s pin=%d", sender, gpioDev.GetPinNo())
 			_ = gpioDev.Close()
@@ -139,6 +144,11 @@ func (sv *Service) deleteClientConnect(sender string) {
 	sv.i2cDevLock.Lock()
 
 	for oldSender, i2cDev := range sv.i2cDevMap {
+
+		if i2cDev == nil {
+			continue
+		}
+
 		if strings.HasPrefix(oldSender, sender) {
 			log.Printf("Delete I2C  sender=%s dev=%s addr=%02x",
 				sender, i2cDev.GetDevice(), i2cDev.GetAddr())
@@ -152,6 +162,11 @@ func (sv *Service) deleteClientConnect(sender string) {
 	sv.spiDevLock.Lock()
 
 	for oldSender, spiDev := range sv.spiDevMap {
+
+		if spiDev == nil {
+			continue
+		}
+
 		if strings.HasPrefix(oldSender, sender) {
 			log.Printf("Delete SPI  sender=%s dev=%s", sender, spiDev.GetDevice())
 			_ = spiDev.Close()
@@ -164,6 +179,11 @@ func (sv *Service) deleteClientConnect(sender string) {
 	sv.uartDevLock.Lock()
 
 	for oldSender, uartDev := range sv.uartDevMap {
+
+		if uartDev == nil {
+			continue
+		}
+
 		if strings.HasPrefix(oldSender, sender) {
 			log.Printf("Delete UART sender=%s dev=%s", sender, uartDev.GetDevice())
 			_ = uartDev.Close()

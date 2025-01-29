@@ -1,6 +1,6 @@
 # Raspberry Pi Hat with I2C and SPI interfaces.
 
-bla bla 
+bla bla
 
 ## Benefits
 
@@ -86,7 +86,7 @@ Solder them to 5V pin and GND pin as displayed in the image.
 
 [<img src="images/raspberry-pi-hat-step-03-e.jpg" width="400"/>](images/raspberry-pi-hat-step-03-e.jpg)
 
-[<img src="images/raspberry-pi-hat-gpio-pins.jpg" width="400"/>](images/raspberry-pi-hat-gpio-pins.jpg)
+[<img src="images/raspberry-pi-hat-gpio-pins-a.jpg" width="400"/>](images/raspberry-pi-hat-gpio-pins-a.jpg)
 
 Step 4
 ======
@@ -116,7 +116,7 @@ The I2C connector pins from left to right:
 - SCL (GPIO 3 Serial Clock I2C)
 - SDA (GPIO 2 Serial Data I2C)
 
-[<img src="images/raspberry-pi-hat-gpio-pins.jpg" width="400"/>](images/raspberry-pi-hat-gpio-pins.jpg)
+[<img src="images/raspberry-pi-hat-gpio-pins-a.jpg" width="400"/>](images/raspberry-pi-hat-gpio-pins-a.jpg)
 
 Step 5
 ======
@@ -124,7 +124,6 @@ Step 5
 We continue with the 8 pin SPI-0 connector.
 
 Prepare Your 7 connecting wires, 5 short wires and 3 longer wires.
-
 
 [<img src="images/raspberry-pi-hat-step-05-a.jpg" width="400"/>](images/raspberry-pi-hat-step-05-a.jpg)
 
@@ -150,14 +149,14 @@ The SPI-0 connector pins from left to right:
 - CE0 (GPIO 8 Chip Enabled-CE0 SPI 0)
 - CE1 (GPIO 7 Chip Enabled-CE1 SPI 0)
 
-[<img src="images/raspberry-pi-hat-gpio-pins.jpg" width="400"/>](images/raspberry-pi-hat-gpio-pins.jpg)
+[<img src="images/raspberry-pi-hat-gpio-pins-a.jpg" width="400"/>](images/raspberry-pi-hat-gpio-pins-a.jpg)
 
 Step 6
 ======
 
 We continue with the 8 pin SPI-1 connector.
 
-Prepare now 8 connecting wires with different lengths. 
+Prepare now 8 connecting wires with different lengths.
 
 The SPI-1 connector pins from left to right:
 
@@ -170,7 +169,7 @@ The SPI-1 connector pins from left to right:
 - CE1 (GPIO 17 Chip Enabled-CE1 SPI 1)
 - CE2 (GPIO 16 Chip Enabled-CE2 SPI 1)
 
-[<img src="images/raspberry-pi-hat-gpio-pins.jpg" width="400"/>](images/raspberry-pi-hat-gpio-pins.jpg)
+[<img src="images/raspberry-pi-hat-gpio-pins-a.jpg" width="400"/>](images/raspberry-pi-hat-gpio-pins-a.jpg)
 
 [<img src="images/raspberry-pi-hat-step-06-a.jpg" width="400"/>](images/raspberry-pi-hat-step-06-a.jpg)
 
@@ -244,7 +243,7 @@ Addendum Step 9
 We want to use the SPI-0 breakout for a nice display
 device GC9A01. (https://www.amazon.de/dp/B0CFXVD9HX)
 
-These devices need another control pin named DC. 
+These devices need another control pin named DC.
 So we need to add another wire to the board.
 
 [<img src="images/raspberry-pi-hat-step-09-a.jpg" width="400"/>](images/raspberry-pi-hat-step-09-a.jpg)
@@ -268,4 +267,84 @@ The SPI-0 connector pins from left to right:
 - CE1 (GPIO 7 Chip Enabled-CE1 SPI 0)
 - DC (GPIO 25 )
 
-[<img src="images/raspberry-pi-hat-gpio-pins.jpg" width="400"/>](images/raspberry-pi-hat-gpio-pins.jpg)
+[<img src="images/raspberry-pi-hat-gpio-pins-a.jpg" width="400"/>](images/raspberry-pi-hat-gpio-pins-a.jpg)
+
+Addendum Step 10
+================
+
+We want to add a breakout for the second I2C interface at GPIO pins O and 1,
+named GPIO 0 EEPROM Serial Data (I2C) and GPIO 1 EEPROM Serial Clock (I2C).
+
+[<img src="images/raspberry-pi-hat-gpio-pins-a.jpg" width="400"/>](images/raspberry-pi-hat-gpio-pins-a.jpg)
+
+See also this pin layout:
+
+[<img src="images/raspberry-pi-hat-gpio-pins-b.png" width="400"/>](images/raspberry-pi-hat-gpio-pins-b.png)
+
+We go for the yellow marked pins numbered 27 and 28 in this layout.
+
+Prepare the break-out pin and four wires.
+
+[<img src="images/raspberry-pi-hat-step-10-a.jpg" width="400"/>](images/raspberry-pi-hat-step-10-a.jpg)
+
+Attach the break-out pin and attach wires like this.
+
+[<img src="images/raspberry-pi-hat-step-10-b.jpg" width="400"/>](images/raspberry-pi-hat-step-10-b.jpg)
+
+Pull them through the corresponding holes and pull them straight.
+
+The shorter wires go to 5V and Ground. The longer wires to the I2C pins 27 and 28.
+
+From left to right:
+
+- Short wire to 5V (2)
+- Short wire to Ground (6)
+- Long wire to I2C SCK (28)
+- Long wire to I2C SDA (27)
+
+[<img src="images/raspberry-pi-hat-step-10-c.jpg" width="400"/>](images/raspberry-pi-hat-step-10-c.jpg)
+
+Addendum Step 11
+================
+
+Enabling and testing the second I2C interface.
+
+Edit the config file:
+
+    sudo vi /boot/firmware/config.txt
+
+Identify following line:
+
+    dtparam=i2c_arm=on
+
+Add the following line:
+
+    dtparam=i2c_vc=on
+
+Save and reboot. After that log back in.
+
+    liesa@pz2lts24a:~ $ ls -al /dev/i2c-*
+    crw-rw---- 1 root i2c 89,  0 Jan 29 09:45 /dev/i2c-0
+    crw-rw---- 1 root i2c 89,  1 Jan 29 09:45 /dev/i2c-1
+    crw-rw---- 1 root i2c 89, 10 Jan 29 09:45 /dev/i2c-10
+    crw-rw---- 1 root i2c 89, 11 Jan 29 09:45 /dev/i2c-11
+    crw-rw---- 1 root i2c 89,  2 Jan 29 09:45 /dev/i2c-2
+
+The new I2C bus is /dev/i2c-0.
+
+Hook up a device of Your choice to the new break-out and issue:
+
+    liesa@pz2lts24a:~ $ i2cdetect -y 0
+    0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
+    00:                         -- -- -- -- -- -- -- --
+    10: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+    20: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+    30: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+    40: -- -- -- -- -- -- -- -- 48 49 -- -- -- -- -- --
+    50: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+    60: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+    70: -- -- -- -- -- -- -- --                         
+
+In my case I see two devices with addresses 48 + 49.
+
+Good job!

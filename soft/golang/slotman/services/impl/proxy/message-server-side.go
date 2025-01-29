@@ -136,6 +136,19 @@ func (sv *Service) deleteClientConnect(sender string) {
 
 	sv.gpioDevLock.Unlock()
 
+	sv.i2cDevLock.Lock()
+
+	for oldSender, i2cDev := range sv.i2cDevMap {
+		if strings.HasPrefix(oldSender, sender) {
+			log.Printf("Delete I2C  sender=%s dev=%s addr=%02x",
+				sender, i2cDev.GetDevice(), i2cDev.GetAddr())
+			_ = i2cDev.Close()
+			sv.i2cDevMap[oldSender] = nil
+		}
+	}
+
+	sv.i2cDevLock.Unlock()
+
 	sv.spiDevLock.Lock()
 
 	for oldSender, spiDev := range sv.spiDevMap {

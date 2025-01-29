@@ -54,7 +54,7 @@ func (sv *Service) checkSensors() {
 
 	if sv.mcp23017s == nil {
 
-		sv.mcp23017s, err = mcp23017.ProbeThings(nil, nil)
+		sv.mcp23017s, err = mcp23017.ProbeThings(nil, []byte{0x20, 0x21})
 
 		if err != nil {
 			log.Cerror(err)
@@ -97,7 +97,7 @@ func (sv *Service) checkSensors() {
 
 	if sv.mxt550s == nil {
 
-		sv.mxt550s, err = mxt550.ProbeThings(nil, nil)
+		sv.mxt550s, err = mxt550.ProbeThings(nil, []byte{0x18, 0x19, 0x1a})
 
 		if err != nil {
 			log.Cerror(err)
@@ -155,7 +155,7 @@ func (sv *Service) checkSensors() {
 
 	if sv.ads1115s == nil {
 
-		sv.ads1115s, err = ads1115.ProbeThings(nil, nil)
+		sv.ads1115s, err = ads1115.ProbeThings(nil, []byte{0x48, 0x49})
 		if err != nil {
 			log.Cerror(err)
 		} else {

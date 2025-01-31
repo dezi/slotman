@@ -54,7 +54,7 @@ func ProbeThings(busyDevicePaths []string, desiredAddresses []byte) (things []*M
 				continue
 			}
 
-			log.Printf("Identified MXT550 devicePath=%s productId=%04x firmwareVersion=%s",
+			log.Printf("Identified MXT550 devicePath=%s productId=%04x fw=%s",
 				deviceAddrPath, productId, firmwareVersion)
 
 			usedAddresses = append(usedAddresses, address)

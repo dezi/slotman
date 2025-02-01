@@ -3,6 +3,7 @@ package speedi
 import (
 	"slotman/services/iface/proxy"
 	"slotman/services/iface/speedi"
+	"slotman/services/iface/speedo"
 	"slotman/services/impl/provider"
 	"slotman/things/ti/ads1115"
 	"slotman/utils/log"
@@ -12,6 +13,7 @@ import (
 
 type Service struct {
 	prx proxy.Interface
+	sdo speedo.Interface
 
 	ads1115s []*ads1115.ADS1115
 
@@ -41,6 +43,12 @@ func StartService() (err error) {
 	singleTon = &Service{}
 
 	singleTon.prx, err = proxy.GetInstance()
+	if err != nil {
+		log.Cerror(err)
+		return
+	}
+
+	singleTon.sdo, err = speedo.GetInstance()
 	if err != nil {
 		log.Cerror(err)
 		return

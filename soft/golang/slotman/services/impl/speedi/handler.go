@@ -83,7 +83,7 @@ func (sv *Service) handleLocalSpeed(track int, rawSpeed uint16, lastTime *int64)
 		speedPcc = pcc.MinPercent + speed*(pcc.MaxPercent-pcc.MinPercent)/100
 	}
 
-	//_ = sv.SetSpeed(track, speedPcc, false)
+	//_ = sv.sdo.SetSpeed(track, speedPcc, false)
 
 	if speed != 0 && (lastTime == nil || time.Now().Unix()-*lastTime > 5) {
 		log.Printf("Speed track=%d speedPcc=%5.1f speed=%5.1f rawSpeed=%d", track, speedPcc, speed, rawSpeed)

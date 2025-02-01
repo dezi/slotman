@@ -1,22 +1,19 @@
-package controls
+package speedo
 
 import (
-	"slotman/services/iface/controls"
+	"slotman/services/iface/speedo"
 	"slotman/services/impl/provider"
-	"slotman/things/mcp/mcp23017"
+	"slotman/things/pololu/mxt550"
 	"slotman/utils/log"
 	"time"
 )
 
 type Service struct {
-	mcp23017s []*mcp23017.MCP23017
+	mxt550s []*mxt550.MXT550
 
-	mcp23017StartLight   *mcp23017.MCP23017
-	mcp23017SpeedMeasure *mcp23017.MCP23017
-
-	speedControlAttached     []bool
-	speedControlChannels     []chan uint16
-	speedControlCalibrations []*SpeedControlCalibration
+	mxt550Motoron1 *mxt550.MXT550
+	mxt550Motoron2 *mxt550.MXT550
+	mxt550Motoron3 *mxt550.MXT550
 
 	doExit bool
 }
@@ -58,7 +55,7 @@ func StopService() (err error) {
 }
 
 func (sv *Service) GetName() (name provider.Service) {
-	return controls.Service
+	return speedo.Service
 }
 
 func (sv *Service) GetControlOptions() (interval time.Duration) {

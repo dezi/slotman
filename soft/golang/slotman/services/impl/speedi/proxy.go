@@ -6,25 +6,25 @@ import (
 )
 
 func (sv *Service) OnMessageFromClient(reqBytes []byte) (resBytes []byte, err error) {
+	_ = reqBytes
+	return
+}
+
+func (sv *Service) OnMessageFromServer(resBytes []byte) {
+
+	var err error
 
 	req := Speedi{}
 
-	err = json.Unmarshal(reqBytes, &req)
+	err = json.Unmarshal(resBytes, &req)
 	if err != nil {
 		log.Cerror(err)
 		return
 	}
 
 	switch req.What {
-	case SpeediWhatOpen:
-		// initialize and open speed reader.
-	case SpeediWhatClose:
-		// close speed reader.
+	case SpeediWhatSpeed:
 	}
 
 	return
-}
-
-func (sv *Service) OnMessageFromServer(resBytes []byte) {
-
 }

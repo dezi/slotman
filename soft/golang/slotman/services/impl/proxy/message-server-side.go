@@ -10,6 +10,27 @@ import (
 	"sync"
 )
 
+func (sv *Service) ProxyBroadcast(resBytes []byte) (err error) {
+
+	sv.webClientsLock.Lock()
+	defer sv.webClientsLock.Unlock()
+
+	for sender, webClientsConn := range sv.webClientsConns {
+
+		webClientsConnLock := sv.webClientsConnsLocks[sender]
+
+		if webClientsConn == nil || webClientsConnLock == nil {
+			continue
+		}
+
+		webClientsConnLock.Lock()
+		_ = webClientsConn.WriteMessage(websocket.TextMessage, resBytes)
+		webClientsConnLock.Unlock()
+	}
+
+	return
+}
+
 func (sv *Service) handleWs(w http.ResponseWriter, r *http.Request) {
 
 	if !strings.HasPrefix(r.URL.String(), "/ws") {
@@ -48,11 +69,12 @@ func (sv *Service) handleWs(w http.ResponseWriter, r *http.Request) {
 
 	sv.deleteClientConnect(sender)
 
+	var wsLock sync.Mutex
+
 	sv.webClientsLock.Lock()
 	sv.webClientsConns[sender] = ws
+	sv.webClientsConnsLocks[sender] = &wsLock
 	sv.webClientsLock.Unlock()
-
-	var wsLock sync.Mutex
 
 	for {
 

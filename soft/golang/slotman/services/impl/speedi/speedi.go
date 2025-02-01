@@ -6,6 +6,7 @@ import (
 	"slotman/services/impl/provider"
 	"slotman/things/ti/ads1115"
 	"slotman/utils/log"
+	"slotman/utils/simple"
 	"time"
 )
 
@@ -20,6 +21,9 @@ type Service struct {
 	speedControlAttached     []bool
 	speedControlChannels     []chan uint16
 	speedControlCalibrations []*SpeedControlCalibration
+
+	isProxyServer bool
+	isProxyClient bool
 
 	doExit bool
 }
@@ -41,6 +45,9 @@ func StartService() (err error) {
 		log.Cerror(err)
 		return
 	}
+
+	singleTon.isProxyServer = simple.GetExecName() == "proxy"
+	singleTon.isProxyClient = simple.GOOS == "darwin"
 
 	singleTon.prx.Subscribe(AreaSpeedi, singleTon)
 

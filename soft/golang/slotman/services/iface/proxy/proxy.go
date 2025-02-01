@@ -21,6 +21,7 @@ type Interface interface {
 	Unsubscribe(area proxy.Area, handler proxy.Subscriber)
 
 	ProxyRequest(req proxy.Message) (res []byte, err error)
+	ProxyBroadcast(resBytes []byte) (err error)
 
 	//
 	// GPIO interface.

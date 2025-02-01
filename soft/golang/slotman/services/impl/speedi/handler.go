@@ -29,6 +29,12 @@ func (sv *Service) speedControlHandler(track int) {
 		case rawSpeed = <-sv.speedControlChannels[track]:
 		}
 
+		if sv.isProxyServer {
+
+			sv.prx.ProxyRequest()
+			continue
+		}
+
 		if rawSpeed == 0 {
 			sv.speedControlAttached[track] = false
 			continue

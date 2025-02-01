@@ -27,6 +27,7 @@ type SpeediWhat string
 const (
 	SpeediWhatOpen  SpeediWhat = "speedi.open"
 	SpeediWhatClose SpeediWhat = "speedi.close"
+	SpeediWhatSpeed SpeediWhat = "speedi.speed"
 )
 
 type Speedi struct {

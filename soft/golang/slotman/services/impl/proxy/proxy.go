@@ -39,8 +39,9 @@ type Service struct {
 	webServerChan     map[simple.UUIDHex]chan []byte
 	webServerChanLock sync.Mutex
 
-	webClientsConns map[string]*websocket.Conn
-	webClientsLock  sync.Mutex
+	webClientsConns      map[string]*websocket.Conn
+	webClientsConnsLocks map[string]*sync.Mutex
+	webClientsLock       sync.Mutex
 
 	subscribers     map[proxyTypes.Area]proxyTypes.Subscriber
 	subscribersLock sync.Mutex
@@ -64,6 +65,8 @@ func StartService() (err error) {
 	singleTon.uartDevMap = make(map[string]*uart.Device)
 
 	singleTon.webClientsConns = make(map[string]*websocket.Conn)
+	singleTon.webClientsConnsLocks = make(map[string]*sync.Mutex)
+
 	singleTon.webServerChan = make(map[simple.UUIDHex]chan []byte)
 	singleTon.subscribers = make(map[proxyTypes.Area]proxyTypes.Subscriber)
 

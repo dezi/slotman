@@ -30,6 +30,10 @@ func (sv *Service) checkSpeedControls() {
 
 func (sv *Service) loadCalibrations() {
 
+	if sv.isProxyServer {
+		return
+	}
+
 	if sv.speedControlCalibrations != nil {
 		return
 	}
@@ -47,6 +51,10 @@ func (sv *Service) loadCalibrations() {
 }
 
 func (sv *Service) checkSensors() {
+
+	if sv.isProxyClient {
+		return
+	}
 
 	var err error
 

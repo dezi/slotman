@@ -31,7 +31,7 @@ func (sv *Service) speedControlHandler(track int) {
 
 		if sv.isProxyServer {
 
-			sv.prx.ProxyRequest()
+			//sv.prx.ProxyRequest()
 			continue
 		}
 

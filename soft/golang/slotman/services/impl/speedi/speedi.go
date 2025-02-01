@@ -66,7 +66,7 @@ func StopService() (err error) {
 
 	log.Printf("Stopping service...")
 
-	singleTon.prx.Unsubscribe(AreaSpeedi, singleTon)
+	singleTon.prx.Unsubscribe(AreaSpeedi)
 
 	singleTon.doExit = true
 

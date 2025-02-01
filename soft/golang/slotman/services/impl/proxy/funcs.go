@@ -10,7 +10,7 @@ func (sv *Service) Subscribe(area proxy.Area, handler proxy.Subscriber) {
 	sv.subscribers[area] = handler
 }
 
-func (sv *Service) Unsubscribe(area proxy.Area, handler proxy.Subscriber) {
+func (sv *Service) Unsubscribe(area proxy.Area) {
 
 	sv.subscribersLock.Lock()
 	defer sv.subscribersLock.Unlock()

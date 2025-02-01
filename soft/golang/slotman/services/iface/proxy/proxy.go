@@ -18,7 +18,7 @@ type Interface interface {
 	GetName() (name provider.Service)
 
 	Subscribe(area proxy.Area, handler proxy.Subscriber)
-	Unsubscribe(area proxy.Area, handler proxy.Subscriber)
+	Unsubscribe(area proxy.Area)
 
 	ProxyRequest(req proxy.Message) (res []byte, err error)
 	ProxyBroadcast(resBytes []byte) (err error)

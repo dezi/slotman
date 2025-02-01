@@ -77,8 +77,8 @@ func (sv *Service) executeClientMessage(
 	sender string, reqBytes []byte,
 	ws *websocket.Conn, wsLock *sync.Mutex) {
 
-	message := message{}
-	err := json.Unmarshal(reqBytes, &message)
+	msg := message{}
+	err := json.Unmarshal(reqBytes, &msg)
 	if err != nil {
 		log.Cerror(err)
 		return
@@ -86,7 +86,7 @@ func (sv *Service) executeClientMessage(
 
 	var resBytes []byte
 
-	switch message.Area {
+	switch msg.Area {
 	case proxy.AreaGpio:
 		resBytes, err = sv.handleGpio(sender, reqBytes)
 	case proxy.AreaI2c:

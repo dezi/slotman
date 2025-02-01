@@ -1,6 +1,7 @@
 package speedi
 
 import (
+	"slotman/services/iface/proxy"
 	"slotman/services/iface/speedi"
 	"slotman/services/impl/provider"
 	"slotman/things/ti/ads1115"
@@ -9,6 +10,8 @@ import (
 )
 
 type Service struct {
+	prx proxy.Interface
+
 	ads1115s []*ads1115.ADS1115
 
 	ads1115Device1 *ads1115.ADS1115
@@ -33,6 +36,14 @@ func StartService() (err error) {
 
 	singleTon = &Service{}
 
+	singleTon.prx, err = proxy.GetInstance()
+	if err != nil {
+		log.Cerror(err)
+		return
+	}
+
+	singleTon.prx.Subscribe(AreaSpeedi, singleTon)
+
 	provider.SetProvider(singleTon)
 
 	return
@@ -47,6 +58,8 @@ func StopService() (err error) {
 	provider.UnsetProvider(singleTon)
 
 	log.Printf("Stopping service...")
+
+	singleTon.prx.Unsubscribe(AreaSpeedi, singleTon)
 
 	singleTon.doExit = true
 

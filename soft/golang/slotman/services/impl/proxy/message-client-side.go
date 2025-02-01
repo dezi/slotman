@@ -129,14 +129,14 @@ func (sv *Service) connectReadLoop() {
 
 		//log.Printf("ProxyRequest res=%s", string(res))
 
-		message := &message{}
-		err = json.Unmarshal(res, message)
+		msg := &message{}
+		err = json.Unmarshal(res, msg)
 		if err != nil {
 			log.Cerror(err)
 			continue
 		}
 
-		uuid := message.Uuid
+		uuid := msg.Uuid
 
 		sv.webServerChanLock.Lock()
 		resc := sv.webServerChan[uuid]

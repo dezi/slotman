@@ -7,8 +7,9 @@ import (
 	"slotman/drivers/impl/i2c"
 	"slotman/drivers/impl/spi"
 	"slotman/drivers/impl/uart"
-	"slotman/services/iface/proxy"
+	proxyIface "slotman/services/iface/proxy"
 	"slotman/services/impl/provider"
+	proxyTypes "slotman/services/type/proxy"
 	"slotman/utils/log"
 	"slotman/utils/simple"
 	"sync"
@@ -40,6 +41,9 @@ type Service struct {
 
 	webClientsConns map[string]*websocket.Conn
 	webClientsLock  sync.Mutex
+
+	subscribers     map[proxyTypes.Area]proxyTypes.Subscriber
+	subscribersLock sync.Mutex
 }
 
 var (
@@ -61,6 +65,7 @@ func StartService() (err error) {
 
 	singleTon.webClientsConns = make(map[string]*websocket.Conn)
 	singleTon.webServerChan = make(map[simple.UUIDHex]chan []byte)
+	singleTon.subscribers = make(map[proxyTypes.Area]proxyTypes.Subscriber)
 
 	provider.SetProvider(singleTon)
 
@@ -87,7 +92,7 @@ func StopService() (err error) {
 }
 
 func (sv *Service) GetName() (name provider.Service) {
-	return proxy.Service
+	return proxyIface.Service
 }
 
 func (sv *Service) GetControlOptions() (interval time.Duration) {

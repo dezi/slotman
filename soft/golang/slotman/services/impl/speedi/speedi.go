@@ -42,23 +42,22 @@ func StartService() (err error) {
 
 	singleTon = &Service{}
 
+	singleTon.isProxyServer = simple.GetExecName() == "proxy"
+	singleTon.isProxyClient = simple.GOOS == "darwin"
+
 	singleTon.prx, err = proxy.GetInstance()
 	if err != nil {
 		log.Cerror(err)
 		return
 	}
 
-	singleTon.sdo, err = speedo.GetInstance()
-	if err != nil {
-		log.Cerror(err)
-		return
+	if !singleTon.isProxyServer {
+		singleTon.sdo, err = speedo.GetInstance()
+		if err != nil {
+			log.Cerror(err)
+			return
+		}
 	}
-
-	singleTon.isProxyServer = simple.GetExecName() == "proxy"
-	singleTon.isProxyClient = simple.GOOS == "darwin"
-
-	singleTon.speedControlAttached = make([]bool, maxTracks)
-	singleTon.speedControlChannels = make([]chan uint16, maxTracks)
 
 	singleTon.prx.Subscribe(AreaSpeedi, singleTon)
 

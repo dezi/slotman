@@ -151,8 +151,6 @@ func (sv *Service) connectReadLoop() {
 		// Handle out of band push message.
 		//
 
-		log.Printf("Push message area=%s...", msg.Area)
-
 		sv.subscribersLock.Lock()
 
 		subscriber := sv.subscribers[msg.Area]

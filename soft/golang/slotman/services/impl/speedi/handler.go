@@ -29,6 +29,8 @@ func (sv *Service) speedControlHandler(track int) {
 
 		if sv.isProxyServer {
 
+			log.Printf("Speed track=%d rawSpeed=%d", track, rawSpeed)
+
 			//sv.prx.ProxyRequest()
 			continue
 		}

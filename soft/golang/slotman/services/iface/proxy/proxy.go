@@ -6,6 +6,7 @@ import (
 	"slotman/drivers/iface/spi"
 	"slotman/drivers/iface/uart"
 	"slotman/services/impl/provider"
+	"slotman/services/type/proxy"
 	"time"
 )
 
@@ -15,6 +16,8 @@ const (
 
 type Interface interface {
 	GetName() (name provider.Service)
+
+	ProxyRequest(req proxy.Message) (res []byte, err error)
 
 	//
 	// GPIO interface.

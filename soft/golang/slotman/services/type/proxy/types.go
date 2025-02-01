@@ -11,12 +11,7 @@ const (
 	AreaUart Area = "uart"
 )
 
-type Message struct {
-	Uuid simple.UUIDHex
-	Area Area
-}
-
-type MessageIface interface {
+type Message interface {
 	GetUuid() (uuid simple.UUIDHex)
 	SetUuid(uuid simple.UUIDHex)
 	GetArea() (area Area)

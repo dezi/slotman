@@ -11,7 +11,7 @@ import (
 	"slotman/utils/simple"
 )
 
-func (sv *Service) proxyRequest(req proxy.MessageIface) (res []byte, err error) {
+func (sv *Service) ProxyRequest(req proxy.Message) (res []byte, err error) {
 
 	sv.webServerConnLock.Lock()
 
@@ -39,7 +39,7 @@ func (sv *Service) proxyRequest(req proxy.MessageIface) (res []byte, err error) 
 		return
 	}
 
-	//log.Printf("proxyRequest req=%s", string(reqBytes))
+	//log.Printf("ProxyRequest req=%s", string(reqBytes))
 
 	sv.webServerConnLock.Lock()
 	err = sv.webServerConn.WriteMessage(websocket.TextMessage, reqBytes)
@@ -67,7 +67,7 @@ func (sv *Service) proxyRequest(req proxy.MessageIface) (res []byte, err error) 
 	//	return
 	//}
 
-	//log.Printf("proxyRequest res=%s", string(res))
+	//log.Printf("ProxyRequest res=%s", string(res))
 
 	return
 }
@@ -127,9 +127,9 @@ func (sv *Service) connectReadLoop() {
 			continue
 		}
 
-		//log.Printf("proxyRequest res=%s", string(res))
+		//log.Printf("ProxyRequest res=%s", string(res))
 
-		message := &proxy.Message{}
+		message := &message{}
 		err = json.Unmarshal(res, message)
 		if err != nil {
 			log.Cerror(err)

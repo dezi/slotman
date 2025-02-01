@@ -77,7 +77,7 @@ func (sv *Service) executeClientMessage(
 	sender string, reqBytes []byte,
 	ws *websocket.Conn, wsLock *sync.Mutex) {
 
-	message := proxy.Message{}
+	message := message{}
 	err := json.Unmarshal(reqBytes, &message)
 	if err != nil {
 		log.Cerror(err)

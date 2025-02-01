@@ -131,7 +131,7 @@ func (sv *Service) i2cExecuteRequest(req *proxy.I2c, i2c i2c.I2c) (res *proxy.I2
 	}
 
 	var resBytes []byte
-	resBytes, err = sv.proxyRequest(req)
+	resBytes, err = sv.ProxyRequest(req)
 	if err != nil {
 		return
 	}

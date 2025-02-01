@@ -107,7 +107,7 @@ func (sv *Service) gpioExecuteRequest(what proxy.GpioWhat, pin gpio.Gpio) (res *
 	}
 
 	var resBytes []byte
-	resBytes, err = sv.proxyRequest(req)
+	resBytes, err = sv.ProxyRequest(req)
 	if err != nil {
 		return
 	}

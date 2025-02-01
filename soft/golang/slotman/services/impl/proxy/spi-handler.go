@@ -44,7 +44,7 @@ func (sv *Service) handleSpi(sender string, reqBytes []byte) (resBytes []byte, e
 	// Check and create device.
 	//
 
-	devAddr := fmt.Sprintf("%s-%d", sender, req.Device)
+	devAddr := fmt.Sprintf("%s-%s", sender, req.Device)
 
 	spiDev := sv.spiDevMap[devAddr]
 	if spiDev == nil {

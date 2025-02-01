@@ -130,7 +130,7 @@ func (sv *Service) spiExecuteRequest(req *proxy.Spi, spi spi.Spi) (res *proxy.Sp
 	}
 
 	var resBytes []byte
-	resBytes, err = sv.proxyRequest(req)
+	resBytes, err = sv.ProxyRequest(req)
 	if err != nil {
 		return
 	}

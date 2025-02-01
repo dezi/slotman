@@ -118,7 +118,7 @@ func (sv *Service) uartExecuteRequest(req *proxy.Uart, uart uart.Uart) (res *pro
 	}
 
 	var resBytes []byte
-	resBytes, err = sv.proxyRequest(req)
+	resBytes, err = sv.ProxyRequest(req)
 	if err != nil {
 		return
 	}

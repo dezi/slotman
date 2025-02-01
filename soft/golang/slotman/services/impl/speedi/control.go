@@ -19,9 +19,6 @@ func (sv *Service) checkSpeedControls() {
 
 	log.Printf("Initializing speed controls...")
 
-	sv.speedControlAttached = make([]bool, maxTracks)
-	sv.speedControlChannels = make([]chan uint16, maxTracks)
-
 	for track := range sv.speedControlChannels {
 		sv.speedControlChannels[track] = make(chan uint16, 3)
 		go sv.speedControlHandler(track)

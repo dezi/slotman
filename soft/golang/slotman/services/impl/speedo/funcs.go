@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"slotman/things/pololu/mxt550"
+	"slotman/utils/log"
 )
 
 func (sv *Service) SetSpeed(track int, percent float64, now bool) (err error) {
@@ -50,7 +51,9 @@ func (sv *Service) SetSpeed(track int, percent float64, now bool) (err error) {
 	if now {
 		err = motoron.SetSpeedNow(motor, speedValue)
 	} else {
+		log.Printf("################# setspeed in...")
 		err = motoron.SetSpeed(motor, speedValue)
+		log.Printf("################# setspeed out...")
 	}
 
 	if err != nil {

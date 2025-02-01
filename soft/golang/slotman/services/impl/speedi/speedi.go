@@ -57,6 +57,9 @@ func StartService() (err error) {
 	singleTon.isProxyServer = simple.GetExecName() == "proxy"
 	singleTon.isProxyClient = simple.GOOS == "darwin"
 
+	singleTon.speedControlAttached = make([]bool, maxTracks)
+	singleTon.speedControlChannels = make([]chan uint16, maxTracks)
+
 	singleTon.prx.Subscribe(AreaSpeedi, singleTon)
 
 	provider.SetProvider(singleTon)

@@ -14,8 +14,6 @@ func (sv *Service) speedControlHandler(track int) {
 		MaxPercent: 70,
 	}
 
-	spc := sv.speedControlCalibrations[track]
-
 	var rawSpeed uint16
 	var lastTime time.Time
 
@@ -41,6 +39,8 @@ func (sv *Service) speedControlHandler(track int) {
 		}
 
 		sv.speedControlAttached[track] = true
+
+		spc := sv.speedControlCalibrations[track]
 
 		speed := 100 * float64(rawSpeed-spc.MinValue) / float64(spc.MaxValue-spc.MinValue)
 

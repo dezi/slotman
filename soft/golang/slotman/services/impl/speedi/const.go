@@ -1,4 +1,4 @@
-package controls
+package speedi
 
 const (
 	maxTracks = 6

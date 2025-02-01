@@ -10,14 +10,8 @@ import (
 
 func (sv *Service) speedControlHandler(track int) {
 
-	pcc := &PlayerControlCurve{
-		BrkPercent: 5,
-		MinPercent: 25,
-		MaxPercent: 70,
-	}
-
+	var lastTime int64
 	var rawSpeed uint16
-	var lastTime time.Time
 
 	for !sv.doExit {
 
@@ -50,39 +44,55 @@ func (sv *Service) speedControlHandler(track int) {
 			err = sv.prx.ProxyBroadcast(speediBytes)
 			log.Cerror(err)
 
-			if time.Now().Unix()-lastTime.Unix() > 5 {
+			if time.Now().Unix()-lastTime > 5 {
 				log.Printf("Speed track=%d rawSpeed=%d", track, rawSpeed)
-				lastTime = time.Now()
+				lastTime = time.Now().Unix()
 			}
 
 			continue
 		}
 
-		if rawSpeed == 0 {
-			sv.speedControlAttached[track] = false
-			continue
-		}
+		err := sv.handleLocalSpeed(track, rawSpeed, &lastTime)
+		log.Cerror(err)
+	}
+}
 
-		sv.speedControlAttached[track] = true
+func (sv *Service) handleLocalSpeed(track int, rawSpeed uint16, lastTime *int64) (err error) {
 
-		spc := sv.speedControlCalibrations[track]
+	if rawSpeed == 0 {
+		sv.speedControlAttached[track] = false
+		return
+	}
 
-		speed := 100 * float64(rawSpeed-spc.MinValue) / float64(spc.MaxValue-spc.MinValue)
+	sv.speedControlAttached[track] = true
 
-		speedPcc := speed
-		if speed <= 0.1 {
-			speedPcc = pcc.BrkPercent
-		} else {
-			speedPcc = pcc.MinPercent + speed*(pcc.MaxPercent-pcc.MinPercent)/100
-		}
+	pcc := &PlayerControlCurve{
+		BrkPercent: 5,
+		MinPercent: 25,
+		MaxPercent: 70,
+	}
 
-		//_ = sv.SetSpeed(track, speedPcc, false)
+	spc := sv.speedControlCalibrations[track]
 
-		if speed != 0 || time.Now().Unix()-lastTime.Unix() > 5 {
-			log.Printf("Speed track=%d speedPcc=%5.1f speed=%5.1f rawSpeed=%d", track, speedPcc, speed, rawSpeed)
-			lastTime = time.Now()
+	speed := 100 * float64(rawSpeed-spc.MinValue) / float64(spc.MaxValue-spc.MinValue)
+
+	speedPcc := speed
+	if speed <= 0.1 {
+		speedPcc = pcc.BrkPercent
+	} else {
+		speedPcc = pcc.MinPercent + speed*(pcc.MaxPercent-pcc.MinPercent)/100
+	}
+
+	//_ = sv.SetSpeed(track, speedPcc, false)
+
+	if speed != 0 && (lastTime == nil || time.Now().Unix()-*lastTime > 5) {
+		log.Printf("Speed track=%d speedPcc=%5.1f speed=%5.1f rawSpeed=%d", track, speedPcc, speed, rawSpeed)
+		if lastTime != nil {
+			*lastTime = time.Now().Unix()
 		}
 	}
+
+	return
 }
 
 func (sv *Service) OnThingOpened(thing things.Thing) {

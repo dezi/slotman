@@ -24,7 +24,7 @@ func (sv *Service) OnMessageFromServer(resBytes []byte) {
 
 	switch res.What {
 	case SpeediWhatSpeed:
-		log.Printf("Speed track=%d rawSpeed=%d", res.Track, res.RawSpeed)
+		err = sv.handleLocalSpeed(res.Track, res.RawSpeed, nil)
 	}
 
 	return

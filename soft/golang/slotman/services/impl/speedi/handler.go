@@ -1,8 +1,10 @@
 package speedi
 
 import (
+	"encoding/json"
 	"slotman/things"
 	"slotman/utils/log"
+	"slotman/utils/simple"
 	"time"
 )
 
@@ -31,7 +33,24 @@ func (sv *Service) speedControlHandler(track int) {
 
 			log.Printf("Speed track=%d rawSpeed=%d", track, rawSpeed)
 
-			//sv.prx.ProxyRequest()
+			speedi := &Speedi{
+				Uuid:     simple.NewUuidHex(),
+				Area:     AreaSpeedi,
+				What:     SpeediWhatSpeed,
+				RawSpeed: rawSpeed,
+				Ok:       true,
+				Err:      "",
+			}
+
+			speediBytes, err := json.Marshal(speedi)
+			if err != nil {
+				log.Cerror(err)
+				continue
+			}
+
+			err = sv.prx.ProxyBroadcast(speediBytes)
+			log.Cerror(err)
+
 			continue
 		}
 

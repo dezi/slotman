@@ -25,8 +25,6 @@ type SpeediWhat string
 
 //goland:noinspection GoNameStartsWithPackageName
 const (
-	SpeediWhatOpen  SpeediWhat = "speedi.open"
-	SpeediWhatClose SpeediWhat = "speedi.close"
 	SpeediWhatSpeed SpeediWhat = "speedi.speed"
 )
 
@@ -42,16 +40,10 @@ type Speedi struct {
 	What SpeediWhat
 
 	//
-	// Request part.
-	//
-
-	//PinNo uint8 `json:",omitempty"`
-
-	//
 	// Response part.
 	//
 
-	//State gpio.State `json:",omitempty"`
+	RawSpeed uint16 `json:",omitempty"`
 
 	Ok  bool   `json:",omitempty"`
 	Err string `json:",omitempty"`

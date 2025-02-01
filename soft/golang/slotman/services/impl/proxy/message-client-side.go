@@ -103,10 +103,10 @@ func (sv *Service) createConnect() (err error) {
 
 func (sv *Service) connectReadLoop() {
 
-	var mType int
-	var res []byte
 	var err error
 	var conn *websocket.Conn
+	var mType int
+	var resBytes []byte
 
 	for {
 
@@ -115,7 +115,7 @@ func (sv *Service) connectReadLoop() {
 			break
 		}
 
-		mType, res, err = conn.ReadMessage()
+		mType, resBytes, err = conn.ReadMessage()
 		if err != nil {
 			log.Cerror(err)
 			return
@@ -130,7 +130,7 @@ func (sv *Service) connectReadLoop() {
 		//log.Printf("ProxyRequest res=%s", string(res))
 
 		msg := &message{}
-		err = json.Unmarshal(res, msg)
+		err = json.Unmarshal(resBytes, msg)
 		if err != nil {
 			log.Cerror(err)
 			continue
@@ -143,7 +143,7 @@ func (sv *Service) connectReadLoop() {
 		sv.webServerChanLock.Unlock()
 
 		if resc != nil {
-			resc <- res
+			resc <- resBytes
 			continue
 		}
 
@@ -151,6 +151,15 @@ func (sv *Service) connectReadLoop() {
 		// Handle out of band push message.
 		//
 
-		log.Printf("########### out of band uuid=%s...", uuid)
+		log.Printf("Push message area=%s...", msg.Area)
+
+		sv.subscribersLock.Lock()
+
+		subscriber := sv.subscribers[msg.Area]
+		if subscriber != nil {
+			subscriber.OnMessageFromServer(resBytes)
+		}
+
+		sv.subscribersLock.Unlock()
 	}
 }

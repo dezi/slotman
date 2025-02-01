@@ -37,6 +37,7 @@ func (sv *Service) speedControlHandler(track int) {
 				Uuid:     simple.NewUuidHex(),
 				Area:     AreaSpeedi,
 				What:     SpeediWhatSpeed,
+				Track:    track,
 				RawSpeed: rawSpeed,
 				Ok:       true,
 				Err:      "",

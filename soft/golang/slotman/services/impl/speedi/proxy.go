@@ -14,16 +14,17 @@ func (sv *Service) OnMessageFromServer(resBytes []byte) {
 
 	var err error
 
-	req := Speedi{}
+	res := Speedi{}
 
-	err = json.Unmarshal(resBytes, &req)
+	err = json.Unmarshal(resBytes, &res)
 	if err != nil {
 		log.Cerror(err)
 		return
 	}
 
-	switch req.What {
+	switch res.What {
 	case SpeediWhatSpeed:
+		log.Printf("Speed track=%d rawSpeed=%d", res.Track, res.RawSpeed)
 	}
 
 	return

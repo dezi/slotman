@@ -47,18 +47,15 @@ func (sv *Service) SetSpeed(track int, percent float64, now bool) (err error) {
 		speedValue = +800
 	}
 
-	_ = motor
+	if now {
+		err = motoron.SetSpeedNow(motor, speedValue)
+	} else {
+		err = motoron.SetSpeed(motor, speedValue)
+	}
 
-	//if now {
-	//	err = motoron.SetSpeedNow(motor, speedValue)
-	//} else {
-	//	log.Printf("################# setspeed in...")
-	//	err = motoron.SetSpeed(motor, speedValue)
-	//	log.Printf("################# setspeed out...")
-	//}
-	//
-	//if err != nil {
-	//	err = errors.New(fmt.Sprintf("%s addr=%02x", err.Error(), motoron.GetThingAddress()))
-	//}
+	if err != nil {
+		err = errors.New(fmt.Sprintf("%s addr=%02x", err.Error(), motoron.GetThingAddress()))
+	}
+
 	return
 }

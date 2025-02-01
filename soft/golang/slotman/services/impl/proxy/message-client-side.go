@@ -155,7 +155,7 @@ func (sv *Service) connectReadLoop() {
 
 		subscriber := sv.subscribers[msg.Area]
 		if subscriber != nil {
-			subscriber.OnMessageFromServer(resBytes)
+			go subscriber.OnMessageFromServer(resBytes)
 		}
 
 		sv.subscribersLock.Unlock()

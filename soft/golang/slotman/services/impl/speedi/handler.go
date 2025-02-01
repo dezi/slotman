@@ -31,8 +31,6 @@ func (sv *Service) speedControlHandler(track int) {
 
 		if sv.isProxyServer {
 
-			log.Printf("Speed track=%d rawSpeed=%d", track, rawSpeed)
-
 			speedi := &Speedi{
 				Uuid:     simple.NewUuidHex(),
 				Area:     AreaSpeedi,
@@ -51,6 +49,11 @@ func (sv *Service) speedControlHandler(track int) {
 
 			err = sv.prx.ProxyBroadcast(speediBytes)
 			log.Cerror(err)
+
+			if rawSpeed != 0 || time.Now().Unix()-lastTime.Unix() > 5 {
+				log.Printf("Speed track=%d rawSpeed=%d", track, rawSpeed)
+				lastTime = time.Now()
+			}
 
 			continue
 		}

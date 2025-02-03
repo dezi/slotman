@@ -14,9 +14,12 @@ type SpeedRead struct {
 }
 
 type TrackState struct {
-	Round     int
-	RoundTs   time.Time
-	Speed     float64
-	SpeedTS   time.Time
+	Round       int
+	RoundMillis int
+	RoundTs     time.Time
+
+	SpeedKmh float64
+	SpeedTS  time.Time
+
 	IsAtStart bool
 }

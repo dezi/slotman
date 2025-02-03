@@ -101,8 +101,8 @@ func (sv *Service) speedEval() {
 					// Start + speed measure pin.
 					//
 
-					log.Printf("Speed pin=%02d track=%d active=%v",
-						pin, track, active)
+					//log.Printf("Speed pin=%02d track=%d active=%v",
+					//	pin, track, active)
 
 					sv.mapsLock.Lock()
 					trackState := sv.trackStates[track]
@@ -159,6 +159,8 @@ func (sv *Service) speedEval() {
 							speed *= 43 / 2
 
 							go sv.OnSpeedMeasurement(track, speed)
+
+							go sv.OnRoundCompleted(track)
 						}
 					}
 				}
@@ -166,11 +168,11 @@ func (sv *Service) speedEval() {
 				if pin%2 == 1 {
 
 					//
-					// Round measure pin.
+					// Speed measure pin 2.
 					//
 
-					log.Printf("Round pin=%02d track=%d active=%v",
-						pin, track, active)
+					//log.Printf("Round pin=%02d track=%d active=%v",
+					//	pin, track, active)
 				}
 
 				sv.speedStates[pin] = state

@@ -11,11 +11,15 @@ import (
 
 type Service struct {
 	speedSensor *mcp23017.MCP23017
-	speedChan   chan uint16
+	speedChan   chan SpeedRead
 	speedStates map[int]SpeedState
 
+	trackStates map[int]TrackState
+
+	mapsLock  sync.Mutex
 	waitGroup sync.WaitGroup
-	doExit    bool
+
+	doExit bool
 }
 
 var (
@@ -30,8 +34,9 @@ func StartService() (err error) {
 
 	singleTon = &Service{}
 
-	singleTon.speedChan = make(chan uint16, 10)
+	singleTon.speedChan = make(chan SpeedRead, 10)
 	singleTon.speedStates = make(map[int]SpeedState)
+	singleTon.trackStates = make(map[int]TrackState)
 
 	provider.SetProvider(singleTon)
 

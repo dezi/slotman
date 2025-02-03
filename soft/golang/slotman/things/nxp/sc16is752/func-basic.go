@@ -11,10 +11,12 @@ import (
 func NewSC15IS752(devicePath string) (se *SC15IS752) {
 
 	se = &SC15IS752{
-		Vendor:     "NXP",
-		Model:      "SC15IS752 Dual Uart",
-		DevicePath: devicePath,
+		Vendor:      "NXP",
+		Model:       "SC15IS752 Dual Uart",
+		DevicePath:  devicePath,
+		crystalFreq: 3072000,
 	}
+
 	return
 }
 

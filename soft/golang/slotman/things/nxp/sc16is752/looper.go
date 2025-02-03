@@ -23,12 +23,12 @@ func (se *SC15IS752) readLoop(channel byte) {
 
 		time.Sleep(time.Millisecond * time.Duration(se.pollSleep[channel]))
 
-		se.readLock.Lock()
+		se.accessLock.Lock()
 
 		//
 		// todo read data...
 		//
 
-		se.readLock.Unlock()
+		se.accessLock.Unlock()
 	}
 }

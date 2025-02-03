@@ -90,4 +90,10 @@ const (
 	RegXon2  byte = 0x05
 	RegXoff1 byte = 0x06
 	RegXoff2 byte = 0x07
+
+	ParityNone   byte = 0
+	ParityOdd    byte = 1
+	ParityEven   byte = 2
+	ParityForce1 byte = 3
+	ParityForce0 byte = 4
 )

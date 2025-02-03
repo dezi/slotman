@@ -43,7 +43,7 @@ func (sv *Service) checkSensors() {
 					return
 				}
 
-				log.Printf("Registered tacho MCP23017 path=%s uuid=%s",
+				log.Printf("Registered ampel MCP23017 path=%s uuid=%s",
 					sensor.DevicePath, sensor.GetUuid()[:8])
 
 				sv.ampelGpio = sensor

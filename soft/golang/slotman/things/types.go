@@ -8,20 +8,21 @@ import (
 type ThingType string
 
 const (
-	ThingTypePresence     ThingType = "presence"
-	ThingTypeFallDetect   ThingType = "fall-detect"
-	ThingTypeSleepMonitor ThingType = "sleep-monitor"
-	ThingTypeHumanTrack   ThingType = "human-track"
-	ThingTypeIllumination ThingType = "illumination"
-	ThingTypeRfid         ThingType = "rfid"
-	ThingTypePressure     ThingType = "pressure"
-	ThingTypeHumidity     ThingType = "humidity"
-	ThingTypeTemperature  ThingType = "temperature"
-	ThingTypeRGBColor     ThingType = "rgb-color"
-	ThingTypeADConverter  ThingType = "ad-converter"
-	ThingTypeIOExpander   ThingType = "io-expander"
-	ThingTypeMotorDriver  ThingType = "motor-driver"
-	ThingTypeColorDisplay ThingType = "color-display"
+	ThingTypePresence      ThingType = "presence"
+	ThingTypeFallDetect    ThingType = "fall-detect"
+	ThingTypeSleepMonitor  ThingType = "sleep-monitor"
+	ThingTypeHumanTrack    ThingType = "human-track"
+	ThingTypeIllumination  ThingType = "illumination"
+	ThingTypeRfid          ThingType = "rfid"
+	ThingTypePressure      ThingType = "pressure"
+	ThingTypeHumidity      ThingType = "humidity"
+	ThingTypeTemperature   ThingType = "temperature"
+	ThingTypeRGBColor      ThingType = "rgb-color"
+	ThingTypeADConverter   ThingType = "ad-converter"
+	ThingTypeIOExpander    ThingType = "io-expander"
+	ThingTypeMotorDriver   ThingType = "motor-driver"
+	ThingTypeColorDisplay  ThingType = "color-display"
+	ThingTypeUartConverter ThingType = "uart-converter"
 )
 
 type Thing interface {

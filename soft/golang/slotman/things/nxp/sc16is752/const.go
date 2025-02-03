@@ -44,6 +44,13 @@ const (
 	ThingI2CAddressDD byte = 0xAE
 
 	//
+	// Channel select
+	//
+
+	ChannelA byte = 0x00
+	ChannelB byte = 0x01
+
+	//
 	// General Registers
 	//
 

@@ -43,13 +43,29 @@ func ProbeThings(busyDevicePaths []string, desiredAddresses []byte) (things []*S
 
 			isValid := false
 
-			//value, tryErr := i2cDev.ReadRegU16BE(byte(RegisterConfig))
-			//if tryErr == nil {
 			//
-			//	log.Printf("Identified ADS1115 devicePath=%s value=%04x", deviceAddrPath, value)
+			// We probe using the user value register.
 			//
-			//	isValid = true
-			//}
+
+			tryErr = i2cDev.WriteRegByte(RegSPR<<3, 0x55)
+			if tryErr != nil {
+				_ = i2cDev.Close()
+				continue
+			}
+
+			var value byte
+
+			value, tryErr = i2cDev.ReadRegByte(RegSPR << 3)
+			if tryErr != nil {
+				_ = i2cDev.Close()
+				continue
+			}
+
+			//
+			// Check if what we wrote is what we read.
+			//
+
+			isValid = value == 0x55
 
 			_ = i2cDev.Close()
 

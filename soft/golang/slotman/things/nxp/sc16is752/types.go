@@ -26,6 +26,8 @@ type SC15IS752 struct {
 
 type Control interface {
 	SetHandler(handler Handler)
+
+	Ping() (err error)
 }
 
 type Handler interface {
@@ -36,5 +38,6 @@ type Handler interface {
 }
 
 var (
-	ErrInvalidInput = errors.New("invalid input")
+	ErrInvalidChannel = errors.New("invalid channel")
+	ErrInvalidPing    = errors.New("invalid ping")
 )

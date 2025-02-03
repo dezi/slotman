@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"slotman/drivers/impl/i2c"
 	"slotman/things"
-	"slotman/utils/log"
 	"slotman/utils/simple"
 	"strings"
 )
@@ -71,8 +70,6 @@ func (se *MCP23017) Open() (err error) {
 	devicePath := parts[0]
 	var address int
 	_, _ = fmt.Sscanf(parts[1], "%02x", &address)
-
-	log.Printf("############### open devicePath=%s address=%02x", devicePath, address)
 
 	i2cDev := i2c.NewDevice(devicePath, byte(address))
 

@@ -3,12 +3,19 @@ package tacho
 import (
 	"slotman/services/iface/tacho"
 	"slotman/services/impl/provider"
+	"slotman/things/mcp/mcp23017"
 	"slotman/utils/log"
+	"sync"
 	"time"
 )
 
 type Service struct {
-	doExit bool
+	speedSensor *mcp23017.MCP23017
+	speedChan   chan uint16
+	speedStates map[int]SpeedState
+
+	waitGroup sync.WaitGroup
+	doExit    bool
 }
 
 var (
@@ -22,6 +29,9 @@ func StartService() (err error) {
 	}
 
 	singleTon = &Service{}
+
+	singleTon.speedChan = make(chan uint16, 10)
+	singleTon.speedStates = make(map[int]SpeedState)
 
 	provider.SetProvider(singleTon)
 
@@ -39,6 +49,12 @@ func StopService() (err error) {
 	log.Printf("Stopping service...")
 
 	singleTon.doExit = true
+	singleTon.waitGroup.Wait()
+
+	if singleTon.speedSensor != nil {
+		_ = singleTon.speedSensor.Close()
+		singleTon.speedSensor = nil
+	}
 
 	log.Printf("Stopped service.")
 

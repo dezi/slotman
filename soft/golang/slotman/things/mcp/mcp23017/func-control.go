@@ -1,15 +1,10 @@
 package mcp23017
 
-import "slotman/utils/log"
-
 func (se *MCP23017) SetHandler(handler Handler) {
 	se.handler = handler
 }
 
 func (se *MCP23017) SetPinDirections(directions uint16) (err error) {
-
-	se.i2cDev.BeginTransaction()
-	defer se.i2cDev.EndTransaction()
 
 	err = se.i2cDev.WriteRegByte(byte(RegisterIoDirB), byte(directions>>8))
 	if err != nil {
@@ -21,9 +16,6 @@ func (se *MCP23017) SetPinDirections(directions uint16) (err error) {
 }
 
 func (se *MCP23017) GetPinDirections() (directions uint16, err error) {
-
-	se.i2cDev.BeginTransaction()
-	defer se.i2cDev.EndTransaction()
 
 	dirsB, err := se.i2cDev.ReadRegByte(byte(RegisterIoDirB))
 	if err != nil {
@@ -57,9 +49,6 @@ func (se *MCP23017) SetPinDirection(pin Pin, dir PinDirection) (err error) {
 		reg = RegisterIoDirB
 	}
 
-	se.i2cDev.BeginTransaction()
-	defer se.i2cDev.EndTransaction()
-
 	dirs, err := se.i2cDev.ReadRegByte(byte(reg))
 	if err != nil {
 		return
@@ -89,16 +78,12 @@ func (se *MCP23017) GetPinDirection(pin Pin) (dir PinDirection, err error) {
 		reg = RegisterIoDirB
 	}
 
-	se.i2cDev.BeginTransaction()
-	defer se.i2cDev.EndTransaction()
-
 	dirs, err := se.i2cDev.ReadRegByte(byte(reg))
 	if err != nil {
 		return
 	}
 
 	dir = PinDirection(0x1 & (dirs >> pin))
-	log.Printf("############## GetPinDirection reg=%02x pin=%d dirs=%02x dir=%d", reg, pin, dirs, dir)
 	return
 }
 
@@ -119,9 +104,6 @@ func (se *MCP23017) WritePin(pin Pin, val PinLogic) (err error) {
 		pin -= 8
 		reg = RegisterOlatB
 	}
-
-	se.i2cDev.BeginTransaction()
-	defer se.i2cDev.EndTransaction()
 
 	bits, err := se.i2cDev.ReadRegByte(byte(reg))
 	if err != nil {
@@ -148,9 +130,6 @@ func (se *MCP23017) ReadPin(pin Pin) (val PinLogic, err error) {
 		reg = RegisterGpioB
 	}
 
-	se.i2cDev.BeginTransaction()
-	defer se.i2cDev.EndTransaction()
-
 	bits, err := se.i2cDev.ReadRegByte(byte(reg))
 	if err != nil {
 		return
@@ -162,9 +141,6 @@ func (se *MCP23017) ReadPin(pin Pin) (val PinLogic, err error) {
 
 func (se *MCP23017) WritePins(values uint16) (err error) {
 
-	se.i2cDev.BeginTransaction()
-	defer se.i2cDev.EndTransaction()
-
 	err = se.i2cDev.WriteRegByte(byte(RegisterOlatB), byte(values>>8))
 	if err != nil {
 		return
@@ -175,9 +151,6 @@ func (se *MCP23017) WritePins(values uint16) (err error) {
 }
 
 func (se *MCP23017) ReadPins() (values uint16, err error) {
-
-	se.i2cDev.BeginTransaction()
-	defer se.i2cDev.EndTransaction()
 
 	valuesB, err := se.i2cDev.ReadRegByte(byte(RegisterGpioB))
 	if err != nil {

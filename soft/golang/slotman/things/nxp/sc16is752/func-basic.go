@@ -113,6 +113,9 @@ func (se *SC15IS752) Start() (err error) {
 
 	se.IsStarted = true
 
+	go se.readLoop(ChannelA)
+	go se.readLoop(ChannelB)
+
 	if se.handler != nil {
 		se.handler.OnThingStarted(se)
 	}

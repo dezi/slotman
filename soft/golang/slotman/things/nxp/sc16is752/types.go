@@ -22,12 +22,19 @@ type SC15IS752 struct {
 	i2cDev   *i2c.Device
 	handler  Handler
 	readLock sync.Mutex
+
+	pollSleep [2]int
 }
 
 type Control interface {
 	SetHandler(handler Handler)
 
 	Ping() (err error)
+
+	EnableFifo(channel byte, enable bool) (err error)
+
+	ReadRegister(register, channel byte) (value byte, err error)
+	WriteRegister(register, channel, value byte) (err error)
 }
 
 type Handler interface {
@@ -35,6 +42,8 @@ type Handler interface {
 	OnThingClosed(thing things.Thing)
 	OnThingStarted(thing things.Thing)
 	OnThingStopped(thing things.Thing)
+
+	OnUartDataReceived(thing things.Thing, channel byte, data []byte)
 }
 
 var (

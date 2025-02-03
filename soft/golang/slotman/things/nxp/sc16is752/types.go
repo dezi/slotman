@@ -39,6 +39,7 @@ type Control interface {
 	SetBaudrate(channel byte, baudrate int) (err error)
 	SetLine(channel byte, dataBits, parity, stopBits byte) (err error)
 	SetPollInterval(channel byte, millis int) (err error)
+
 	SetReadTimeout(channel byte, millis int) (err error)
 	SetWriteTimeout(channel byte, millis int) (err error)
 
@@ -47,6 +48,7 @@ type Control interface {
 
 	ReadUartByte(channel byte) (value byte, err error)
 	ReadUartBytes(channel byte, size int) (xfer int, data []byte, err error)
+	ReadUartBytesNow(channel byte, size int) (xfer int, data []byte, err error)
 
 	ReadRegister(register, channel byte) (value byte, err error)
 	WriteRegister(register, channel, value byte) (err error)

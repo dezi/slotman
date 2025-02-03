@@ -376,6 +376,44 @@ func (se *SC15IS752) ReadUartBytes(channel byte, size int) (xfer int, data []byt
 	return
 }
 
+func (se *SC15IS752) ReadUartBytesNow(channel byte, size int) (xfer int, data []byte, err error) {
+
+	if channel > ChannelB {
+		err = ErrInvalidChannel
+		return
+	}
+
+	se.accessLock.Lock()
+	defer se.accessLock.Unlock()
+
+	var avail byte
+	var value byte
+
+	avail, err = se.ReadRegister(RegRxLvl, channel)
+	if err != nil {
+		return
+	}
+
+	if avail == 0 {
+		return
+	}
+
+	for avail > 0 && xfer < size {
+
+		value, err = se.ReadRegister(RegRHR, channel)
+		if err != nil {
+			return
+		}
+
+		data = append(data, value)
+
+		xfer++
+		avail--
+	}
+
+	return
+}
+
 func (se *SC15IS752) Ping() (err error) {
 
 	err = se.WriteRegister(RegSPR, ChannelA, 0x55)

@@ -57,7 +57,6 @@ func (sv *Service) speedEval() {
 	log.Printf("SpeedSensor eval started...")
 	defer log.Printf("SpeedSensor eval stopped.")
 
-	var track int
 	var active bool
 
 	for !sv.doExit {
@@ -92,94 +91,13 @@ func (sv *Service) speedEval() {
 
 				state.dirty = false
 
-				//
-				// Todo push message here.
-				//
-
-				track = pin >> 1
-				active = state.active
-
-				if pin%2 == 0 {
-
-					//
-					// Start + speed measure pin.
-					//
-
-					//log.Printf("Speed pin=%02d track=%d active=%v",
-					//	pin, track, active)
-
-					sv.mapsLock.Lock()
-					trackState := sv.trackStates[track]
-					sv.mapsLock.Unlock()
-
-					if active {
-
-						if !trackState.IsAtStart {
-
-							//
-							// Enter start position.
-							//
-
-							go sv.OnEnterStartPosition(track)
-						}
-
-					} else {
-
-						if trackState.IsAtStart {
-
-							//
-							// Leave start position.
-							//
-
-							go sv.OnLeaveStartPosition(track)
-						}
-
-						//
-						// Take speed if possible.
-						//
-
-						state2 := sv.speedStates[pin+1]
-
-						microSecs := state.time.UnixMicro() - state2.time.UnixMicro()
-
-						if microSecs > 0 && microSecs < 1000000 {
-
-							//
-							// Time measurement possible.
-							//
-
-							speed := float64(sensorDistMM) / float64(microSecs)
-							// mm / sec
-							speed *= 1000000
-							// mm / h
-							speed *= 3600
-							// cm / h
-							speed /= 10
-							// m / h
-							speed /= 100
-							// km / h
-							speed /= 1000
-							// Scale 43 / 2
-							speed *= 43 / 2
-
-							go sv.OnSpeedMeasurement(track, speed)
-
-							go sv.OnRoundCompleted(track)
-						}
-					}
-				}
-
-				if pin%2 == 1 {
-
-					//
-					// Speed measure pin 2.
-					//
-
-					//log.Printf("Round pin=%02d track=%d active=%v",
-					//	pin, track, active)
-				}
-
 				sv.speedStates[pin] = state
+
+				//
+				// Todo push message here if proxy.
+				//
+
+				sv.handleLocalSpeed(pin, state)
 			}
 
 		case speedRead, ok := <-sv.speedChan:
@@ -206,5 +124,92 @@ func (sv *Service) speedEval() {
 				}
 			}
 		}
+	}
+}
+
+func (sv *Service) handleLocalSpeed(pin int, state SpeedState) {
+
+	track := pin >> 1
+	active := state.active
+
+	if pin%2 == 0 {
+
+		//
+		// Start + speed measure pin.
+		//
+
+		//log.Printf("Speed pin=%02d track=%d active=%v",
+		//	pin, track, active)
+
+		sv.mapsLock.Lock()
+		trackState := sv.trackStates[track]
+		sv.mapsLock.Unlock()
+
+		if active {
+
+			if !trackState.IsAtStart {
+
+				//
+				// Enter start position.
+				//
+
+				go sv.OnEnterStartPosition(track)
+			}
+
+		} else {
+
+			if trackState.IsAtStart {
+
+				//
+				// Leave start position.
+				//
+
+				go sv.OnLeaveStartPosition(track)
+			}
+
+			//
+			// Take speed if possible.
+			//
+
+			state2 := sv.speedStates[pin+1]
+
+			microSecs := state.time.UnixMicro() - state2.time.UnixMicro()
+
+			if microSecs > 0 && microSecs < 1000000 {
+
+				//
+				// Time measurement possible.
+				//
+
+				speed := float64(sensorDistMM) / float64(microSecs)
+				// mm / sec
+				speed *= 1000000
+				// mm / h
+				speed *= 3600
+				// cm / h
+				speed /= 10
+				// m / h
+				speed /= 100
+				// km / h
+				speed /= 1000
+				// Scale 43 / 2
+				speed *= 43 / 2
+
+				go sv.OnSpeedMeasurement(track, speed)
+
+				go sv.OnRoundCompleted(track)
+			}
+		}
+	}
+
+	if pin%2 == 1 {
+
+		//
+		// Speed measure pin 2.
+		// The state is only maintained
+		// for further processing.
+		//
+
+		log.Printf("Round pin=%02d track=%d active=%v", pin, track, active)
 	}
 }

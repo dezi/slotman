@@ -1,6 +1,10 @@
 package tacho
 
-import "time"
+import (
+	"slotman/services/type/proxy"
+	"slotman/utils/simple"
+	"time"
+)
 
 type SpeedState struct {
 	active bool
@@ -22,4 +26,41 @@ type TrackState struct {
 	SpeedTS  time.Time
 
 	IsAtStart bool
+}
+
+const (
+	AreaSpeedi proxy.Area = "speedi"
+)
+
+//goland:noinspection GoNameStartsWithPackageName
+type TachoWhat string
+
+//goland:noinspection GoNameStartsWithPackageName
+const (
+	TachoWhatSpeed TachoWhat = "tacho.speed"
+)
+
+type Tacho struct {
+
+	//
+	// Routing part.
+	//
+
+	Uuid simple.UUIDHex
+
+	Area proxy.Area
+	What TachoWhat
+
+	//
+	// Response part.
+	//
+
+	Pin    byte      `json:",omitempty"`
+	Active bool      `json:",omitempty"`
+	Time   time.Time `json:",omitempty"`
+
+	Ok  bool   `json:",omitempty"`
+	Err string `json:",omitempty"`
+
+	NE error `json:"-"`
 }

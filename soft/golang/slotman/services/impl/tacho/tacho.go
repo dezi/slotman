@@ -5,6 +5,7 @@ import (
 	"slotman/services/impl/provider"
 	"slotman/things/mcp/mcp23017"
 	"slotman/utils/log"
+	"slotman/utils/simple"
 	"sync"
 	"time"
 )
@@ -18,6 +19,9 @@ type Service struct {
 
 	mapsLock  sync.Mutex
 	waitGroup sync.WaitGroup
+
+	isProxyServer bool
+	isProxyClient bool
 
 	doExit bool
 }
@@ -37,6 +41,9 @@ func StartService() (err error) {
 	singleTon.speedChan = make(chan SpeedRead, 10)
 	singleTon.speedStates = make(map[int]SpeedState)
 	singleTon.trackStates = make(map[int]TrackState)
+
+	singleTon.isProxyServer = simple.GetExecName() == "proxy"
+	singleTon.isProxyClient = simple.GOOS == "darwin"
 
 	provider.SetProvider(singleTon)
 

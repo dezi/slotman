@@ -92,6 +92,10 @@ func (sv *Service) speedEval() {
 
 				state.dirty = false
 
+				//
+				// Todo push message here.
+				//
+
 				track = pin >> 1
 				active = state.active
 
@@ -190,7 +194,7 @@ func (sv *Service) speedEval() {
 			for pin := 0; pin < 16; pin++ {
 
 				mask := uint16(1 << pin)
-				active := inputs&mask != 0
+				active = inputs&mask != 0
 
 				state := sv.speedStates[pin]
 

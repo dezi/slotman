@@ -57,7 +57,7 @@ type Tacho struct {
 	// Response part.
 	//
 
-	Pin    byte      `json:",omitempty"`
+	Pin    int       `json:",omitempty"`
 	Active bool      `json:",omitempty"`
 	Time   time.Time `json:",omitempty"`
 

@@ -1,6 +1,7 @@
 package tacho
 
 import (
+	"slotman/services/iface/proxy"
 	"slotman/services/iface/tacho"
 	"slotman/services/impl/provider"
 	"slotman/things/mcp/mcp23017"
@@ -11,6 +12,8 @@ import (
 )
 
 type Service struct {
+	prx proxy.Interface
+
 	tachoSensor *mcp23017.MCP23017
 	tachoChan   chan TachoRead
 	tachoStates map[int]TachoState
@@ -44,6 +47,12 @@ func StartService() (err error) {
 
 	singleTon.isProxyServer = simple.GetExecName() == "proxy"
 	singleTon.isProxyClient = simple.GOOS == "darwin"
+
+	singleTon.prx, err = proxy.GetInstance()
+	if err != nil {
+		log.Cerror(err)
+		return
+	}
 
 	provider.SetProvider(singleTon)
 

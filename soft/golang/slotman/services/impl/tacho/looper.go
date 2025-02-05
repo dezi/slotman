@@ -1,7 +1,9 @@
 package tacho
 
 import (
+	"encoding/json"
 	"slotman/utils/log"
+	"slotman/utils/simple"
 	"time"
 )
 
@@ -133,6 +135,26 @@ func (sv *Service) pushLocalSpeed(pin int, state TachoState) {
 	active := state.active
 
 	log.Printf("Tacho push pin=%02d track=%d active=%v", pin, track, active)
+
+	tacho := &Tacho{
+		Uuid:   simple.NewUuidHex(),
+		Area:   AreaTacho,
+		What:   TachoWhatSpeed,
+		Pin:    pin,
+		Active: active,
+		Time:   state.time,
+		Ok:     true,
+		Err:    "",
+	}
+
+	tachoBytes, err := json.Marshal(tacho)
+	if err != nil {
+		log.Cerror(err)
+		return
+	}
+
+	err = sv.prx.ProxyBroadcast(tachoBytes)
+	log.Cerror(err)
 }
 
 func (sv *Service) handleLocalSpeed(pin int, state TachoState) {

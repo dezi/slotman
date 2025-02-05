@@ -21,12 +21,12 @@ func (sv *Service) tachoRead() {
 
 	for !sv.doExit {
 
-		speedSensor := sv.tachoSensor
-		if speedSensor == nil {
+		tachoSensor := sv.tachoSensor
+		if tachoSensor == nil {
 			break
 		}
 
-		thisInputs, err = speedSensor.ReadPins()
+		thisInputs, err = tachoSensor.ReadPins()
 		if err != nil {
 			log.Cerror(err)
 			time.Sleep(time.Millisecond * 100)
@@ -96,20 +96,20 @@ func (sv *Service) tachoEval() {
 				sv.tachoStates[pin] = state
 
 				if sv.isProxyServer {
-					sv.pushLocalSpeed(pin, state)
+					sv.pushLocalTacho(pin, state)
 				} else {
-					sv.handleLocalSpeed(pin, state)
+					sv.handleLocalTacho(pin, state)
 				}
 			}
 
-		case speedRead, ok := <-sv.tachoChan:
+		case tachoRead, ok := <-sv.tachoChan:
 
 			if !ok {
 				return
 			}
 
-			now := speedRead.readTime
-			inputs := speedRead.pinStates
+			now := tachoRead.readTime
+			inputs := tachoRead.pinStates
 
 			for pin := 0; pin < 16; pin++ {
 
@@ -129,7 +129,7 @@ func (sv *Service) tachoEval() {
 	}
 }
 
-func (sv *Service) pushLocalSpeed(pin int, state TachoState) {
+func (sv *Service) pushLocalTacho(pin int, state TachoState) {
 
 	track := pin >> 1
 	active := state.active
@@ -139,7 +139,7 @@ func (sv *Service) pushLocalSpeed(pin int, state TachoState) {
 	tacho := &Tacho{
 		Uuid:   simple.NewUuidHex(),
 		Area:   AreaTacho,
-		What:   TachoWhatSpeed,
+		What:   TachoWhatTacho,
 		Pin:    pin,
 		Active: active,
 		Time:   state.time,
@@ -157,7 +157,7 @@ func (sv *Service) pushLocalSpeed(pin int, state TachoState) {
 	log.Cerror(err)
 }
 
-func (sv *Service) handleLocalSpeed(pin int, state TachoState) {
+func (sv *Service) handleLocalTacho(pin int, state TachoState) {
 
 	track := pin >> 1
 	active := state.active
@@ -232,13 +232,10 @@ func (sv *Service) handleLocalSpeed(pin int, state TachoState) {
 	}
 
 	if pin%2 == 1 {
-
 		//
 		// Speed measure pin 2.
 		// The state is only maintained
 		// for further processing.
 		//
-
-		log.Printf("Round pin=%02d track=%d active=%v", pin, track, active)
 	}
 }

@@ -12,6 +12,7 @@ func (sv *Service) OnMessageFromClient(reqBytes []byte) (resBytes []byte, err er
 
 func (sv *Service) OnMessageFromServer(resBytes []byte) {
 
+	log.Printf("############## messaage resBytes=%s", string(resBytes))
 	var err error
 
 	res := Tacho{}
@@ -23,8 +24,15 @@ func (sv *Service) OnMessageFromServer(resBytes []byte) {
 	}
 
 	switch res.What {
-	case TachoWhatSpeed:
-		//_ = sv.handleLocalSpeed(res.Track, res.RawSpeed, nil)
+	case TachoWhatTacho:
+		state := TachoState{
+			active: res.Active,
+			time:   res.Time,
+		}
+
+		sv.tachoStates[res.Pin] = state
+
+		sv.handleLocalTacho(res.Pin, state)
 	}
 
 	return

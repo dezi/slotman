@@ -54,6 +54,8 @@ func StartService() (err error) {
 		return
 	}
 
+	singleTon.prx.Subscribe(AreaTacho, singleTon)
+
 	provider.SetProvider(singleTon)
 
 	return
@@ -68,6 +70,8 @@ func StopService() (err error) {
 	provider.UnsetProvider(singleTon)
 
 	log.Printf("Stopping service...")
+
+	singleTon.prx.Unsubscribe(AreaTacho)
 
 	singleTon.doExit = true
 	singleTon.waitGroup.Wait()

@@ -39,7 +39,7 @@ type TachoWhat string
 
 //goland:noinspection GoNameStartsWithPackageName
 const (
-	TachoWhatSpeed TachoWhat = "tacho.speed"
+	TachoWhatTacho TachoWhat = "tacho.tacho"
 )
 
 type Tacho struct {
@@ -57,9 +57,9 @@ type Tacho struct {
 	// Response part.
 	//
 
-	Pin    int       `json:",omitempty"`
-	Active bool      `json:",omitempty"`
-	Time   time.Time `json:",omitempty"`
+	Pin    int
+	Active bool
+	Time   time.Time
 
 	Ok  bool   `json:",omitempty"`
 	Err string `json:",omitempty"`

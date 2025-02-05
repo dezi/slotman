@@ -162,7 +162,7 @@ func (sv *Service) handleLocalTacho(pin int, state TachoState) {
 	track := pin >> 1
 	active := state.active
 
-	log.Printf("Tacho local pin=%02d track=%d active=%v", pin, track, active)
+	//log.Printf("Tacho local pin=%02d track=%d active=%v", pin, track, active)
 
 	if pin%2 == 0 {
 

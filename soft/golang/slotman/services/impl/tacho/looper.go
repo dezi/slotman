@@ -9,8 +9,8 @@ func (sv *Service) tachoRead() {
 
 	defer sv.waitGroup.Done()
 
-	log.Printf("SpeedSensor read started...")
-	defer log.Printf("SpeedSensor read stopped.")
+	log.Printf("TachoSensor read started...")
+	defer log.Printf("TachoSensor read stopped.")
 
 	var err error
 
@@ -41,7 +41,7 @@ func (sv *Service) tachoRead() {
 			continue
 		}
 
-		sv.tachoChan <- SpeedRead{
+		sv.tachoChan <- TachoRead{
 			pinStates: thisInputs,
 			readTime:  time.Now(),
 		}
@@ -54,8 +54,8 @@ func (sv *Service) tachoEval() {
 
 	defer sv.waitGroup.Done()
 
-	log.Printf("SpeedSensor eval started...")
-	defer log.Printf("SpeedSensor eval stopped.")
+	log.Printf("TachoSensor eval started...")
+	defer log.Printf("TachoSensor eval stopped.")
 
 	var active bool
 
@@ -127,23 +127,26 @@ func (sv *Service) tachoEval() {
 	}
 }
 
-func (sv *Service) pushLocalSpeed(pin int, state SpeedState) {
-
-}
-
-func (sv *Service) handleLocalSpeed(pin int, state SpeedState) {
+func (sv *Service) pushLocalSpeed(pin int, state TachoState) {
 
 	track := pin >> 1
 	active := state.active
+
+	log.Printf("Tacho push pin=%02d track=%d active=%v", pin, track, active)
+}
+
+func (sv *Service) handleLocalSpeed(pin int, state TachoState) {
+
+	track := pin >> 1
+	active := state.active
+
+	log.Printf("Tacho local pin=%02d track=%d active=%v", pin, track, active)
 
 	if pin%2 == 0 {
 
 		//
 		// Start + speed measure pin.
 		//
-
-		//log.Printf("Speed pin=%02d track=%d active=%v",
-		//	pin, track, active)
 
 		sv.mapsLock.Lock()
 		trackState := sv.trackStates[track]

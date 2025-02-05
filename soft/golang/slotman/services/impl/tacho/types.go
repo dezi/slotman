@@ -6,13 +6,15 @@ import (
 	"time"
 )
 
-type SpeedState struct {
+//goland:noinspection GoNameStartsWithPackageName
+type TachoState struct {
 	active bool
 	dirty  bool
 	time   time.Time
 }
 
-type SpeedRead struct {
+//goland:noinspection GoNameStartsWithPackageName
+type TachoRead struct {
 	pinStates uint16
 	readTime  time.Time
 }
@@ -29,7 +31,7 @@ type TrackState struct {
 }
 
 const (
-	AreaSpeedi proxy.Area = "speedi"
+	AreaTacho proxy.Area = "tacho"
 )
 
 //goland:noinspection GoNameStartsWithPackageName

@@ -12,8 +12,8 @@ import (
 
 type Service struct {
 	tachoSensor *mcp23017.MCP23017
-	tachoChan   chan SpeedRead
-	tachoStates map[int]SpeedState
+	tachoChan   chan TachoRead
+	tachoStates map[int]TachoState
 
 	trackStates map[int]TrackState
 
@@ -38,8 +38,8 @@ func StartService() (err error) {
 
 	singleTon = &Service{}
 
-	singleTon.tachoChan = make(chan SpeedRead, 10)
-	singleTon.tachoStates = make(map[int]SpeedState)
+	singleTon.tachoChan = make(chan TachoRead, 10)
+	singleTon.tachoStates = make(map[int]TachoState)
 	singleTon.trackStates = make(map[int]TrackState)
 
 	singleTon.isProxyServer = simple.GetExecName() == "proxy"

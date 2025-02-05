@@ -54,7 +54,7 @@ func (sv *Service) pushLocalSpeed(track int, rawSpeed uint16, lastTime *int64) (
 	err = sv.prx.ProxyBroadcast(speediBytes)
 	log.Cerror(err)
 
-	if rawSpeed != 0 && (lastTime == nil || time.Now().Unix()-*lastTime > 5) {
+	if rawSpeed > 7000 || (lastTime == nil || time.Now().Unix()-*lastTime > 5) {
 		log.Printf("Speed track=%d rawSpeed=%d", track, rawSpeed)
 		*lastTime = time.Now().Unix()
 	}

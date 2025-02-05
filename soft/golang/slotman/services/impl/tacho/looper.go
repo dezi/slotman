@@ -93,11 +93,11 @@ func (sv *Service) tachoEval() {
 
 				sv.tachoStates[pin] = state
 
-				//
-				// Todo push message here if proxy.
-				//
-
-				sv.handleLocalSpeed(pin, state)
+				if sv.isProxyServer {
+					sv.pushLocalSpeed(pin, state)
+				} else {
+					sv.handleLocalSpeed(pin, state)
+				}
 			}
 
 		case speedRead, ok := <-sv.tachoChan:
@@ -125,6 +125,10 @@ func (sv *Service) tachoEval() {
 			}
 		}
 	}
+}
+
+func (sv *Service) pushLocalSpeed(pin int, state SpeedState) {
+
 }
 
 func (sv *Service) handleLocalSpeed(pin int, state SpeedState) {

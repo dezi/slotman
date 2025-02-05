@@ -24,37 +24,42 @@ func (sv *Service) speedControlHandler(track int) {
 		}
 
 		if sv.isProxyServer {
-
-			speedi := &Speedi{
-				Uuid:     simple.NewUuidHex(),
-				Area:     AreaSpeedi,
-				What:     SpeediWhatSpeed,
-				Track:    track,
-				RawSpeed: rawSpeed,
-				Ok:       true,
-				Err:      "",
-			}
-
-			speediBytes, err := json.Marshal(speedi)
-			if err != nil {
-				log.Cerror(err)
-				continue
-			}
-
-			err = sv.prx.ProxyBroadcast(speediBytes)
+			err := sv.pushLocalSpeed(track, rawSpeed, &lastTime)
 			log.Cerror(err)
-
-			if time.Now().Unix()-lastTime > 5 {
-				log.Printf("Speed track=%d rawSpeed=%d", track, rawSpeed)
-				lastTime = time.Now().Unix()
-			}
-
-			continue
+		} else {
+			err := sv.handleLocalSpeed(track, rawSpeed, &lastTime)
+			log.Cerror(err)
 		}
-
-		err := sv.handleLocalSpeed(track, rawSpeed, &lastTime)
-		log.Cerror(err)
 	}
+}
+
+func (sv *Service) pushLocalSpeed(track int, rawSpeed uint16, lastTime *int64) (err error) {
+
+	speedi := &Speedi{
+		Uuid:     simple.NewUuidHex(),
+		Area:     AreaSpeedi,
+		What:     SpeediWhatSpeed,
+		Track:    track,
+		RawSpeed: rawSpeed,
+		Ok:       true,
+		Err:      "",
+	}
+
+	speediBytes, err := json.Marshal(speedi)
+	if err != nil {
+		log.Cerror(err)
+		return
+	}
+
+	err = sv.prx.ProxyBroadcast(speediBytes)
+	log.Cerror(err)
+
+	if time.Now().Unix()-*lastTime > 5 {
+		log.Printf("Speed track=%d rawSpeed=%d", track, rawSpeed)
+		*lastTime = time.Now().Unix()
+	}
+
+	return
 }
 
 func (sv *Service) handleLocalSpeed(track int, rawSpeed uint16, lastTime *int64) (err error) {

@@ -11,9 +11,9 @@ import (
 )
 
 type Service struct {
-	speedSensor *mcp23017.MCP23017
-	speedChan   chan SpeedRead
-	speedStates map[int]SpeedState
+	tachoSensor *mcp23017.MCP23017
+	tachoChan   chan SpeedRead
+	tachoStates map[int]SpeedState
 
 	trackStates map[int]TrackState
 
@@ -38,8 +38,8 @@ func StartService() (err error) {
 
 	singleTon = &Service{}
 
-	singleTon.speedChan = make(chan SpeedRead, 10)
-	singleTon.speedStates = make(map[int]SpeedState)
+	singleTon.tachoChan = make(chan SpeedRead, 10)
+	singleTon.tachoStates = make(map[int]SpeedState)
 	singleTon.trackStates = make(map[int]TrackState)
 
 	singleTon.isProxyServer = simple.GetExecName() == "proxy"
@@ -63,9 +63,9 @@ func StopService() (err error) {
 	singleTon.doExit = true
 	singleTon.waitGroup.Wait()
 
-	if singleTon.speedSensor != nil {
-		_ = singleTon.speedSensor.Close()
-		singleTon.speedSensor = nil
+	if singleTon.tachoSensor != nil {
+		_ = singleTon.tachoSensor.Close()
+		singleTon.tachoSensor = nil
 	}
 
 	log.Printf("Stopped service.")

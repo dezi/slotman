@@ -5,7 +5,7 @@ import (
 	"time"
 )
 
-func (sv *Service) speedRead() {
+func (sv *Service) tachoRead() {
 
 	defer sv.waitGroup.Done()
 
@@ -19,7 +19,7 @@ func (sv *Service) speedRead() {
 
 	for !sv.doExit {
 
-		speedSensor := sv.speedSensor
+		speedSensor := sv.tachoSensor
 		if speedSensor == nil {
 			break
 		}
@@ -41,7 +41,7 @@ func (sv *Service) speedRead() {
 			continue
 		}
 
-		sv.speedChan <- SpeedRead{
+		sv.tachoChan <- SpeedRead{
 			pinStates: thisInputs,
 			readTime:  time.Now(),
 		}
@@ -50,7 +50,7 @@ func (sv *Service) speedRead() {
 	}
 }
 
-func (sv *Service) speedEval() {
+func (sv *Service) tachoEval() {
 
 	defer sv.waitGroup.Done()
 
@@ -61,8 +61,8 @@ func (sv *Service) speedEval() {
 
 	for !sv.doExit {
 
-		speedSensor := sv.speedSensor
-		if speedSensor == nil {
+		tachoSensor := sv.tachoSensor
+		if tachoSensor == nil {
 			break
 		}
 
@@ -74,7 +74,7 @@ func (sv *Service) speedEval() {
 
 			for pin := 0; pin < 16; pin++ {
 
-				state := sv.speedStates[pin]
+				state := sv.tachoStates[pin]
 
 				if !state.dirty {
 					continue
@@ -91,7 +91,7 @@ func (sv *Service) speedEval() {
 
 				state.dirty = false
 
-				sv.speedStates[pin] = state
+				sv.tachoStates[pin] = state
 
 				//
 				// Todo push message here if proxy.
@@ -100,7 +100,7 @@ func (sv *Service) speedEval() {
 				sv.handleLocalSpeed(pin, state)
 			}
 
-		case speedRead, ok := <-sv.speedChan:
+		case speedRead, ok := <-sv.tachoChan:
 
 			if !ok {
 				return
@@ -114,13 +114,13 @@ func (sv *Service) speedEval() {
 				mask := uint16(1 << pin)
 				active = inputs&mask != 0
 
-				state := sv.speedStates[pin]
+				state := sv.tachoStates[pin]
 
 				if state.active != active {
 					state.active = active
 					state.dirty = true
 					state.time = now
-					sv.speedStates[pin] = state
+					sv.tachoStates[pin] = state
 				}
 			}
 		}
@@ -171,7 +171,7 @@ func (sv *Service) handleLocalSpeed(pin int, state SpeedState) {
 			// Take speed if possible.
 			//
 
-			state2 := sv.speedStates[pin+1]
+			state2 := sv.tachoStates[pin+1]
 
 			microSecs := state.time.UnixMicro() - state2.time.UnixMicro()
 

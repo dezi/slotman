@@ -11,7 +11,11 @@ func (sv *Service) DoControlTask() {
 
 func (sv *Service) checkSensors() {
 
-	if sv.speedSensor == nil {
+	if sv.isProxyClient {
+		return
+	}
+
+	if sv.tachoSensor == nil {
 
 		sensors, err := mcp23017.ProbeThings(nil, []byte{0x21})
 
@@ -46,12 +50,12 @@ func (sv *Service) checkSensors() {
 				log.Printf("Registered tacho MCP23017 path=%s uuid=%s",
 					sensor.DevicePath, sensor.GetUuid()[:8])
 
-				sv.speedSensor = sensor
+				sv.tachoSensor = sensor
 
 				sv.waitGroup.Add(2)
 
-				go sv.speedRead()
-				go sv.speedEval()
+				go sv.tachoRead()
+				go sv.tachoEval()
 			}
 		}
 	}

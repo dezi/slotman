@@ -55,7 +55,7 @@ func (sv *Service) pushLocalSpeed(track int, rawSpeed uint16, lastTime *int64) (
 	log.Cerror(err)
 
 	if rawSpeed > 7000 || (lastTime == nil || time.Now().Unix()-*lastTime > 5) {
-		log.Printf("Speed track=%d rawSpeed=%d", track, rawSpeed)
+		log.Printf("Speed push track=%d rawSpeed=%d", track, rawSpeed)
 		*lastTime = time.Now().Unix()
 	}
 
@@ -91,7 +91,7 @@ func (sv *Service) handleLocalSpeed(track int, rawSpeed uint16, lastTime *int64)
 	_ = sv.sdo.SetSpeed(track, speedPcc, false)
 
 	if speed != 0 && (lastTime == nil || time.Now().Unix()-*lastTime > 5) {
-		log.Printf("Speed track=%d speedPcc=%5.1f speed=%5.1f rawSpeed=%d", track, speedPcc, speed, rawSpeed)
+		log.Printf("Speed local track=%d speedPcc=%5.1f speed=%5.1f rawSpeed=%d", track, speedPcc, speed, rawSpeed)
 		if lastTime != nil {
 			*lastTime = time.Now().Unix()
 		}

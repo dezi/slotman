@@ -12,7 +12,6 @@ func (sv *Service) OnMessageFromClient(reqBytes []byte) (resBytes []byte, err er
 
 func (sv *Service) OnMessageFromServer(resBytes []byte) {
 
-	log.Printf("############## messaage resBytes=%s", string(resBytes))
 	var err error
 
 	res := Tacho{}

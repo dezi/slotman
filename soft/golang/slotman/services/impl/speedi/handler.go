@@ -42,7 +42,6 @@ func (sv *Service) pushLocalSpeed(track int, rawSpeed uint16, lastTime *int64) (
 		Track:    track,
 		RawSpeed: rawSpeed,
 		Ok:       true,
-		Err:      "",
 	}
 
 	speediBytes, err := json.Marshal(speedi)
@@ -63,6 +62,8 @@ func (sv *Service) pushLocalSpeed(track int, rawSpeed uint16, lastTime *int64) (
 }
 
 func (sv *Service) handleLocalSpeed(track int, rawSpeed uint16, lastTime *int64) (err error) {
+
+	_ = lastTime
 
 	if rawSpeed == 0 {
 		sv.speedControlAttached[track] = false
@@ -88,14 +89,14 @@ func (sv *Service) handleLocalSpeed(track int, rawSpeed uint16, lastTime *int64)
 		speedPcc = pcc.MinPercent + speed*(pcc.MaxPercent-pcc.MinPercent)/100
 	}
 
-	_ = sv.sdo.SetSpeed(track, speedPcc, false)
+	//if speed != 0 && (lastTime == nil || time.Now().Unix()-*lastTime > 5) {
+	//	log.Printf("Speed local track=%d speedPcc=%5.1f speed=%5.1f rawSpeed=%d", track, speedPcc, speed, rawSpeed)
+	//	if lastTime != nil {
+	//		*lastTime = time.Now().Unix()
+	//	}
+	//}
 
-	if speed != 0 && (lastTime == nil || time.Now().Unix()-*lastTime > 5) {
-		log.Printf("Speed local track=%d speedPcc=%5.1f speed=%5.1f rawSpeed=%d", track, speedPcc, speed, rawSpeed)
-		if lastTime != nil {
-			*lastTime = time.Now().Unix()
-		}
-	}
+	sv.OnCurrentSpeed(track, speedPcc)
 
 	return
 }
@@ -151,4 +152,11 @@ func (sv *Service) OnADConversion(thing things.Thing, input int, value uint16) {
 	//
 
 	sv.speedControlChannels[track] <- value
+}
+
+func (sv *Service) OnCurrentSpeed(track int, speedPcc float64) {
+
+	log.Printf("OnCurrentSpeed track=%d speedPcc=%0.1f", track, speedPcc)
+
+	//_ = sv.sdo.SetSpeed(track, speedPcc, false)
 }

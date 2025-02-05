@@ -164,7 +164,7 @@ func (sv *Service) connectReadLoop() {
 		// Handle out of band push message.
 		//
 
-		log.Printf("ProxyRequest OOB res=%s", string(resBytes))
+		//log.Printf("ProxyRequest OOB res=%s", string(resBytes))
 
 		sv.subscribersLock.Lock()
 

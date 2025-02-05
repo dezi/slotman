@@ -16,5 +16,4 @@ func (sv *Service) Unsubscribe(area proxy.Area) {
 	defer sv.subscribersLock.Unlock()
 
 	delete(sv.subscribers, area)
-
 }

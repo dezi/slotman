@@ -11,6 +11,19 @@ import (
 	"slotman/utils/simple"
 )
 
+func (sv *Service) CheckTarget() (ok bool) {
+
+	var hostName string
+	hostName, err := os.Hostname()
+	if err != nil {
+		return
+	}
+
+	_, ok = proxy.ProxyTargets[hostName]
+
+	return
+}
+
 func (sv *Service) ProxyRequest(req proxy.Message) (res []byte, err error) {
 
 	sv.webServerConnLock.Lock()
@@ -155,7 +168,7 @@ func (sv *Service) connectReadLoop() {
 
 		subscriber := sv.subscribers[msg.Area]
 		if subscriber != nil {
-			go subscriber.OnMessageFromServer(resBytes)
+			subscriber.OnMessageFromServer(resBytes)
 		}
 
 		sv.subscribersLock.Unlock()

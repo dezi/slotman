@@ -17,6 +17,8 @@ const (
 type Interface interface {
 	GetName() (name provider.Service)
 
+	CheckTarget() (ok bool)
+
 	Subscribe(area proxy.Area, handler proxy.Subscriber)
 	Unsubscribe(area proxy.Area)
 

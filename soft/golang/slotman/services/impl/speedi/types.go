@@ -43,8 +43,8 @@ type Speedi struct {
 	// Response part.
 	//
 
-	Track    int    `json:",omitempty"`
-	RawSpeed uint16 `json:",omitempty"`
+	Track    int
+	RawSpeed uint16
 
 	Ok  bool   `json:",omitempty"`
 	Err string `json:",omitempty"`

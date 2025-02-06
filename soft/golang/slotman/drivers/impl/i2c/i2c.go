@@ -2,10 +2,6 @@ package i2c
 
 import "sync"
 
-var (
-	locks = make(map[string]*sync.Mutex)
-)
-
 // NewDevice opens a connection for I2C-device.
 // SMBus (System Management Bus) protocol over I2C
 // supported as well: you should preliminarily specify
@@ -17,14 +13,6 @@ func NewDevice(device string, addr uint8) (i2c *Device) {
 		device: device,
 		addr:   addr,
 		lock:   sync.Mutex{},
-	}
-
-	//
-	// Create global mutexes for device and device address.
-	//
-
-	if _, ok := locks[i2c.device]; !ok {
-		locks[i2c.device] = &sync.Mutex{}
 	}
 
 	return

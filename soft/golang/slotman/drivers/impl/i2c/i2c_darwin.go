@@ -40,30 +40,6 @@ func (i2c *Device) Close() (err error) {
 	return
 }
 
-// BeginTransaction Begin a write and read transaction for device.
-func (i2c *Device) BeginTransaction() (err error) {
-
-	prx, err := proxy.GetInstance()
-	if err != nil {
-		return
-	}
-
-	err = prx.I2cBeginTransaction(i2c)
-	return
-}
-
-// EndTransaction End a write and read transaction for device.
-func (i2c *Device) EndTransaction() (err error) {
-
-	prx, err := proxy.GetInstance()
-	if err != nil {
-		return
-	}
-
-	err = prx.I2cEndTransaction(i2c)
-	return
-}
-
 func (i2c *Device) Write(data []byte) (xfer int, err error) {
 
 	prx, err := proxy.GetInstance()

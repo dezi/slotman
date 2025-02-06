@@ -51,22 +51,6 @@ func (i2c *Device) Close() (err error) {
 	return
 }
 
-// BeginTransaction Begin a write and read transaction for device.
-func (i2c *Device) BeginTransaction() (err error) {
-
-	locks[i2c.device].Lock()
-
-	return
-}
-
-// EndTransaction End a write and read transaction for device.
-func (i2c *Device) EndTransaction() (err error) {
-
-	locks[i2c.device].Unlock()
-
-	return
-}
-
 func (i2c *Device) Write(data []byte) (xfer int, err error) {
 	xfer, err = i2c.rc.Write(data)
 	return

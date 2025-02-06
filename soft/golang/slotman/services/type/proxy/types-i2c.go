@@ -5,13 +5,11 @@ import "slotman/utils/simple"
 type I2cWhat string
 
 const (
-	I2cWhatGetDevicePaths   I2cWhat = "i2c.get.device-paths"
-	I2cWhatOpen             I2cWhat = "i2c.open"
-	I2cWhatClose            I2cWhat = "i2c.close"
-	I2cWhatBeginTransaction I2cWhat = "i2c.begin.transaction"
-	I2cWhatEndTransaction   I2cWhat = "i2c.end.transaction"
-	I2cWhatWrite            I2cWhat = "i2c.write"
-	I2cWhatRead             I2cWhat = "i2c.read"
+	I2cWhatGetDevicePaths I2cWhat = "i2c.get.device-paths"
+	I2cWhatOpen           I2cWhat = "i2c.open"
+	I2cWhatClose          I2cWhat = "i2c.close"
+	I2cWhatWrite          I2cWhat = "i2c.write"
+	I2cWhatRead           I2cWhat = "i2c.read"
 )
 
 type I2c struct {

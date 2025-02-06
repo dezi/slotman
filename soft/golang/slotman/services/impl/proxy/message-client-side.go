@@ -167,12 +167,11 @@ func (sv *Service) connectReadLoop() {
 		//log.Printf("ProxyRequest OOB res=%s", string(resBytes))
 
 		sv.subscribersLock.Lock()
-
 		subscriber := sv.subscribers[msg.Area]
+		sv.subscribersLock.Unlock()
+
 		if subscriber != nil {
 			subscriber.OnMessageFromServer(resBytes)
 		}
-
-		sv.subscribersLock.Unlock()
 	}
 }

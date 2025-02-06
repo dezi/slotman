@@ -30,6 +30,12 @@ func (sv *Service) SetSpeed(track int, percent float64, now bool) (err error) {
 	case 5:
 		motor = 2
 		motoron = sv.mxt550Motoron3
+	case 6:
+		motor = 1
+		motoron = sv.mxt550Motoron4
+	case 7:
+		motor = 2
+		motoron = sv.mxt550Motoron4
 	}
 
 	if motoron == nil {

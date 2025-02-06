@@ -34,6 +34,9 @@ func (sv *Service) checkSensors() {
 				case 0x1a:
 					sv.mxt550Motoron3 = sensor
 
+				case 0x1b:
+					sv.mxt550Motoron4 = sensor
+
 				default:
 					continue
 				}

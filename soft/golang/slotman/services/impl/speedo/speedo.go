@@ -14,6 +14,7 @@ type Service struct {
 	mxt550Motoron1 *mxt550.MXT550
 	mxt550Motoron2 *mxt550.MXT550
 	mxt550Motoron3 *mxt550.MXT550
+	mxt550Motoron4 *mxt550.MXT550
 
 	doExit bool
 }

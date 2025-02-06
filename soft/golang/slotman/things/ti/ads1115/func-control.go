@@ -118,12 +118,12 @@ func (se *ADS1115) ReadADConversion(input int) (value uint16, err error) {
 	se.readLock.Lock()
 	defer se.readLock.Unlock()
 
-	err = se.i2cDev.BeginTransaction()
-	if err != nil {
-		return
-	}
-
-	defer func() { _ = se.i2cDev.EndTransaction() }()
+	//err = se.i2cDev.BeginTransaction()
+	//if err != nil {
+	//	return
+	//}
+	//
+	//defer func() { _ = se.i2cDev.EndTransaction() }()
 
 	config, err := se.i2cDev.ReadRegU16BE(byte(RegisterConfig))
 	if err != nil {

@@ -23,24 +23,6 @@ func (sv *Service) checkSensors() {
 
 			for _, sensor := range sv.mxt550s {
 
-				switch sensor.GetThingAddress() {
-
-				case 0x18:
-					sv.mxt550Motoron1 = sensor
-
-				case 0x19:
-					sv.mxt550Motoron2 = sensor
-
-				case 0x1a:
-					sv.mxt550Motoron3 = sensor
-
-				case 0x1b:
-					sv.mxt550Motoron4 = sensor
-
-				default:
-					continue
-				}
-
 				sensor.SetHandler(sv)
 
 				err = sensor.Open()
@@ -70,6 +52,24 @@ func (sv *Service) checkSensors() {
 				//log.Cerror(err)
 
 				go sv.motoronSafetyLoop(sensor)
+
+				switch sensor.GetThingAddress() {
+
+				case 0x18:
+					sv.mxt550Motoron1 = sensor
+
+				case 0x19:
+					sv.mxt550Motoron2 = sensor
+
+				case 0x1a:
+					sv.mxt550Motoron3 = sensor
+
+				case 0x1b:
+					sv.mxt550Motoron4 = sensor
+
+				default:
+					continue
+				}
 			}
 		}
 	}

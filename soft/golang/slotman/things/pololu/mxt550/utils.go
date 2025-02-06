@@ -2,6 +2,7 @@ package mxt550
 
 import (
 	"errors"
+	"fmt"
 	"slotman/things"
 	"slotman/utils/log"
 )
@@ -12,13 +13,6 @@ func (se *MXT550) sendCommand(cmd []byte) (err error) {
 		err = things.ErrThingNotOpen
 		return
 	}
-
-	//err = se.i2cDev.BeginTransaction()
-	//if err != nil {
-	//	return
-	//}
-	//
-	//defer func() { _ = se.i2cDev.EndTransaction() }()
 
 	sendCrc := (se.protocolOptions & 1 << MotoronProtocolOptionCrcForCommands) != 0
 	err = se.sendCommandCore(cmd, sendCrc)
@@ -33,13 +27,6 @@ func (se *MXT550) sendCommandCrc(cmd []byte) (err error) {
 		return
 	}
 
-	//err = se.i2cDev.BeginTransaction()
-	//if err != nil {
-	//	return
-	//}
-	//
-	//defer func() { _ = se.i2cDev.EndTransaction() }()
-
 	err = se.sendCommandCore(cmd, true)
 
 	return
@@ -51,13 +38,6 @@ func (se *MXT550) sendCommandAndReadResponse(cmd []byte, length byte) (response 
 		err = things.ErrThingNotOpen
 		return
 	}
-
-	//err = se.i2cDev.BeginTransaction()
-	//if err != nil {
-	//	return
-	//}
-	//
-	//defer func() { _ = se.i2cDev.EndTransaction() }()
 
 	sendCrc := (se.protocolOptions & 1 << MotoronProtocolOptionCrcForCommands) != 0
 	err = se.sendCommandCore(cmd, sendCrc)
@@ -71,28 +51,15 @@ func (se *MXT550) sendCommandAndReadResponse(cmd []byte, length byte) (response 
 
 func (se *MXT550) sendCommandCore(cmd []byte, sendCrc bool) (err error) {
 
+	if sendCrc {
+		crc := se.calculateCrc(cmd)
+		cmd = append(cmd, crc)
+	}
+
 	_, err = se.i2cDev.WriteBytes(cmd)
 	if err != nil {
+		err = fmt.Errorf("%s @wb=%d", err.Error(), len(cmd))
 		return
-	}
-
-	if !sendCrc {
-
-		if se.debug {
-			log.Printf("Send name=%s cmd=[ %02x ]", MotoronCmd2Str[MotoronCmd(cmd[0])], cmd)
-		}
-
-		return
-	}
-
-	crc := []byte{se.calculateCrc(cmd)}
-	_, err = se.i2cDev.WriteBytes(crc)
-	if err != nil {
-		return
-	}
-
-	if se.debug {
-		log.Printf("Send name=%s cmd=[ %02x ] (%02x)", MotoronCmd2Str[MotoronCmd(cmd[0])], cmd, crc)
 	}
 
 	return

@@ -156,7 +156,9 @@ func (sv *Service) OnADConversion(thing things.Thing, input int, value uint16) {
 
 func (sv *Service) OnCurrentSpeed(track int, speedPcc float64) {
 
-	log.Printf("OnCurrentSpeed track=%d speedPcc=%0.1f", track, speedPcc)
+	if speedPcc > 5.0 {
+		log.Printf("OnCurrentSpeed track=%d speedPcc=%0.1f", track, speedPcc)
+	}
 
-	_ = sv.sdo.SetSpeed(track, speedPcc, true)
+	//_ = sv.sdo.SetSpeed(track, speedPcc, true)
 }

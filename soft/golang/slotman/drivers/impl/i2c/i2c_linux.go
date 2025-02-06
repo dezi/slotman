@@ -4,12 +4,7 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
-	"sync"
 	"syscall"
-)
-
-var (
-	locks = make(map[string]*sync.Mutex)
 )
 
 // GetDevicePaths Retrieve all I2C device paths.

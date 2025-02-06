@@ -2,11 +2,6 @@ package i2c
 
 import (
 	"slotman/services/iface/proxy"
-	"sync"
-)
-
-var (
-	locks = make(map[string]*sync.Mutex)
 )
 
 // GetDevicePaths Retrieve all I2C device paths.

@@ -2,6 +2,10 @@ package i2c
 
 import "sync"
 
+var (
+	locks = make(map[string]*sync.Mutex)
+)
+
 // NewDevice opens a connection for I2C-device.
 // SMBus (System Management Bus) protocol over I2C
 // supported as well: you should preliminarily specify
@@ -12,6 +16,7 @@ func NewDevice(device string, addr uint8) (i2c *Device) {
 	i2c = &Device{
 		device: device,
 		addr:   addr,
+		lock:   sync.Mutex{},
 	}
 
 	//
@@ -55,6 +60,9 @@ func (i2c *Device) ReadBytes(data []byte) (xfer int, err error) {
 // SMBus (System Management Bus) protocol over I2C.
 func (i2c *Device) ReadRegByte(reg byte) (value byte, err error) {
 
+	i2c.lock.Lock()
+	defer i2c.lock.Unlock()
+
 	_, err = i2c.WriteBytes([]byte{reg})
 	if err != nil {
 		return 0, err
@@ -74,6 +82,9 @@ func (i2c *Device) ReadRegByte(reg byte) (value byte, err error) {
 // starting from reg address.
 // SMBus (System Management Bus) protocol over I2C.
 func (i2c *Device) ReadRegBytes(reg byte, n int) (data []byte, xfer int, err error) {
+
+	i2c.lock.Lock()
+	defer i2c.lock.Unlock()
 
 	_, err = i2c.WriteBytes([]byte{reg})
 	if err != nil {
@@ -120,6 +131,9 @@ func (i2c *Device) WriteRegBytes(reg byte, data []byte) (err error) {
 // SMBus (System Management Bus) protocol over I2C.
 func (i2c *Device) ReadRegU16BE(reg byte) (value uint16, err error) {
 
+	i2c.lock.Lock()
+	defer i2c.lock.Unlock()
+
 	_, err = i2c.WriteBytes([]byte{reg})
 	if err != nil {
 		return
@@ -153,6 +167,9 @@ func (i2c *Device) ReadRegU16LE(reg byte) (value uint16, err error) {
 // from I2C-device starting from address specified in reg.
 // SMBus (System Management Bus) protocol over I2C.
 func (i2c *Device) ReadRegS16BE(reg byte) (value int16, err error) {
+
+	i2c.lock.Lock()
+	defer i2c.lock.Unlock()
 
 	_, err = i2c.WriteBytes([]byte{reg})
 	if err != nil {

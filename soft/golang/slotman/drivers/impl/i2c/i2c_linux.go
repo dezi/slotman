@@ -61,7 +61,7 @@ func (i2c *Device) Write(data []byte) (xfer int, err error) {
 	xfer, err = i2c.rc.Write(data)
 
 	if err != nil {
-		txt := strings.Replace(err.Error(), ": ", fmt.Sprintf("%02x: ", i2c.addr), 1)
+		txt := strings.Replace(err.Error(), ": ", fmt.Sprintf("-%02x: ", i2c.addr), 1)
 		err = errors.New(txt)
 	}
 
@@ -76,7 +76,7 @@ func (i2c *Device) Read(data []byte) (xfer int, err error) {
 	xfer, err = i2c.rc.Read(data)
 
 	if err != nil {
-		txt := strings.Replace(err.Error(), ": ", fmt.Sprintf("%02x: ", i2c.addr), 1)
+		txt := strings.Replace(err.Error(), ": ", fmt.Sprintf("-%02x: ", i2c.addr), 1)
 		err = errors.New(txt)
 	}
 

@@ -1,8 +1,6 @@
 package speedo
 
 import (
-	"errors"
-	"fmt"
 	"slotman/things/pololu/mxt550"
 	"slotman/utils/log"
 	"time"
@@ -18,7 +16,6 @@ func (sv *Service) motoronSafetyLoop(motoron *mxt550.MXT550) {
 
 		voltageMv, err := motoron.GetVinVoltageMv(5000, mxt550.Motoron550)
 		if err != nil {
-			err = errors.New(fmt.Sprintf("%s addr=%02x", err.Error(), motoron.GetThingAddress()))
 			log.Cerror(err)
 			continue
 		}

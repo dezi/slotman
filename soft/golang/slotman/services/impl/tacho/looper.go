@@ -28,8 +28,8 @@ func (sv *Service) tachoRead() {
 
 		thisInputs, err = tachoSensor.ReadPins()
 		if err != nil {
-			log.Cerror(err)
-			time.Sleep(time.Millisecond * 100)
+			//log.Cerror(err)
+			//time.Sleep(time.Millisecond * 100)
 			continue
 		}
 

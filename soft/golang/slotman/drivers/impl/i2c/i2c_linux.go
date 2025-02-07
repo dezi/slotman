@@ -7,6 +7,7 @@ import (
 	"path/filepath"
 	"strings"
 	"syscall"
+	"time"
 )
 
 // GetDevicePaths Retrieve all I2C device paths.
@@ -59,10 +60,13 @@ func (i2c *Device) Write(data []byte) (xfer int, err error) {
 	defer locks[i2c.device].Unlock()
 
 	for try := 1; try <= 2; try++ {
+
 		xfer, err = i2c.rc.Write(data)
 		if err == nil {
 			return
 		}
+
+		time.Sleep(time.Millisecond)
 	}
 
 	txt := strings.Replace(err.Error(), ": ", fmt.Sprintf("-%02x: ", i2c.addr), 1)
@@ -77,10 +81,13 @@ func (i2c *Device) Read(data []byte) (xfer int, err error) {
 	defer locks[i2c.device].Unlock()
 
 	for try := 1; try <= 2; try++ {
+
 		xfer, err = i2c.rc.Read(data)
 		if err == nil {
 			return
 		}
+
+		time.Sleep(time.Millisecond)
 	}
 
 	txt := strings.Replace(err.Error(), ": ", fmt.Sprintf("-%02x: ", i2c.addr), 1)

@@ -1,6 +1,8 @@
 package i2c
 
 import (
+	"errors"
+	"fmt"
 	"os"
 	"path/filepath"
 	"strings"
@@ -57,6 +59,12 @@ func (i2c *Device) Write(data []byte) (xfer int, err error) {
 	defer locks[i2c.device].Unlock()
 
 	xfer, err = i2c.rc.Write(data)
+
+	if err != nil {
+		txt := strings.Replace(err.Error(), ": ", fmt.Sprintf("%02x: ", i2c.addr))
+		err = errors.New(txt)
+	}
+
 	return
 }
 
@@ -66,6 +74,12 @@ func (i2c *Device) Read(data []byte) (xfer int, err error) {
 	defer locks[i2c.device].Unlock()
 
 	xfer, err = i2c.rc.Read(data)
+
+	if err != nil {
+		txt := strings.Replace(err.Error(), ": ", fmt.Sprintf("%02x: ", i2c.addr))
+		err = errors.New(txt)
+	}
+
 	return
 }
 

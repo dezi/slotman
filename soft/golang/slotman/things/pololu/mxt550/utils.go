@@ -59,7 +59,7 @@ func (se *MXT550) sendCommandCore(cmd []byte, sendCrc bool) (err error) {
 	_, err = se.i2cDev.WriteBytes(cmd)
 
 	if se.debug {
-		log.Printf("Write cmd=%s cmd=[ %02x ]", MotoronCmd2Str[MotoronCmd(cmd[0])], cmd)
+		log.Printf("Write name=%s cmd=[ %02x ]", MotoronCmd2Str[MotoronCmd(cmd[0])], cmd)
 	}
 
 	if err != nil {
@@ -94,7 +94,7 @@ func (se *MXT550) readResponse(cmdByte byte, length byte) (response []byte, err 
 	if !crcEnabled {
 
 		if se.debug {
-			log.Printf("Read name=%s res=[ %02x ]", MotoronCmd2Str[MotoronCmd(cmdByte)], response)
+			log.Printf("Read  name=%s res=[ %02x ]", MotoronCmd2Str[MotoronCmd(cmdByte)], response)
 		}
 
 		return
@@ -103,11 +103,14 @@ func (se *MXT550) readResponse(cmdByte byte, length byte) (response []byte, err 
 	crc := response[len(response)-1]
 	response = response[:len(response)-1]
 
+	crcNeed := se.calculateCrc(response)
+
 	if se.debug {
-		log.Printf("Read name=%s cmd=[ %02x ] (%02x)", MotoronCmd2Str[MotoronCmd(cmdByte)], response, crc)
+		log.Printf("Read  name=%s cmd=[ %02x ] (%02x)==(%02x)",
+			MotoronCmd2Str[MotoronCmd(cmdByte)], response, crc, crcNeed)
 	}
 
-	if crc != se.calculateCrc(response) {
+	if crcNeed != se.calculateCrc(response) {
 		err = errors.New("checksum error")
 		return
 	}

@@ -57,6 +57,11 @@ func (se *MXT550) sendCommandCore(cmd []byte, sendCrc bool) (err error) {
 	}
 
 	_, err = se.i2cDev.WriteBytes(cmd)
+
+	if se.debug {
+		log.Printf("Write cmd=%s cmd=[ %02x ]", MotoronCmd2Str[MotoronCmd(cmd[0])], cmd)
+	}
+
 	if err != nil {
 		err = fmt.Errorf("%s @wb=%d", err.Error(), len(cmd))
 		return

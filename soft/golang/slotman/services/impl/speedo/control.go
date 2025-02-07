@@ -30,6 +30,8 @@ func (sv *Service) checkSensors() {
 					continue
 				}
 
+				sensor.SetDebug(true)
+
 				err = sensor.Start()
 				if err != nil {
 					continue

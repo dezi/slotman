@@ -52,11 +52,19 @@ func (i2c *Device) Close() (err error) {
 }
 
 func (i2c *Device) Write(data []byte) (xfer int, err error) {
+
+	locks[i2c.device].Lock()
+	defer locks[i2c.device].Unlock()
+
 	xfer, err = i2c.rc.Write(data)
 	return
 }
 
 func (i2c *Device) Read(data []byte) (xfer int, err error) {
+
+	locks[i2c.device].Lock()
+	defer locks[i2c.device].Unlock()
+
 	xfer, err = i2c.rc.Read(data)
 	return
 }

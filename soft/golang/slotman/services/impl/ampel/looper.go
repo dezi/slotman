@@ -46,7 +46,7 @@ func (sv *Service) buttonLoop() {
 		duration := thisButtonTime - lastButtonTime
 		lastButtonTime = thisButtonTime
 
-		if duration < 1000 {
+		if duration < 500 {
 			sv.OnButtonClickShort(ampelGpio)
 		} else {
 			sv.OnButtonClickLong(ampelGpio)

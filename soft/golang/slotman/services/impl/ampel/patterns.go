@@ -211,6 +211,29 @@ func (sv *Service) patternIdle() {
 			pins |= 1 << pinsGreen[4]
 		}
 
+		switch sv.roundsToGo {
+		case 5:
+			pins |= 1 << pinsYellow[4]
+		case 10:
+			pins |= 1 << pinsYellow[4]
+			pins |= 1 << pinsYellow[3]
+		case 25:
+			pins |= 1 << pinsYellow[4]
+			pins |= 1 << pinsYellow[3]
+			pins |= 1 << pinsYellow[2]
+		case 50:
+			pins |= 1 << pinsYellow[4]
+			pins |= 1 << pinsYellow[3]
+			pins |= 1 << pinsYellow[2]
+			pins |= 1 << pinsYellow[1]
+		case 100:
+			pins |= 1 << pinsYellow[4]
+			pins |= 1 << pinsYellow[3]
+			pins |= 1 << pinsYellow[2]
+			pins |= 1 << pinsYellow[1]
+			pins |= 1 << pinsYellow[0]
+		}
+
 		_ = ampelGpio.WritePins(pins)
 
 		sv.ampelLock.Unlock()

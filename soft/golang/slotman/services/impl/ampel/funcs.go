@@ -1,5 +1,9 @@
 package ampel
 
+func (sv *Service) SetRoundsToGo(roundsToGo int) {
+	sv.roundsToGo = roundsToGo
+}
+
 func (sv *Service) SetIdle() {
 	sv.ampelState = AmpelStateIdle
 	go sv.patternIdle()

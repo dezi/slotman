@@ -13,9 +13,11 @@ import (
 type Service struct {
 	rce race.Interface
 
-	ampelGpio  *mcp23017.MCP23017
-	ampelLock  sync.Mutex
+	ampelGpio *mcp23017.MCP23017
+	ampelLock sync.Mutex
+
 	ampelState AmpelState
+	roundsToGo int
 
 	doExit bool
 }

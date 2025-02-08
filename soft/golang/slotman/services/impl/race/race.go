@@ -17,6 +17,8 @@ type Service struct {
 	raceState     raceTypes.RaceState
 	raceStateDone raceTypes.RaceState
 
+	roundsToGo int
+
 	servicesReady bool
 	looperStarted bool
 

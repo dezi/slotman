@@ -11,6 +11,8 @@ const (
 type Interface interface {
 	GetName() (name provider.Service)
 
+	SetRoundsToGo(roundsToGo int)
+
 	SetIdle()
 
 	SetRaceStart()

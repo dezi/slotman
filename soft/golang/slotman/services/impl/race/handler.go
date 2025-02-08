@@ -8,6 +8,26 @@ import (
 func (sv *Service) OnAmpelClickShort() {
 	log.Printf("OnAmpelClickShort...")
 
+	if sv.raceState == race.RaceStateIdle {
+
+		switch sv.roundsToGo {
+		case 0:
+			sv.roundsToGo = 5
+		case 5:
+			sv.roundsToGo = 10
+		case 10:
+			sv.roundsToGo = 25
+		case 25:
+			sv.roundsToGo = 50
+		case 50:
+			sv.roundsToGo = 100
+		case 100:
+			sv.roundsToGo = 0
+		}
+
+		sv.amp.SetRoundsToGo(sv.roundsToGo)
+	}
+
 	if sv.raceState == race.RaceStateRaceRunning {
 		sv.raceState = race.RaceStateRaceSuspended
 		sv.amp.SetRaceSuspend()
@@ -19,7 +39,6 @@ func (sv *Service) OnAmpelClickShort() {
 		sv.amp.SetRaceRestart()
 		return
 	}
-
 }
 
 func (sv *Service) OnAmpelClickLong() {
@@ -31,6 +50,7 @@ func (sv *Service) OnAmpelClickLong() {
 	}
 
 	sv.raceState = race.RaceStateIdle
+	sv.roundsToGo = 0
 }
 
 func (sv *Service) OnMotoronVoltage(tracks []int, voltageMv uint32) {

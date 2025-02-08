@@ -21,6 +21,11 @@ func (sv *Service) OnMessageFromClient(reqBytes []byte) (resBytes []byte, err er
 	case TurnerWhatBlip:
 
 		log.Printf("################# size=%d", len(req.BlipImage))
+
+		if sv.turnDisplay1 != nil {
+			err = sv.turnDisplay1.BlipFullImageRaw(req.BlipImage)
+		}
+
 		req.BlipImage = nil
 	}
 

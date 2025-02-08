@@ -67,31 +67,35 @@ func (sv *Service) displayTeams() {
 		return
 	}
 
-	//if sv.turnDisplay1 != nil {
-	//	_ = sv.turnDisplay1.Initialize()
-	//	_ = sv.turnDisplay1.BlipFullImage(img)
-	//}
-	//
-	//if sv.turnDisplay2 != nil {
-	//	_ = sv.turnDisplay2.Initialize()
-	//	_ = sv.turnDisplay2.BlipFullImage(img)
-	//}
+	if sv.isProxyClient {
 
-	req := &Turner{
-		Area:      AreaTurner,
-		What:      TurnerWhatBlip,
-		BlipImage: imaging.GetImageRawData(img),
+		req := &Turner{
+			Area:      AreaTurner,
+			What:      TurnerWhatBlip,
+			BlipImage: imaging.GetImageRawData(img),
+		}
+
+		xxx, _ := json.Marshal(req)
+
+		log.Printf("################ ProxyRequest img len=%d ......", len(req.BlipImage))
+		log.Printf("################ ProxyRequest xxx len=%d ......", len(xxx))
+
+		res, err := sv.prx.ProxyRequest(req)
+		log.Cerror(err)
+		_ = res
+
+	} else {
+
+		if sv.turnDisplay1 != nil {
+			_ = sv.turnDisplay1.Initialize()
+			_ = sv.turnDisplay1.BlipFullImage(img)
+		}
+
+		if sv.turnDisplay2 != nil {
+			_ = sv.turnDisplay2.Initialize()
+			_ = sv.turnDisplay2.BlipFullImage(img)
+		}
 	}
-
-	xxx, _ := json.Marshal(req)
-
-	log.Printf("################ ProxyRequest img len=%d ......", len(req.BlipImage))
-	log.Printf("################ ProxyRequest xxx len=%d ......", len(xxx))
-
-	res, err := sv.prx.ProxyRequest(req)
-	log.Cerror(err)
-	_ = res
-
 }
 
 func (sv *Service) checkDisplays() {

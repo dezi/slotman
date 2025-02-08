@@ -34,15 +34,15 @@ func (sv *Service) displayPilots() {
 		return
 	}
 
-	if sv.turnDisplay1 != nil {
-		_ = sv.turnDisplay1.Initialize()
-		_ = sv.turnDisplay1.BlipFullImage(img)
-	}
-
-	if sv.turnDisplay2 != nil {
-		_ = sv.turnDisplay2.Initialize()
-		_ = sv.turnDisplay2.BlipFullImage(img)
-	}
+	//if sv.turnDisplay1 != nil {
+	//	_ = sv.turnDisplay1.Initialize()
+	//	_ = sv.turnDisplay1.BlipFullImage(img)
+	//}
+	//
+	//if sv.turnDisplay2 != nil {
+	//	_ = sv.turnDisplay2.Initialize()
+	//	_ = sv.turnDisplay2.BlipFullImage(img)
+	//}
 
 	req := &Turner{
 		Uuid:      simple.NewUuidHex(),
@@ -76,20 +76,22 @@ func (sv *Service) displayTeams() {
 		return
 	}
 
-	if sv.turnDisplay1 != nil {
-		_ = sv.turnDisplay1.Initialize()
-		_ = sv.turnDisplay1.BlipFullImage(img)
-	}
+	_ = img
 
-	if sv.turnDisplay2 != nil {
-		_ = sv.turnDisplay2.Initialize()
-		_ = sv.turnDisplay2.BlipFullImage(img)
-	}
+	//if sv.turnDisplay1 != nil {
+	//	_ = sv.turnDisplay1.Initialize()
+	//	_ = sv.turnDisplay1.BlipFullImage(img)
+	//}
+	//
+	//if sv.turnDisplay2 != nil {
+	//	_ = sv.turnDisplay2.Initialize()
+	//	_ = sv.turnDisplay2.BlipFullImage(img)
+	//}
 }
 
 func (sv *Service) checkDisplays() {
 
-	if sv.isProxyServer {
+	if sv.isProxyClient {
 		return
 	}
 

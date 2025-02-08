@@ -126,7 +126,7 @@ func (sv *Service) executeClientMessage(
 		sv.subscribersLock.Unlock()
 
 		if subscriber != nil {
-			resBytes, err = subscriber.OnMessageFromClient(resBytes)
+			resBytes, err = subscriber.OnMessageFromClient(reqBytes)
 		}
 	}
 

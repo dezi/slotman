@@ -18,11 +18,9 @@ func (sv *Service) OnMessageFromClient(reqBytes []byte) (resBytes []byte, err er
 	switch req.What {
 	case TurnerWhatBlipFull:
 
-		go func(rawBytes []byte) {
-			if sv.turnDisplay1 != nil {
-				_ = sv.turnDisplay1.BlipFullImageRaw(req.BlipImage)
-			}
-		}(req.BlipImage)
+		if sv.turnDisplay1 != nil {
+			_ = sv.turnDisplay1.BlipFullImageRaw(req.BlipImage)
+		}
 
 		req.BlipImage = nil
 	}

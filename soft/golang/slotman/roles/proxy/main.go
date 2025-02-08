@@ -5,6 +5,7 @@ import (
 	"slotman/services/impl/proxy"
 	"slotman/services/impl/speedi"
 	"slotman/services/impl/tacho"
+	"slotman/services/impl/turner"
 	"slotman/utils/daemon"
 	"slotman/utils/exitter"
 	"slotman/utils/log"
@@ -22,9 +23,11 @@ func startup() {
 	_ = proxy.StartService()
 	_ = speedi.StartService()
 	_ = tacho.StartService()
+	_ = turner.StartService()
 
 	_ = exitter.WaitUntilTermination()
 
+	_ = turner.StopService()
 	_ = tacho.StopService()
 	_ = speedi.StopService()
 	_ = proxy.StopService()

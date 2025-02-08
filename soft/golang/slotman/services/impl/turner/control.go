@@ -16,6 +16,10 @@ func (sv *Service) DoControlTask() {
 
 func (sv *Service) displayPilots() {
 
+	if sv.isProxyServer {
+		return
+	}
+
 	if sv.loopCount%2 == 0 {
 		return
 	}
@@ -54,6 +58,10 @@ func (sv *Service) displayPilots() {
 
 func (sv *Service) displayTeams() {
 
+	if sv.isProxyServer {
+		return
+	}
+
 	if sv.loopCount%2 == 1 {
 		return
 	}
@@ -80,6 +88,10 @@ func (sv *Service) displayTeams() {
 }
 
 func (sv *Service) checkDisplays() {
+
+	if sv.isProxyServer {
+		return
+	}
 
 	if sv.turnDisplay1 == nil {
 

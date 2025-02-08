@@ -19,6 +19,9 @@ func (sv *Service) tachoRead() {
 	thisInputs := uint16(0x0000)
 	lastInputs := uint16(0xffff)
 
+	rd1 := uint16(0)
+	rd2 := uint16(0)
+
 	for !sv.doExit {
 
 		tachoSensor := sv.tachoSensor
@@ -26,10 +29,21 @@ func (sv *Service) tachoRead() {
 			break
 		}
 
-		thisInputs, err = tachoSensor.ReadPins()
+		rd1, err = tachoSensor.ReadPins()
 		if err != nil {
 			//log.Cerror(err)
 			//time.Sleep(time.Millisecond * 100)
+			continue
+		}
+
+		rd2, err = tachoSensor.ReadPins()
+		if err != nil {
+			//log.Cerror(err)
+			//time.Sleep(time.Millisecond * 100)
+			continue
+		}
+
+		if rd1 != rd2 {
 			continue
 		}
 
@@ -37,7 +51,7 @@ func (sv *Service) tachoRead() {
 		// Remark: missing pull down resistors...
 		//
 
-		thisInputs &= 0x000f
+		thisInputs = rd1 & 0x000f
 
 		if thisInputs == lastInputs {
 			continue

@@ -2,7 +2,6 @@ package speedo
 
 import (
 	"slotman/things/pololu/mxt550"
-	"slotman/utils/log"
 	"time"
 )
 
@@ -14,34 +13,50 @@ func (sv *Service) motoronSafetyLoop(motoron *mxt550.MXT550) {
 
 		time.Sleep(time.Millisecond * 1000)
 
-		voltageMv, err := motoron.GetVinVoltageMv(5000, mxt550.Motoron550)
-		if err != nil {
-			log.Cerror(err)
-			continue
+		var voltageMv uint32
+		var tryErr error
+
+		for {
+
+			time.Sleep(time.Millisecond * 10)
+
+			voltageMv, tryErr = motoron.GetVinVoltageMv(5000, mxt550.Motoron550)
+			if tryErr != nil {
+				continue
+			}
+
+			if voltageMv < 40000 {
+				break
+			}
 		}
 
 		address := motoron.GetThingAddress()
 
-		tracks := ""
+		var tracks []int
 
 		if address == 0x18 {
-			tracks = "1+2"
+			tracks = []int{0, 1}
 		}
 
 		if address == 0x19 {
-			tracks = "3+4"
+			tracks = []int{2, 3}
 		}
 
 		if address == 0x1a {
-			tracks = "5+6"
+			tracks = []int{4, 5}
 		}
 
-		if tracks == "" {
+		if address == 0x1b {
+			tracks = []int{6, 7}
+		}
+
+		if tracks == nil {
 			continue
 		}
 
 		if loops%10 == 0 {
-			log.Printf("Motoron address=%02x tracks=%s voltageMv=%d", address, tracks, voltageMv)
+			sv.rce.OnMotoronVoltage(tracks, voltageMv)
+			//log.Printf("Motoron address=%02x tracks=%v voltageMv=%d", address, tracks, voltageMv)
 		}
 
 		loops++

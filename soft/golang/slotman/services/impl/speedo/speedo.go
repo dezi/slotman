@@ -1,6 +1,7 @@
 package speedo
 
 import (
+	"slotman/services/iface/race"
 	"slotman/services/iface/speedo"
 	"slotman/services/impl/provider"
 	"slotman/things/pololu/mxt550"
@@ -9,6 +10,8 @@ import (
 )
 
 type Service struct {
+	rce race.Interface
+
 	mxt550s []*mxt550.MXT550
 
 	mxt550Motoron1 *mxt550.MXT550
@@ -30,6 +33,12 @@ func StartService() (err error) {
 	}
 
 	singleTon = &Service{}
+
+	singleTon.rce, err = race.GetInstance()
+	if err != nil {
+		log.Cerror(err)
+		return
+	}
 
 	provider.SetProvider(singleTon)
 

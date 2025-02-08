@@ -13,6 +13,8 @@ type Interface interface {
 
 	OnAmpelClickShort()
 	OnAmpelClickLong()
+
+	OnMotoronVoltage(tracks []int, voltageMv uint32)
 }
 
 func GetInstance() (iface Interface, err error) {

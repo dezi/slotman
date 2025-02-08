@@ -43,6 +43,8 @@ func (sv *Service) tachoRead() {
 			continue
 		}
 
+		log.Printf("############ thisInputs=%04x", thisInputs)
+
 		sv.tachoChan <- TachoRead{
 			pinStates: thisInputs,
 			readTime:  time.Now(),

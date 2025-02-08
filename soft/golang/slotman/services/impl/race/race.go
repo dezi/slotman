@@ -1,20 +1,15 @@
-package ampel
+package race
 
 import (
-	"slotman/services/iface/ampel"
 	"slotman/services/iface/race"
 	"slotman/services/impl/provider"
-	"slotman/things/mcp/mcp23017"
 	"slotman/utils/log"
 	"time"
 )
 
 type Service struct {
-	rce race.Interface
-
-	ampelGpio *mcp23017.MCP23017
-
-	doExit bool
+	raceState RaceState
+	doExit    bool
 }
 
 var (
@@ -29,11 +24,7 @@ func StartService() (err error) {
 
 	singleTon = &Service{}
 
-	singleTon.rce, err = race.GetInstance()
-	if err != nil {
-		log.Cerror(err)
-		return
-	}
+	singleTon.raceState = RaceStateIdle
 
 	provider.SetProvider(singleTon)
 
@@ -52,11 +43,6 @@ func StopService() (err error) {
 
 	singleTon.doExit = true
 
-	if singleTon.ampelGpio != nil {
-		_ = singleTon.ampelGpio.Close()
-		singleTon.ampelGpio = nil
-	}
-
 	log.Printf("Stopped service.")
 
 	singleTon = nil
@@ -65,7 +51,7 @@ func StopService() (err error) {
 }
 
 func (sv *Service) GetName() (name provider.Service) {
-	return ampel.Service
+	return race.Service
 }
 
 func (sv *Service) GetControlOptions() (interval time.Duration) {

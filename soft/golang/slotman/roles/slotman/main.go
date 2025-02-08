@@ -1,9 +1,11 @@
 package main
 
 import (
+	"slotman/services/impl/ampel"
 	"slotman/services/impl/pilots"
 	"slotman/services/impl/provider"
 	"slotman/services/impl/proxy"
+	"slotman/services/impl/race"
 	"slotman/services/impl/speedi"
 	"slotman/services/impl/speedo"
 	"slotman/services/impl/tacho"
@@ -25,23 +27,25 @@ func startup() {
 	_ = provider.StartService()
 	_ = proxy.StartService()
 
+	_ = race.StartService()
 	_ = teams.StartService()
 	_ = pilots.StartService()
 	_ = turner.StartService()
 	_ = speedo.StartService()
 	_ = speedi.StartService()
 	_ = tacho.StartService()
-	//_ = ampel.StartService()
+	_ = ampel.StartService()
 
 	_ = exitter.WaitUntilTermination()
 
-	//_ = ampel.StopService()
+	_ = ampel.StopService()
 	_ = tacho.StopService()
 	_ = speedi.StopService()
 	_ = speedo.StopService()
 	_ = turner.StopService()
 	_ = pilots.StopService()
 	_ = teams.StopService()
+	_ = race.StopService()
 
 	_ = proxy.StopService()
 	_ = provider.StopService()

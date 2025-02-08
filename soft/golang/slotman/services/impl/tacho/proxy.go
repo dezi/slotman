@@ -29,7 +29,9 @@ func (sv *Service) OnMessageFromServer(resBytes []byte) {
 			time:   res.Time,
 		}
 
+		sv.mapsLock.Lock()
 		sv.tachoStates[res.Pin] = state
+		sv.mapsLock.Unlock()
 
 		sv.handleLocalTacho(res.Pin, state)
 	}

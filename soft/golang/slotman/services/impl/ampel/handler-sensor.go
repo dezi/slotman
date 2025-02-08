@@ -32,3 +32,19 @@ func (sv *Service) OnThingStopped(thing things.Thing) {
 	vendor, _, short := thing.GetModelInfo()
 	log.Printf("Thing stopped uuid=%s vendor=<%s> model=<%s>", uuid[:8], vendor, short)
 }
+
+func (sv *Service) OnButtonPinDown(thing things.Thing) {
+	return
+}
+
+func (sv *Service) OnButtonPinUp(thing things.Thing) {
+	return
+}
+
+func (sv *Service) OnButtonClickShort(thing things.Thing) {
+	sv.rce.OnAmpelClickShort()
+}
+
+func (sv *Service) OnButtonClickLong(thing things.Thing) {
+	sv.rce.OnAmpelClickLong()
+}

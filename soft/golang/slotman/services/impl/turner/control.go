@@ -7,9 +7,30 @@ import (
 
 func (sv *Service) DoControlTask() {
 	sv.checkDisplays()
+	sv.displayState()
 	sv.displayTeams()
 	sv.displayPilots()
 	sv.loopCount++
+}
+
+func (sv *Service) displayState() {
+
+	if sv.isProxyServer {
+		return
+	}
+
+	if sv.loopCount%3 != 0 {
+		return
+	}
+
+	img, err := sv.getSlotmanLogo()
+	if err != nil {
+		log.Cerror(err)
+		return
+	}
+
+	err = sv.blipFullImage(img)
+	log.Cerror(err)
 }
 
 func (sv *Service) displayPilots() {
@@ -18,7 +39,7 @@ func (sv *Service) displayPilots() {
 		return
 	}
 
-	if sv.loopCount%2 == 0 {
+	if sv.loopCount%3 != 1 {
 		return
 	}
 
@@ -42,7 +63,7 @@ func (sv *Service) displayTeams() {
 		return
 	}
 
-	if sv.loopCount%2 == 1 {
+	if sv.loopCount%3 != 2 {
 		return
 	}
 

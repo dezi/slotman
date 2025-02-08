@@ -2,9 +2,31 @@ package turner
 
 import (
 	"image"
+	"image/png"
+	"path/filepath"
 	"slotman/utils/imaging"
 	"slotman/utils/log"
 )
+
+func (sv *Service) getSlotmanLogo() (rgba *image.RGBA, err error) {
+
+	input, err := embedFs.Open(filepath.Join("embeds", "slotman-logo.png"))
+	if err != nil {
+		log.Cerror(err)
+		return
+	}
+
+	defer func() { _ = input.Close() }()
+
+	src, err := png.Decode(input)
+	if err != nil {
+		log.Cerror(err)
+		return
+	}
+
+	rgba, err = imaging.ScaleToCircle(src, 240, 0, "")
+	return
+}
 
 func (sv *Service) blipFullImage(img *image.RGBA) (err error) {
 

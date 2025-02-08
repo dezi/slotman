@@ -55,8 +55,8 @@ func (sv *Service) handleWs(w http.ResponseWriter, r *http.Request) {
 	defer log.Printf("Stopped websocket remoteAddr=%s.", r.RemoteAddr)
 
 	upgrader := websocket.Upgrader{
-		ReadBufferSize:  2048,
-		WriteBufferSize: 2048,
+		ReadBufferSize:  2048 * 1024,
+		WriteBufferSize: 2048 * 1024,
 	}
 
 	upgrader.CheckOrigin = func(r *http.Request) bool { return true }

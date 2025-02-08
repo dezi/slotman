@@ -11,7 +11,7 @@ func (sv *Service) OnMessageFromClient(reqBytes []byte) (resBytes []byte, err er
 
 	req := Turner{}
 
-	err = json.Unmarshal(resBytes, &req)
+	err = json.Unmarshal(reqBytes, &req)
 	if err != nil {
 		log.Cerror(err)
 		return

@@ -14,6 +14,8 @@ type Interface interface {
 	OnAmpelClickShort()
 	OnAmpelClickLong()
 
+	OnRaceStarted()
+
 	OnMotoronVoltage(tracks []int, voltageMv uint32)
 }
 

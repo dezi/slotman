@@ -22,8 +22,12 @@ func (sv *Service) looper() {
 		sv.raceStateDone = sv.raceState
 
 		switch sv.raceState {
+
 		case race.RaceStateIdle:
 			sv.amp.SetIdle()
+
+		case race.RaceStateRaceStart:
+			sv.amp.SetRaceStart()
 		}
 	}
 }

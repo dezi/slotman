@@ -12,6 +12,10 @@ type Interface interface {
 	GetName() (name provider.Service)
 
 	SetIdle()
+
+	SetRaceStart()
+	SetRaceSuspend()
+	SetRaceRestart()
 }
 
 func GetInstance() (iface Interface, err error) {

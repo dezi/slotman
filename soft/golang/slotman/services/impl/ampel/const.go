@@ -5,7 +5,10 @@ type AmpelState string
 
 //goland:noinspection GoNameStartsWithPackageName
 const (
-	AmpelStateIdle AmpelState = "ampel.idle"
+	AmpelStateIdle        AmpelState = "ampel.idle"
+	AmpelStateRaceStart   AmpelState = "ampel.race.start"
+	AmpelStateRaceSuspend AmpelState = "ampel.race.suspend"
+	AmpelStateRaceRestart AmpelState = "ampel.race.restart"
 )
 
 var (

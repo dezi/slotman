@@ -6,6 +6,174 @@ import (
 	"time"
 )
 
+func (sv *Service) patternRaceSuspend() {
+	log.Printf("Pattern race suspend started...")
+	defer log.Printf("Pattern race suspend done.")
+
+	state := 0
+	delay := 250
+
+	for !sv.doExit && sv.ampelState == AmpelStateRaceSuspend {
+
+		ampelGpio := sv.ampelGpio
+		if ampelGpio == nil {
+			break
+		}
+
+		sv.ampelLock.Lock()
+
+		pins, _ := ampelGpio.ReadPins()
+		pins &= 0x8000
+
+		switch state {
+		case 0: // * _ _ _ *
+			pins |= 1 << pinsYellow[0]
+			pins |= 1 << pinsYellow[4]
+		case 1: // _ * _ * _
+			pins |= 1 << pinsYellow[1]
+			pins |= 1 << pinsYellow[3]
+		case 2: // _ _ * _ _
+			pins |= 1 << pinsYellow[2]
+		case 3: // _ * _ * _
+			pins |= 1 << pinsYellow[1]
+			pins |= 1 << pinsYellow[3]
+		case 4: // * _ _ _ *
+			pins |= 1 << pinsYellow[0]
+			pins |= 1 << pinsYellow[4]
+		}
+
+		_ = ampelGpio.WritePins(pins)
+
+		sv.ampelLock.Unlock()
+
+		state = (state + 1) % 4
+
+		wait := delay
+		for !sv.doExit && sv.ampelState == AmpelStateRaceSuspend && wait > 0 {
+			time.Sleep(time.Millisecond * 20)
+			wait -= 20
+		}
+	}
+}
+
+func (sv *Service) patternRaceRestart() {
+	log.Printf("Pattern race restart started...")
+	defer log.Printf("Pattern race restart done.")
+
+	state := 0
+	delay := 250
+
+	for !sv.doExit && sv.ampelState == AmpelStateRaceRestart {
+
+		ampelGpio := sv.ampelGpio
+		if ampelGpio == nil {
+			break
+		}
+
+		sv.ampelLock.Lock()
+
+		pins, _ := ampelGpio.ReadPins()
+		pins &= 0x8000
+
+		switch state {
+		case 0:
+			pins |= 1 << pinsGreen[0]
+			pins |= 1 << pinsGreen[1]
+			pins |= 1 << pinsGreen[2]
+			pins |= 1 << pinsGreen[3]
+			pins |= 1 << pinsGreen[4]
+		}
+
+		_ = ampelGpio.WritePins(pins)
+
+		sv.ampelLock.Unlock()
+
+		state++
+
+		if state > 0 {
+			break
+		}
+
+		wait := delay
+		for !sv.doExit && sv.ampelState == AmpelStateRaceRestart && wait > 0 {
+			time.Sleep(time.Millisecond * 20)
+			wait -= 20
+		}
+	}
+}
+
+func (sv *Service) patternRaceStart() {
+
+	log.Printf("Pattern race start started...")
+	defer log.Printf("Pattern race start done.")
+
+	state := 0
+	delay := 1000
+
+	for !sv.doExit && sv.ampelState == AmpelStateRaceStart {
+
+		ampelGpio := sv.ampelGpio
+		if ampelGpio == nil {
+			break
+		}
+
+		sv.ampelLock.Lock()
+
+		pins, _ := ampelGpio.ReadPins()
+		pins &= 0x8000
+
+		//goland:noinspection GoDfaConstantCondition
+		switch state {
+		case 0:
+			pins |= 0
+		case 1:
+			pins |= 1 << pinsRed[4]
+		case 2:
+			pins |= 1 << pinsRed[4]
+			pins |= 1 << pinsRed[3]
+		case 3:
+			pins |= 1 << pinsRed[4]
+			pins |= 1 << pinsRed[3]
+			pins |= 1 << pinsRed[2]
+		case 4:
+			pins |= 1 << pinsRed[4]
+			pins |= 1 << pinsRed[3]
+			pins |= 1 << pinsRed[2]
+			pins |= 1 << pinsRed[1]
+		case 5:
+			pins |= 1 << pinsRed[4]
+			pins |= 1 << pinsRed[3]
+			pins |= 1 << pinsRed[2]
+			pins |= 1 << pinsRed[1]
+			pins |= 1 << pinsRed[0]
+		case 6:
+			pins |= 1 << pinsGreen[0]
+			pins |= 1 << pinsGreen[1]
+			pins |= 1 << pinsGreen[2]
+			pins |= 1 << pinsGreen[3]
+			pins |= 1 << pinsGreen[4]
+		}
+
+		_ = ampelGpio.WritePins(pins)
+
+		sv.ampelLock.Unlock()
+
+		state++
+
+		if state == 7 {
+			break
+		}
+
+		wait := delay
+		for !sv.doExit && sv.ampelState == AmpelStateRaceStart && wait > 0 {
+			time.Sleep(time.Millisecond * 20)
+			wait -= 20
+		}
+	}
+
+	sv.rce.OnRaceStarted()
+}
+
 func (sv *Service) patternIdle() {
 
 	log.Printf("Pattern idle started...")

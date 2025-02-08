@@ -185,7 +185,7 @@ func (sv *Service) handleLocalTacho(pin int, state TachoState) {
 	if pin%2 == 0 {
 
 		//
-		// Start + speed measure pin.
+		// Start + speed measure pin even numbers.
 		//
 
 		sv.mapsLock.Lock()
@@ -250,10 +250,15 @@ func (sv *Service) handleLocalTacho(pin int, state TachoState) {
 	}
 
 	if pin%2 == 1 {
+
 		//
-		// Speed measure pin 2.
-		// The state is only maintained
-		// for further processing.
+		// Speed measure pin odd numbers.
 		//
+		// The state is maintained for speed computation.
+		//
+
+		if !active {
+			sv.OnEmergencyStopNow(track)
+		}
 	}
 }

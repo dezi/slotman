@@ -64,3 +64,7 @@ func (sv *Service) OnSpeedMeasurement(track int, speed float64) {
 
 	sv.mapsLock.Unlock()
 }
+
+func (sv *Service) OnEmergencyStopNow(track int) {
+	log.Printf("OnEmergencyStopNow   track=%d", track)
+}

@@ -40,7 +40,6 @@ func (sv *Service) OnRoundCompleted(track int) {
 
 	trackState := sv.trackStates[track]
 
-	trackState.Round++
 	trackState.RoundMillis = int(now.UnixMilli() - trackState.RoundTs.UnixMilli())
 	trackState.RoundTs = time.Now()
 
@@ -48,8 +47,8 @@ func (sv *Service) OnRoundCompleted(track int) {
 
 	sv.mapsLock.Unlock()
 
-	log.Printf("OnRoundCompleted     track=%d round=%3d secs=%0.3f",
-		track, trackState.Round, float64(trackState.RoundMillis)/1000)
+	log.Printf("OnRoundCompleted     track=%d secs=%0.3f",
+		track, float64(trackState.RoundMillis)/1000)
 }
 
 func (sv *Service) OnSpeedMeasurement(track int, speed float64) {

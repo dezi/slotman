@@ -29,6 +29,10 @@ func (sv *Service) tachoRead() {
 			break
 		}
 
+		//
+		// Check for indeterministic values.
+		//
+
 		rd1, err = tachoSensor.ReadPins()
 		if err != nil {
 			//log.Cerror(err)
@@ -38,8 +42,6 @@ func (sv *Service) tachoRead() {
 
 		rd2, err = tachoSensor.ReadPins()
 		if err != nil {
-			//log.Cerror(err)
-			//time.Sleep(time.Millisecond * 100)
 			continue
 		}
 

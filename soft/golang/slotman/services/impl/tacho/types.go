@@ -20,7 +20,6 @@ type TachoRead struct {
 }
 
 type TrackState struct {
-	Round       int
 	RoundMillis int
 	RoundTs     time.Time
 

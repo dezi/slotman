@@ -117,8 +117,17 @@ func (sv *Service) executeClientMessage(
 		resBytes, err = sv.handleSpi(sender, reqBytes)
 	case proxy.AreaUart:
 		resBytes, err = sv.handleUart(sender, reqBytes)
+
 	default:
 		log.Printf("################ OBO area=%s", msg.Area)
+
+		sv.subscribersLock.Lock()
+		subscriber := sv.subscribers[msg.Area]
+		sv.subscribersLock.Unlock()
+
+		if subscriber != nil {
+			resBytes, err = subscriber.OnMessageFromClient(resBytes)
+		}
 	}
 
 	if err != nil {

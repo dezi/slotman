@@ -55,8 +55,8 @@ func (sv *Service) handleWs(w http.ResponseWriter, r *http.Request) {
 	defer log.Printf("Stopped websocket remoteAddr=%s.", r.RemoteAddr)
 
 	upgrader := websocket.Upgrader{
-		ReadBufferSize:  2048 * 1024,
-		WriteBufferSize: 2048 * 1024,
+		ReadBufferSize:  256 * 1024,
+		WriteBufferSize: 256 * 1024,
 	}
 
 	upgrader.CheckOrigin = func(r *http.Request) bool { return true }
@@ -117,6 +117,8 @@ func (sv *Service) executeClientMessage(
 		resBytes, err = sv.handleSpi(sender, reqBytes)
 	case proxy.AreaUart:
 		resBytes, err = sv.handleUart(sender, reqBytes)
+	default:
+		log.Printf("################ OBO area=%s", msg.Area)
 	}
 
 	if err != nil {

@@ -52,7 +52,9 @@ func (sv *Service) ProxyRequest(req proxy.Message) (res []byte, err error) {
 		return
 	}
 
-	//log.Printf("ProxyRequest req=%s", string(reqBytes))
+	if req.GetArea() == "turner" {
+		log.Printf("ProxyRequest req=%d", len(reqBytes))
+	}
 
 	sv.webServerConnLock.Lock()
 	err = sv.webServerConn.WriteMessage(websocket.TextMessage, reqBytes)
@@ -72,15 +74,9 @@ func (sv *Service) ProxyRequest(req proxy.Message) (res []byte, err error) {
 	delete(sv.webServerChan, uuid)
 	sv.webServerChanLock.Unlock()
 
-	//var mType int
-	//mType, res, err = sv.webServerConn.ReadMessage()
-	//if mType != websocket.TextMessage {
-	//	err = errors.New("wrong message type received")
-	//	log.Cerror(err)
-	//	return
-	//}
-
-	//log.Printf("ProxyRequest res=%s", string(res))
+	if req.GetArea() == "turner" {
+		log.Printf("ProxyRequest res=%s", string(res))
+	}
 
 	return
 }

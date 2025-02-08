@@ -58,7 +58,7 @@ func StartService() (err error) {
 		return
 	}
 
-	if singleTon.isProxyClient {
+	if !singleTon.isProxyServer {
 
 		singleTon.tms, err = teams.GetInstance()
 		if err != nil {

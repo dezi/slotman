@@ -1,10 +1,10 @@
 package turner
 
 import (
+	"encoding/json"
 	"slotman/things/galaxycore/gc9a01"
 	"slotman/utils/imaging"
 	"slotman/utils/log"
-	"slotman/utils/simple"
 )
 
 func (sv *Service) DoControlTask() {
@@ -34,6 +34,8 @@ func (sv *Service) displayPilots() {
 		return
 	}
 
+	_ = img
+
 	//if sv.turnDisplay1 != nil {
 	//	_ = sv.turnDisplay1.Initialize()
 	//	_ = sv.turnDisplay1.BlipFullImage(img)
@@ -43,17 +45,6 @@ func (sv *Service) displayPilots() {
 	//	_ = sv.turnDisplay2.Initialize()
 	//	_ = sv.turnDisplay2.BlipFullImage(img)
 	//}
-
-	req := &Turner{
-		Uuid:      simple.NewUuidHex(),
-		Area:      AreaTurner,
-		What:      TurnerWhatBlip,
-		BlipImage: imaging.GetImageRawData(img),
-	}
-
-	res, err := sv.prx.ProxyRequest(req)
-	log.Cerror(err)
-	_ = res
 }
 
 func (sv *Service) displayTeams() {
@@ -76,8 +67,6 @@ func (sv *Service) displayTeams() {
 		return
 	}
 
-	_ = img
-
 	//if sv.turnDisplay1 != nil {
 	//	_ = sv.turnDisplay1.Initialize()
 	//	_ = sv.turnDisplay1.BlipFullImage(img)
@@ -87,6 +76,22 @@ func (sv *Service) displayTeams() {
 	//	_ = sv.turnDisplay2.Initialize()
 	//	_ = sv.turnDisplay2.BlipFullImage(img)
 	//}
+
+	req := &Turner{
+		Area:      AreaTurner,
+		What:      TurnerWhatBlip,
+		BlipImage: imaging.GetImageRawData(img),
+	}
+
+	xxx, _ := json.Marshal(req)
+
+	log.Printf("################ ProxyRequest img len=%d ......", len(req.BlipImage))
+	log.Printf("################ ProxyRequest xxx len=%d ......", len(xxx))
+
+	res, err := sv.prx.ProxyRequest(req)
+	log.Cerror(err)
+	_ = res
+
 }
 
 func (sv *Service) checkDisplays() {

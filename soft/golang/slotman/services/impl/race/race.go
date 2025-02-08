@@ -1,15 +1,26 @@
 package race
 
 import (
-	"slotman/services/iface/race"
+	"slotman/services/iface/ampel"
+	raceIface "slotman/services/iface/race"
+	"slotman/services/iface/speedo"
 	"slotman/services/impl/provider"
+	raceTypes "slotman/services/type/race"
 	"slotman/utils/log"
 	"time"
 )
 
 type Service struct {
-	raceState RaceState
-	doExit    bool
+	amp ampel.Interface
+	sdo speedo.Interface
+
+	raceState     raceTypes.RaceState
+	raceStateDone raceTypes.RaceState
+
+	servicesReady bool
+	looperStarted bool
+
+	doExit bool
 }
 
 var (
@@ -24,7 +35,7 @@ func StartService() (err error) {
 
 	singleTon = &Service{}
 
-	singleTon.raceState = RaceStateIdle
+	singleTon.raceState = raceTypes.RaceStateIdle
 
 	provider.SetProvider(singleTon)
 
@@ -51,7 +62,7 @@ func StopService() (err error) {
 }
 
 func (sv *Service) GetName() (name provider.Service) {
-	return race.Service
+	return raceIface.Service
 }
 
 func (sv *Service) GetControlOptions() (interval time.Duration) {

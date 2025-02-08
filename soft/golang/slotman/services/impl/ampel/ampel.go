@@ -6,13 +6,16 @@ import (
 	"slotman/services/impl/provider"
 	"slotman/things/mcp/mcp23017"
 	"slotman/utils/log"
+	"sync"
 	"time"
 )
 
 type Service struct {
 	rce race.Interface
 
-	ampelGpio *mcp23017.MCP23017
+	ampelGpio  *mcp23017.MCP23017
+	ampelLock  sync.Mutex
+	ampelState AmpelState
 
 	doExit bool
 }

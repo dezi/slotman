@@ -1,7 +1,6 @@
 package turner
 
 import (
-	"encoding/json"
 	"slotman/things/galaxycore/gc9a01"
 	"slotman/utils/imaging"
 	"slotman/utils/log"
@@ -71,18 +70,12 @@ func (sv *Service) displayTeams() {
 
 		req := &Turner{
 			Area:      AreaTurner,
-			What:      TurnerWhatBlip,
+			What:      TurnerWhatBlipFull,
 			BlipImage: imaging.GetImageRawData(img),
 		}
 
-		xxx, _ := json.Marshal(req)
-
-		log.Printf("################ ProxyRequest img len=%d ......", len(req.BlipImage))
-		log.Printf("################ ProxyRequest xxx len=%d ......", len(xxx))
-
-		res, err := sv.prx.ProxyRequest(req)
+		_, err = sv.prx.ProxyRequest(req)
 		log.Cerror(err)
-		_ = res
 
 	} else {
 

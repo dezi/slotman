@@ -14,7 +14,7 @@ type TurnerWhat string
 
 //goland:noinspection GoNameStartsWithPackageName
 const (
-	TurnerWhatBlip TurnerWhat = "turner.blip"
+	TurnerWhatBlipFull TurnerWhat = "turner.blip.full"
 )
 
 type Turner struct {

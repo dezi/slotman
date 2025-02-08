@@ -7,8 +7,6 @@ import (
 
 func (sv *Service) OnMessageFromClient(reqBytes []byte) (resBytes []byte, err error) {
 
-	log.Printf("################# Turner OnMessageFromClient...")
-
 	req := Turner{}
 
 	err = json.Unmarshal(reqBytes, &req)
@@ -18,9 +16,7 @@ func (sv *Service) OnMessageFromClient(reqBytes []byte) (resBytes []byte, err er
 	}
 
 	switch req.What {
-	case TurnerWhatBlip:
-
-		log.Printf("################# size=%d", len(req.BlipImage))
+	case TurnerWhatBlipFull:
 
 		if sv.turnDisplay1 != nil {
 			err = sv.turnDisplay1.BlipFullImageRaw(req.BlipImage)

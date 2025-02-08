@@ -119,8 +119,6 @@ func (sv *Service) executeClientMessage(
 		resBytes, err = sv.handleUart(sender, reqBytes)
 
 	default:
-		log.Printf("################ OBO area=%s", msg.Area)
-
 		sv.subscribersLock.Lock()
 		subscriber := sv.subscribers[msg.Area]
 		sv.subscribersLock.Unlock()

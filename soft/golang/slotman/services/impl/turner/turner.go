@@ -5,15 +5,18 @@ import (
 	"golang.org/x/image/font"
 	"golang.org/x/image/font/gofont/goregular"
 	"slotman/services/iface/pilots"
+	"slotman/services/iface/proxy"
 	"slotman/services/iface/teams"
 	"slotman/services/iface/turner"
 	"slotman/services/impl/provider"
 	"slotman/things/galaxycore/gc9a01"
 	"slotman/utils/log"
+	"slotman/utils/simple"
 	"time"
 )
 
 type Service struct {
+	prx proxy.Interface
 	tms teams.Interface
 	plt pilots.Interface
 
@@ -27,6 +30,9 @@ type Service struct {
 
 	teamIndex  int
 	pilotIndex int
+
+	isProxyServer bool
+	isProxyClient bool
 
 	loopCount int
 }
@@ -42,6 +48,15 @@ func StartService() (err error) {
 	}
 
 	singleTon = &Service{}
+
+	singleTon.isProxyServer = simple.GetExecName() == "proxy"
+	singleTon.isProxyClient = simple.GOOS == "darwin"
+
+	singleTon.prx, err = proxy.GetInstance()
+	if err != nil {
+		log.Cerror(err)
+		return
+	}
 
 	singleTon.tms, err = teams.GetInstance()
 	if err != nil {
@@ -65,6 +80,8 @@ func StartService() (err error) {
 		singleTon.fontRegular,
 		&truetype.Options{Size: 40})
 
+	singleTon.prx.Subscribe(AreaTurner, singleTon)
+
 	provider.SetProvider(singleTon)
 
 	return
@@ -77,6 +94,10 @@ func StopService() (err error) {
 	}
 
 	provider.UnsetProvider(singleTon)
+
+	log.Printf("Stopping service...")
+
+	singleTon.prx.Unsubscribe(AreaTurner)
 
 	log.Printf("Stopped service.")
 

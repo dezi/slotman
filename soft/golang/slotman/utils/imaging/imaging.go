@@ -72,3 +72,41 @@ func ScaleToCircle(src image.Image, size, borderWidth int, borderColor string) (
 
 	return
 }
+
+func GetImageRawData(rgba *image.RGBA) (raw []byte) {
+
+	wid := rgba.Bounds().Size().X
+	hei := rgba.Bounds().Size().Y
+	pix := rgba.Pix
+
+	raw = make([]byte, wid*hei*3)
+
+	src := 0
+	dst := 0
+
+	for x := 0; x < wid; x++ {
+
+		stride := src
+
+		for y := 0; y < hei; y++ {
+
+			raw[dst] = pix[stride]
+			stride++
+			dst++
+
+			raw[dst] = pix[stride]
+			stride++
+			dst++
+
+			raw[dst] = pix[stride]
+			stride++
+			dst++
+
+			stride++
+		}
+
+		src += rgba.Stride
+	}
+
+	return
+}

@@ -2,7 +2,9 @@ package turner
 
 import (
 	"slotman/things/galaxycore/gc9a01"
+	"slotman/utils/imaging"
 	"slotman/utils/log"
+	"slotman/utils/simple"
 )
 
 func (sv *Service) DoControlTask() {
@@ -37,6 +39,17 @@ func (sv *Service) displayPilots() {
 		_ = sv.turnDisplay2.Initialize()
 		_ = sv.turnDisplay2.BlipFullImage(img)
 	}
+
+	req := &Turner{
+		Uuid:      simple.NewUuidHex(),
+		Area:      AreaTurner,
+		What:      TurnerWhatBlip,
+		BlipImage: imaging.GetImageRawData(img),
+	}
+
+	res, err := sv.prx.ProxyRequest(req)
+	log.Cerror(err)
+	_ = res
 }
 
 func (sv *Service) displayTeams() {

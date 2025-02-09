@@ -63,8 +63,8 @@ func (sv *Service) displayHardware(img *image.RGBA) {
 
 	dc.SetHexColor("e0bf78")
 	dc.SetFontFace(sv.faceBoldLarge)
-	dc.DrawStringAnchored("Hardware", 120, 44, 0.5, 0.0)
-	dc.DrawStringAnchored("________", 120, 48, 0.5, 0.0)
+	dc.DrawStringAnchored("Host", 120, 44, 0.5, 0.0)
+	dc.DrawStringAnchored("____", 120, 48, 0.5, 0.0)
 
 	//
 	// Hostname.
@@ -74,7 +74,7 @@ func (sv *Service) displayHardware(img *image.RGBA) {
 	parts := strings.Split(hostName, ".")
 	hostName = parts[0]
 
-	dc.SetFontFace(sv.faceBoldNormal)
+	dc.SetFontFace(sv.faceBoldLarge)
 	dc.DrawStringAnchored(hostName, 120, float64(86+0*36), 0.5, 0.0)
 
 	//
@@ -90,6 +90,7 @@ func (sv *Service) displayHardware(img *image.RGBA) {
 		ipAddr = ip.String()
 	}
 
+	dc.SetFontFace(sv.faceBoldNormal)
 	dc.DrawStringAnchored(ipAddr, 120, float64(86+1*36), 0.5, 0.0)
 
 	//
@@ -98,6 +99,7 @@ func (sv *Service) displayHardware(img *image.RGBA) {
 
 	goos := simple.FirstUpper(simple.GOOS)
 
+	dc.SetFontFace(sv.faceBoldNormal)
 	dc.DrawStringAnchored(goos, 120, float64(86+2*36), 0.5, 0.0)
 }
 

@@ -6,6 +6,7 @@ import (
 )
 
 func (sv *Service) OnAmpelClickShort() {
+
 	log.Printf("OnAmpelClickShort...")
 
 	if sv.raceState == race.RaceStateIdle {

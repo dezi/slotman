@@ -17,7 +17,8 @@ func (sv *Service) patternRaceSuspend() {
 
 		ampelGpio := sv.ampelGpio
 		if ampelGpio == nil {
-			break
+			time.Sleep(time.Second)
+			continue
 		}
 
 		sv.ampelLock.Lock()
@@ -67,7 +68,8 @@ func (sv *Service) patternRaceRestart() {
 
 		ampelGpio := sv.ampelGpio
 		if ampelGpio == nil {
-			break
+			time.Sleep(time.Second)
+			continue
 		}
 
 		sv.ampelLock.Lock()
@@ -114,7 +116,8 @@ func (sv *Service) patternRaceStart() {
 
 		ampelGpio := sv.ampelGpio
 		if ampelGpio == nil {
-			break
+			time.Sleep(time.Second)
+			continue
 		}
 
 		sv.ampelLock.Lock()
@@ -186,7 +189,8 @@ func (sv *Service) patternIdle() {
 
 		ampelGpio := sv.ampelGpio
 		if ampelGpio == nil {
-			break
+			time.Sleep(time.Second)
+			continue
 		}
 
 		sv.ampelLock.Lock()
@@ -254,7 +258,8 @@ func (sv *Service) patternTest() {
 
 		ampelGpio := sv.ampelGpio
 		if ampelGpio == nil {
-			break
+			time.Sleep(time.Second)
+			continue
 		}
 
 		for loop := 1; loop < 5; loop++ {

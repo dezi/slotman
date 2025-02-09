@@ -17,14 +17,17 @@ func (sv *Service) DoControlTask() {
 
 	sv.checkDisplays()
 
-	state := sv.rce.GetRaceState()
+	if sv.isProxyServer {
 
-	if state == race.RaceStateIdle {
-		switch sv.loopCount % 2 {
-		case 0:
-			sv.displayState()
-		case 1:
-			sv.displayTeams()
+		state := sv.rce.GetRaceState()
+
+		if state == race.RaceStateIdle {
+			switch sv.loopCount % 2 {
+			case 0:
+				sv.displayState()
+			case 1:
+				sv.displayTeams()
+			}
 		}
 	}
 

@@ -3,10 +3,13 @@ package turner
 import (
 	"github.com/golang/freetype/truetype"
 	"golang.org/x/image/font"
+	"golang.org/x/image/font/gofont/gobold"
 	"golang.org/x/image/font/gofont/goregular"
 	"slotman/services/iface/pilots"
 	"slotman/services/iface/proxy"
 	"slotman/services/iface/race"
+	"slotman/services/iface/speedi"
+	"slotman/services/iface/speedo"
 	"slotman/services/iface/teams"
 	"slotman/services/iface/turner"
 	"slotman/services/impl/provider"
@@ -17,15 +20,21 @@ import (
 )
 
 type Service struct {
+	rce race.Interface
 	prx proxy.Interface
 	tms teams.Interface
 	plt pilots.Interface
-	rce race.Interface
+	sdi speedi.Interface
+	sdo speedo.Interface
 
 	turnDisplay1 *gc9a01.GC9A01
 	turnDisplay2 *gc9a01.GC9A01
 
+	fontBold    *truetype.Font
 	fontRegular *truetype.Font
+
+	faceBoldNormal font.Face
+	faceBoldLarge  font.Face
 
 	faceRegularNormal font.Face
 	faceRegularLarge  font.Face
@@ -68,6 +77,18 @@ func StartService() (err error) {
 		return
 	}
 
+	singleTon.sdi, err = speedi.GetInstance()
+	if err != nil {
+		log.Cerror(err)
+		return
+	}
+
+	singleTon.sdo, err = speedo.GetInstance()
+	if err != nil {
+		log.Cerror(err)
+		return
+	}
+
 	singleTon.rce, err = race.GetInstance()
 	if err != nil {
 		log.Cerror(err)
@@ -86,15 +107,24 @@ func StartService() (err error) {
 		return
 	}
 
+	singleTon.fontBold, _ = truetype.Parse(gobold.TTF)
 	singleTon.fontRegular, _ = truetype.Parse(goregular.TTF)
+
+	singleTon.faceBoldNormal = truetype.NewFace(
+		singleTon.fontBold,
+		&truetype.Options{Size: 22})
+
+	singleTon.faceBoldLarge = truetype.NewFace(
+		singleTon.fontBold,
+		&truetype.Options{Size: 32})
 
 	singleTon.faceRegularNormal = truetype.NewFace(
 		singleTon.fontRegular,
-		&truetype.Options{Size: 24})
+		&truetype.Options{Size: 22})
 
 	singleTon.faceRegularLarge = truetype.NewFace(
 		singleTon.fontRegular,
-		&truetype.Options{Size: 40})
+		&truetype.Options{Size: 32})
 
 	return
 }

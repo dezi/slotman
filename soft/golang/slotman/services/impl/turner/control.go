@@ -1,6 +1,9 @@
 package turner
 
 import (
+	"fmt"
+	"github.com/fogleman/gg"
+	"slotman/services/type/race"
 	"slotman/things/galaxycore/gc9a01"
 	"slotman/utils/log"
 )
@@ -8,8 +11,8 @@ import (
 func (sv *Service) DoControlTask() {
 	sv.checkDisplays()
 	sv.displayState()
-	sv.displayTeams()
-	sv.displayPilots()
+	//sv.displayTeams()
+	//sv.displayPilots()
 	sv.loopCount++
 }
 
@@ -27,6 +30,54 @@ func (sv *Service) displayState() {
 	if err != nil {
 		log.Cerror(err)
 		return
+	}
+
+	raceState := sv.rce.GetRaceState()
+
+	motoronsAttached := sv.sdo.GetMotoronsAttached()
+	speedControls := sv.sdi.GetSpeedControlsAttached()
+
+	if raceState == race.RaceStateIdle {
+
+	}
+
+	dc := gg.NewContextForRGBA(img)
+
+	dc.DrawRectangle(0, 0, 240, 240)
+	dc.SetHexColor("#00000080")
+	dc.Fill()
+
+	dc.SetHexColor("e0bf78")
+	dc.SetFontFace(sv.faceBoldLarge)
+	dc.DrawStringAnchored("Hardware", 120, 44, 0.5, 0.0)
+	dc.DrawStringAnchored("________", 120, 48, 0.5, 0.0)
+
+	for inx := 0; inx < 4; inx++ {
+
+		dc.SetHexColor("e0bf78")
+		text := fmt.Sprintf("%d:", inx+1)
+		dc.DrawString(text, 60, float64(86+inx*36))
+
+		if motoronsAttached[inx] {
+			dc.SetHexColor("00ff00")
+		} else {
+			dc.SetHexColor("ff0000")
+		}
+		dc.DrawString("M", 100, float64(86+inx*36))
+
+		if speedControls[inx] {
+			dc.SetHexColor("00ff00")
+		} else {
+			dc.SetHexColor("ff0000")
+		}
+		dc.DrawString("C", 130, float64(86+inx*36))
+
+		if speedControls[inx] {
+			dc.SetHexColor("00ff00")
+		} else {
+			dc.SetHexColor("ff0000")
+		}
+		dc.DrawString("T", 160, float64(86+inx*36))
 	}
 
 	err = sv.blipFullImage(img)

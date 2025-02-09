@@ -6,6 +6,33 @@ import (
 	"slotman/things/pololu/mxt550"
 )
 
+func (sv *Service) GetMotoronsAttached() (tracks []bool) {
+
+	tracks = make([]bool, 8)
+
+	if sv.mxt550Motoron1 != nil {
+		tracks[0] = true
+		tracks[1] = true
+	}
+
+	if sv.mxt550Motoron2 != nil {
+		tracks[2] = true
+		tracks[3] = true
+	}
+
+	if sv.mxt550Motoron3 != nil {
+		tracks[4] = true
+		tracks[5] = true
+	}
+
+	if sv.mxt550Motoron4 != nil {
+		tracks[6] = true
+		tracks[7] = true
+	}
+
+	return
+}
+
 func (sv *Service) SetSpeed(track int, percent float64, now bool) (err error) {
 
 	var motor byte

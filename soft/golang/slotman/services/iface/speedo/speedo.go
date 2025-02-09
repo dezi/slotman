@@ -12,6 +12,8 @@ type Interface interface {
 	GetName() (name provider.Service)
 
 	SetSpeed(track int, percent float64, now bool) (err error)
+
+	GetMotoronsAttached() (tracks []bool)
 }
 
 func GetInstance() (iface Interface, err error) {

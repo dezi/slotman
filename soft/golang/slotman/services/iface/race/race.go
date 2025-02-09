@@ -2,6 +2,7 @@ package race
 
 import (
 	"slotman/services/impl/provider"
+	"slotman/services/type/race"
 )
 
 const (
@@ -10,6 +11,8 @@ const (
 
 type Interface interface {
 	GetName() (name provider.Service)
+
+	GetRaceState() (state race.RaceState)
 
 	OnAmpelClickShort()
 	OnAmpelClickLong()

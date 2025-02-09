@@ -23,7 +23,7 @@ func (sv *Service) DoControlTask() {
 	case 1:
 		sv.displayTeams()
 	case 2:
-		//sv.displayPilots()
+		sv.displayPilots()
 	}
 
 	sv.loopCount++
@@ -164,11 +164,35 @@ func (sv *Service) displayPilots() {
 
 	sv.pilotIndex = (sv.pilotIndex + 1) % len(pilots)
 
-	img, err := sv.plt.GetScaledPilotPic(pilots[sv.pilotIndex], 240)
+	pilot := pilots[sv.pilotIndex]
+
+	img, err := sv.plt.GetScaledPilotPic(pilot, 240)
 	if err != nil {
 		log.Cerror(err)
 		return
 	}
+
+	//dc := gg.NewContextForRGBA(img)
+	//
+	//teams := sv.tms.GetAllTeams()
+	//
+	//for _, team := range teams {
+	//
+	//	if pilot.Team != team.Name {
+	//		continue
+	//	}
+	//
+	//	var teamImg *image.RGBA
+	//	teamImg, err = sv.tms.GetCircleTeamLogo(team, circleSize*2)
+	//	if err != nil {
+	//		log.Cerror(err)
+	//		continue
+	//	}
+	//
+	//	dc.DrawImage(teamImg, 120-circleSize, 240-circleSize*2)
+	//
+	//	break
+	//}
 
 	err = sv.blipFullImage(img)
 	log.Cerror(err)
@@ -185,8 +209,6 @@ func (sv *Service) displayTeams() {
 	sv.teamIndex = (sv.teamIndex + 1) % len(teams)
 
 	team := teams[sv.teamIndex]
-
-	log.Printf("#################### team=%s", team.Name)
 
 	img, err := sv.tms.GetScaledTeamLogo(team, 240)
 	if err != nil {

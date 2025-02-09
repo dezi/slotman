@@ -16,6 +16,7 @@ type Interface interface {
 	GetAllTeams() (teams []*slotman.Team)
 	GetTeam(name string) (team *slotman.Team, err error)
 	GetScaledTeamLogo(team *slotman.Team, size int) (img *image.RGBA, err error)
+	GetCircleTeamLogo(team *slotman.Team, size int) (img *image.RGBA, err error)
 
 	UpdateTeam(team *slotman.Team)
 }

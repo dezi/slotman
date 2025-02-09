@@ -5,8 +5,6 @@ import (
 	"fmt"
 	"golang.org/x/image/draw"
 	"image"
-	"image/png"
-	"path/filepath"
 	"slotman/services/type/slotman"
 	"slotman/utils/imaging"
 	"slotman/utils/log"
@@ -56,23 +54,14 @@ func (sv *Service) GetScaledTeamLogo(team *slotman.Team, size int) (img *image.R
 	return
 }
 
-func GetCircleTeamLogo(logo string, size int) (img *image.RGBA, err error) {
+func (sv *Service) GetCircleTeamLogo(team *slotman.Team, size int) (img *image.RGBA, err error) {
 
-	input, err := embedFs.Open(filepath.Join("embeds", logo))
+	img, err = sv.GetScaledTeamLogo(team, size)
 	if err != nil {
-		log.Cerror(err)
 		return
 	}
 
-	defer func() { _ = input.Close() }()
-
-	src, err := png.Decode(input)
-	if err != nil {
-		log.Cerror(err)
-		return
-	}
-
-	img, err = imaging.ScaleToCircle(src, size, 2, "ffffff")
+	img, err = imaging.ScaleToCircle(img, size, 8, "e0bf78")
 	return
 }
 

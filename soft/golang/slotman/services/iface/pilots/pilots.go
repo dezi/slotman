@@ -15,6 +15,7 @@ type Interface interface {
 
 	GetAllPilots() (pilots []*slotman.Pilot)
 	GetScaledPilotPic(pilot *slotman.Pilot, size int) (img *image.RGBA, err error)
+	GetCircularPilotPic(pilot *slotman.Pilot, size int) (img *image.RGBA, err error)
 
 	UpdatePilot(pilot *slotman.Pilot)
 }

@@ -10,23 +10,28 @@ import (
 	"slotman/utils/log"
 	"slotman/utils/simple"
 	"strings"
+	"time"
 )
 
 func (sv *Service) DoControlTask() {
+
 	sv.checkDisplays()
-	sv.displayState()
-	//sv.displayTeams()
-	//sv.displayPilots()
+
+	switch sv.loopCount % 3 {
+	case 0:
+		sv.displayState()
+	case 1:
+		sv.displayTeams()
+	case 2:
+		//sv.displayPilots()
+	}
+
 	sv.loopCount++
 }
 
 func (sv *Service) displayState() {
 
 	if sv.isProxyServer {
-		return
-	}
-
-	if sv.loopCount%3 != 0 {
 		return
 	}
 
@@ -61,7 +66,7 @@ func (sv *Service) displayHardware(img *image.RGBA) {
 	dc.SetHexColor("#00000080")
 	dc.Fill()
 
-	dc.SetHexColor("e0bf78")
+	dc.SetHexColor(goldColor)
 	dc.SetFontFace(sv.faceBoldLarge)
 	dc.DrawStringAnchored("Host", 120, 44, 0.5, 0.0)
 	dc.DrawStringAnchored("____", 120, 48, 0.5, 0.0)
@@ -115,14 +120,14 @@ func (sv *Service) displayControls(img *image.RGBA) {
 	dc.SetHexColor("#00000080")
 	dc.Fill()
 
-	dc.SetHexColor("e0bf78")
+	dc.SetHexColor(goldColor)
 	dc.SetFontFace(sv.faceBoldLarge)
 	dc.DrawStringAnchored("Controls", 120, 44, 0.5, 0.0)
 	dc.DrawStringAnchored("________", 120, 48, 0.5, 0.0)
 
 	for inx := 0; inx < 4; inx++ {
 
-		dc.SetHexColor("e0bf78")
+		dc.SetHexColor(goldColor)
 		text := fmt.Sprintf("%d:", inx+1)
 		dc.DrawString(text, 60, float64(86+inx*36))
 
@@ -155,10 +160,6 @@ func (sv *Service) displayPilots() {
 		return
 	}
 
-	if sv.loopCount%3 != 1 {
-		return
-	}
-
 	pilots := sv.plt.GetAllPilots()
 
 	sv.pilotIndex = (sv.pilotIndex + 1) % len(pilots)
@@ -179,15 +180,15 @@ func (sv *Service) displayTeams() {
 		return
 	}
 
-	if sv.loopCount%3 != 2 {
-		return
-	}
-
 	teams := sv.tms.GetAllTeams()
 
 	sv.teamIndex = (sv.teamIndex + 1) % len(teams)
 
-	img, err := sv.tms.GetScaledTeamLogo(teams[sv.teamIndex], 240)
+	team := teams[sv.teamIndex]
+
+	log.Printf("#################### team=%s", team.Name)
+
+	img, err := sv.tms.GetScaledTeamLogo(team, 240)
 	if err != nil {
 		log.Cerror(err)
 		return
@@ -195,6 +196,52 @@ func (sv *Service) displayTeams() {
 
 	err = sv.blipFullImage(img)
 	log.Cerror(err)
+
+	dc := gg.NewContextForRGBA(img)
+
+	pilots := sv.plt.GetAllPilots()
+
+	members := 0
+	for _, pilot := range pilots {
+		if pilot.Team == team.Name {
+			members++
+		}
+	}
+
+	positions := evenPositions
+	if members%2 == 1 {
+		positions = oddPositions
+	}
+
+	count := 0
+
+	for _, pilot := range pilots {
+
+		if pilot.Team != team.Name {
+			continue
+		}
+
+		time.Sleep(time.Millisecond * 1000)
+
+		var pilotImg *image.RGBA
+		pilotImg, err = sv.plt.GetCircularPilotPic(pilot, circleSize)
+		if err != nil {
+			log.Cerror(err)
+			continue
+		}
+
+		if (count+1)<<1 > len(positions) {
+			break
+		}
+
+		dc.DrawImage(pilotImg, int(positions[0+count<<1]), int(positions[1+count<<1]))
+		count++
+
+		err = sv.blipFullImage(img)
+		log.Cerror(err)
+	}
+
+	time.Sleep(time.Millisecond * 2000)
 }
 
 func (sv *Service) checkDisplays() {

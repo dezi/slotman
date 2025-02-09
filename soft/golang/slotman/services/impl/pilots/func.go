@@ -7,6 +7,7 @@ import (
 	"slotman/utils/imaging"
 	"slotman/utils/log"
 	"slotman/utils/simple"
+	"sort"
 )
 
 func (sv *Service) GetAllPilots() (pilots []*slotman.Pilot) {
@@ -17,6 +18,15 @@ func (sv *Service) GetAllPilots() (pilots []*slotman.Pilot) {
 	for _, pilot := range sv.pilots {
 		pilots = append(pilots, pilot)
 	}
+
+	sort.Slice(pilots, func(i, j int) bool {
+
+		if pilots[i].LastName != pilots[j].LastName {
+			return pilots[i].LastName < pilots[j].LastName
+		}
+
+		return pilots[i].FirstName < pilots[j].FirstName
+	})
 
 	return
 }
@@ -32,6 +42,17 @@ func (sv *Service) GetScaledPilotPic(pilot *slotman.Pilot, size int) (img *image
 	img = image.NewRGBA(image.Rect(0, 0, size, size))
 	draw.NearestNeighbor.Scale(img, img.Rect, src, src.Bounds(), draw.Over, nil)
 
+	return
+}
+
+func (sv *Service) GetCircularPilotPic(pilot *slotman.Pilot, size int) (img *image.RGBA, err error) {
+
+	img, err = sv.GetScaledPilotPic(pilot, size)
+	if err != nil {
+		return
+	}
+
+	img, err = imaging.ScaleToCircle(img, size, 8, "e0bf78")
 	return
 }
 

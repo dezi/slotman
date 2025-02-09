@@ -10,6 +10,7 @@ import (
 	"slotman/services/type/slotman"
 	"slotman/utils/imaging"
 	"slotman/utils/log"
+	"sort"
 )
 
 func (sv *Service) GetAllTeams() (teams []*slotman.Team) {
@@ -20,6 +21,10 @@ func (sv *Service) GetAllTeams() (teams []*slotman.Team) {
 	for _, team := range sv.teams {
 		teams = append(teams, team)
 	}
+
+	sort.Slice(teams, func(i, j int) bool {
+		return teams[i].Name < teams[j].Name
+	})
 
 	return
 }

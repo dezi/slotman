@@ -65,7 +65,11 @@ func ScaleToCircle(src image.Image, size, borderWidth int, borderColor string) (
 
 	size -= borderWidth
 
-	dc.DrawRoundedRectangle(0, 0, float64(size), float64(size), float64(size/2))
+	dc.DrawRoundedRectangle(
+		float64(borderWidth/2), float64(borderWidth/2),
+		float64(size), float64(size),
+		float64(size/2))
+
 	dc.Clip()
 
 	dc.DrawImage(srcScaled, 0, 0)

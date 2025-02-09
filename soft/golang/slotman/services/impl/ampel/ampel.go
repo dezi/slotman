@@ -16,6 +16,9 @@ type Service struct {
 	ampelGpio *mcp23017.MCP23017
 	ampelLock sync.Mutex
 
+	waitingTracks      int
+	waitingTracksReady []int
+
 	ampelState AmpelState
 	roundsToGo int
 

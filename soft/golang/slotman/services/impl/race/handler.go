@@ -29,24 +29,27 @@ func (sv *Service) OnAmpelClickShort() {
 		sv.amp.SetRoundsToGo(sv.roundsToGo)
 	}
 
+	if sv.raceState == race.RaceStateRaceWaiting {
+		sv.raceState = race.RaceStateRaceStart
+	}
+
 	if sv.raceState == race.RaceStateRaceRunning {
 		sv.raceState = race.RaceStateRaceSuspended
-		sv.amp.SetRaceSuspend()
 		return
 	}
 
 	if sv.raceState == race.RaceStateRaceSuspended {
 		sv.raceState = race.RaceStateRaceRunning
-		sv.amp.SetRaceRestart()
 		return
 	}
 }
 
 func (sv *Service) OnAmpelClickLong() {
+
 	log.Printf("OnAmpelClickLong...")
 
 	if sv.raceState == race.RaceStateIdle {
-		sv.raceState = race.RaceStateRaceStart
+		sv.raceState = race.RaceStateRaceWaiting
 		return
 	}
 

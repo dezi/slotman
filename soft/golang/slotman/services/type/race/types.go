@@ -7,6 +7,7 @@ type RaceState string
 const (
 	RaceStateIdle          RaceState = "state.idle"
 	RaceStateRaceStart     RaceState = "state.race.start"
+	RaceStateRaceWaiting   RaceState = "state.race.waiting"
 	RaceStateRaceRunning   RaceState = "state.race.running"
 	RaceStateRaceSuspended RaceState = "state.race.suspended"
 	RaceStateRaceFinished  RaceState = "state.race.finished"

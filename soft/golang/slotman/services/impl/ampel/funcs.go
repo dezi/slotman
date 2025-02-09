@@ -14,12 +14,22 @@ func (sv *Service) SetRaceStart() {
 	go sv.patternRaceStart()
 }
 
-func (sv *Service) SetRaceSuspend() {
-	sv.ampelState = AmpelStateRaceSuspend
-	go sv.patternRaceSuspend()
+func (sv *Service) SetRaceWaiting(tracksReady []int) {
+
+	sv.waitingTracksReady = tracksReady
+
+	if sv.ampelState != AmpelStateRaceWaiting {
+		sv.ampelState = AmpelStateRaceWaiting
+		go sv.patternRaceWaiting()
+	}
 }
 
-func (sv *Service) SetRaceRestart() {
-	sv.ampelState = AmpelStateRaceRestart
-	go sv.patternRaceRestart()
+func (sv *Service) SetRaceSuspended() {
+	sv.ampelState = AmpelStateRaceSuspended
+	go sv.patternRaceSuspended()
+}
+
+func (sv *Service) SetRaceRunning() {
+	sv.ampelState = AmpelStateRaceRunning
+	go sv.patternRaceRunning()
 }

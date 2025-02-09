@@ -6,14 +6,68 @@ import (
 	"time"
 )
 
-func (sv *Service) patternRaceSuspend() {
-	log.Printf("Pattern race suspend started...")
-	defer log.Printf("Pattern race suspend done.")
+func (sv *Service) patternRaceWaiting() {
+
+	log.Printf("Pattern race waiting started...")
+	defer log.Printf("Pattern race waiting done.")
 
 	state := 0
 	delay := 250
 
-	for !sv.doExit && sv.ampelState == AmpelStateRaceSuspend {
+	for !sv.doExit && sv.ampelState == AmpelStateRaceWaiting {
+
+		ampelGpio := sv.ampelGpio
+		if ampelGpio == nil {
+			time.Sleep(time.Second)
+			continue
+		}
+
+		sv.ampelLock.Lock()
+
+		pins, _ := ampelGpio.ReadPins()
+		pins &= 0x8000
+
+		for track, ready := range sv.waitingTracksReady {
+
+			if track > 4 || ready == 0 {
+				continue
+			}
+
+			if ready == 1 {
+				if state%2 == 0 {
+					pins |= 1 << pinsYellow[track]
+				}
+			}
+
+			if ready == 2 {
+				pins |= 1 << pinsYellow[track]
+				pins |= 1 << pinsGreen[track]
+			}
+		}
+
+		_ = ampelGpio.WritePins(pins)
+
+		sv.ampelLock.Unlock()
+
+		state = (state + 1) % 2
+
+		wait := delay
+		for !sv.doExit && sv.ampelState == AmpelStateRaceWaiting && wait > 0 {
+			time.Sleep(time.Millisecond * 20)
+			wait -= 20
+		}
+	}
+}
+
+func (sv *Service) patternRaceSuspended() {
+
+	log.Printf("Pattern race suspended started...")
+	defer log.Printf("Pattern race suspended done.")
+
+	state := 0
+	delay := 250
+
+	for !sv.doExit && sv.ampelState == AmpelStateRaceSuspended {
 
 		ampelGpio := sv.ampelGpio
 		if ampelGpio == nil {
@@ -50,21 +104,22 @@ func (sv *Service) patternRaceSuspend() {
 		state = (state + 1) % 4
 
 		wait := delay
-		for !sv.doExit && sv.ampelState == AmpelStateRaceSuspend && wait > 0 {
+		for !sv.doExit && sv.ampelState == AmpelStateRaceSuspended && wait > 0 {
 			time.Sleep(time.Millisecond * 20)
 			wait -= 20
 		}
 	}
 }
 
-func (sv *Service) patternRaceRestart() {
-	log.Printf("Pattern race restart started...")
-	defer log.Printf("Pattern race restart done.")
+func (sv *Service) patternRaceRunning() {
+
+	log.Printf("Pattern race running started...")
+	defer log.Printf("Pattern race running done.")
 
 	state := 0
 	delay := 250
 
-	for !sv.doExit && sv.ampelState == AmpelStateRaceRestart {
+	for !sv.doExit && sv.ampelState == AmpelStateRaceRunning {
 
 		ampelGpio := sv.ampelGpio
 		if ampelGpio == nil {
@@ -97,7 +152,7 @@ func (sv *Service) patternRaceRestart() {
 		}
 
 		wait := delay
-		for !sv.doExit && sv.ampelState == AmpelStateRaceRestart && wait > 0 {
+		for !sv.doExit && sv.ampelState == AmpelStateRaceRunning && wait > 0 {
 			time.Sleep(time.Millisecond * 20)
 			wait -= 20
 		}

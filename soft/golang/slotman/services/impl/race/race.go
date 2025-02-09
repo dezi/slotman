@@ -17,7 +17,8 @@ type Service struct {
 	raceState     raceTypes.RaceState
 	raceStateDone raceTypes.RaceState
 
-	roundsToGo int
+	tracksReady []int
+	roundsToGo  int
 
 	servicesReady bool
 	looperStarted bool
@@ -38,6 +39,7 @@ func StartService() (err error) {
 	singleTon = &Service{}
 
 	singleTon.raceState = raceTypes.RaceStateIdle
+	singleTon.tracksReady = make([]int, 8)
 
 	provider.SetProvider(singleTon)
 
@@ -68,6 +70,6 @@ func (sv *Service) GetName() (name provider.Service) {
 }
 
 func (sv *Service) GetControlOptions() (interval time.Duration) {
-	interval = time.Second * 60
+	interval = time.Second * 10
 	return
 }

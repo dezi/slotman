@@ -28,6 +28,15 @@ func (sv *Service) looper() {
 
 		case race.RaceStateRaceStart:
 			sv.amp.SetRaceStart()
+
+		case race.RaceStateRaceRunning:
+			sv.amp.SetRaceRunning()
+
+		case race.RaceStateRaceSuspended:
+			sv.amp.SetRaceSuspended()
+
+		case race.RaceStateRaceWaiting:
+			sv.amp.SetRaceWaiting(sv.tracksReady)
 		}
 	}
 }

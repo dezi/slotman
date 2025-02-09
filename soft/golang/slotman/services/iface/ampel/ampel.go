@@ -16,8 +16,10 @@ type Interface interface {
 	SetIdle()
 
 	SetRaceStart()
-	SetRaceSuspend()
-	SetRaceRestart()
+	SetRaceRunning()
+	SetRaceSuspended()
+
+	SetRaceWaiting(tracksReady []int)
 }
 
 func GetInstance() (iface Interface, err error) {

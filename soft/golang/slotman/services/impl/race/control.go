@@ -3,12 +3,15 @@ package race
 import (
 	"slotman/services/iface/ampel"
 	"slotman/services/iface/speedo"
+	"slotman/utils/log"
 	"time"
 )
 
 func (sv *Service) DoControlTask() {
 	sv.checkServices()
 	sv.checkLooper()
+
+	log.Printf("Race raceState=%s", sv.raceState)
 }
 
 func (sv *Service) checkServices() {

@@ -17,13 +17,15 @@ func (sv *Service) DoControlTask() {
 
 	sv.checkDisplays()
 
-	switch sv.loopCount % 3 {
-	case 0:
-		sv.displayState()
-	case 1:
-		sv.displayTeams()
-	case 2:
-		sv.displayPilots()
+	state := sv.rce.GetRaceState()
+
+	if state == race.RaceStateIdle {
+		switch sv.loopCount % 2 {
+		case 0:
+			sv.displayState()
+		case 1:
+			sv.displayTeams()
+		}
 	}
 
 	sv.loopCount++
@@ -45,11 +47,11 @@ func (sv *Service) displayState() {
 
 	if raceState == race.RaceStateIdle {
 
-		if sv.loopCount%6 == 0 {
+		if sv.loopCount%4 == 0 {
 			sv.displayHardware(img)
 		}
 
-		if sv.loopCount%6 == 3 {
+		if sv.loopCount%4 == 2 {
 			sv.displayControls(img)
 		}
 	}

@@ -3,9 +3,13 @@ package turner
 import (
 	"fmt"
 	"github.com/fogleman/gg"
+	"image"
+	"os"
 	"slotman/services/type/race"
 	"slotman/things/galaxycore/gc9a01"
 	"slotman/utils/log"
+	"slotman/utils/simple"
+	"strings"
 )
 
 func (sv *Service) DoControlTask() {
@@ -34,12 +38,22 @@ func (sv *Service) displayState() {
 
 	raceState := sv.rce.GetRaceState()
 
-	motoronsAttached := sv.sdo.GetMotoronsAttached()
-	speedControls := sv.sdi.GetSpeedControlsAttached()
-
 	if raceState == race.RaceStateIdle {
 
+		if sv.loopCount%6 == 0 {
+			sv.displayHardware(img)
+		}
+
+		if sv.loopCount%6 == 3 {
+			sv.displayControls(img)
+		}
 	}
+
+	err = sv.blipFullImage(img)
+	log.Cerror(err)
+}
+
+func (sv *Service) displayHardware(img *image.RGBA) {
 
 	dc := gg.NewContextForRGBA(img)
 
@@ -50,6 +64,58 @@ func (sv *Service) displayState() {
 	dc.SetHexColor("e0bf78")
 	dc.SetFontFace(sv.faceBoldLarge)
 	dc.DrawStringAnchored("Hardware", 120, 44, 0.5, 0.0)
+	dc.DrawStringAnchored("________", 120, 48, 0.5, 0.0)
+
+	//
+	// Hostname.
+	//
+
+	hostName, _ := os.Hostname()
+	parts := strings.Split(hostName, ".")
+	hostName = parts[0]
+
+	dc.SetFontFace(sv.faceBoldNormal)
+	dc.DrawStringAnchored(hostName, 120, float64(86+0*36), 0.5, 0.0)
+
+	//
+	// Ip-Address.
+	//
+
+	ipAddr := ""
+
+	ip, err := simple.GetLocalIPV4()
+	if err != nil {
+		ipAddr = "No IP-Address"
+	} else {
+		ipAddr = ip.String()
+	}
+
+	dc.DrawStringAnchored(ipAddr, 120, float64(86+1*36), 0.5, 0.0)
+
+	//
+	// Operating system.
+	//
+
+	goos := simple.FirstUpper(simple.GOOS)
+
+	dc.DrawStringAnchored(goos, 120, float64(86+2*36), 0.5, 0.0)
+}
+
+func (sv *Service) displayControls(img *image.RGBA) {
+
+	tachosAttached := sv.tco.GetTachosAttached()
+	motoronsAttached := sv.sdo.GetMotoronsAttached()
+	speedControlsAttached := sv.sdi.GetSpeedControlsAttached()
+
+	dc := gg.NewContextForRGBA(img)
+
+	dc.DrawRectangle(0, 0, 240, 240)
+	dc.SetHexColor("#00000080")
+	dc.Fill()
+
+	dc.SetHexColor("e0bf78")
+	dc.SetFontFace(sv.faceBoldLarge)
+	dc.DrawStringAnchored("Controls", 120, 44, 0.5, 0.0)
 	dc.DrawStringAnchored("________", 120, 48, 0.5, 0.0)
 
 	for inx := 0; inx < 4; inx++ {
@@ -65,23 +131,20 @@ func (sv *Service) displayState() {
 		}
 		dc.DrawString("M", 100, float64(86+inx*36))
 
-		if speedControls[inx] {
+		if speedControlsAttached[inx] {
 			dc.SetHexColor("00ff00")
 		} else {
 			dc.SetHexColor("ff0000")
 		}
 		dc.DrawString("C", 130, float64(86+inx*36))
 
-		if speedControls[inx] {
+		if tachosAttached[inx] {
 			dc.SetHexColor("00ff00")
 		} else {
 			dc.SetHexColor("ff0000")
 		}
 		dc.DrawString("T", 160, float64(86+inx*36))
 	}
-
-	err = sv.blipFullImage(img)
-	log.Cerror(err)
 }
 
 func (sv *Service) displayPilots() {

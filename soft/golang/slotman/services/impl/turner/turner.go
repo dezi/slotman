@@ -10,6 +10,7 @@ import (
 	"slotman/services/iface/race"
 	"slotman/services/iface/speedi"
 	"slotman/services/iface/speedo"
+	"slotman/services/iface/tacho"
 	"slotman/services/iface/teams"
 	"slotman/services/iface/turner"
 	"slotman/services/impl/provider"
@@ -26,6 +27,7 @@ type Service struct {
 	plt pilots.Interface
 	sdi speedi.Interface
 	sdo speedo.Interface
+	tco tacho.Interface
 
 	turnDisplay1 *gc9a01.GC9A01
 	turnDisplay2 *gc9a01.GC9A01
@@ -89,6 +91,12 @@ func StartService() (err error) {
 		return
 	}
 
+	singleTon.tco, err = tacho.GetInstance()
+	if err != nil {
+		log.Cerror(err)
+		return
+	}
+
 	singleTon.rce, err = race.GetInstance()
 	if err != nil {
 		log.Cerror(err)
@@ -112,7 +120,7 @@ func StartService() (err error) {
 
 	singleTon.faceBoldNormal = truetype.NewFace(
 		singleTon.fontBold,
-		&truetype.Options{Size: 22})
+		&truetype.Options{Size: 24})
 
 	singleTon.faceBoldLarge = truetype.NewFace(
 		singleTon.fontBold,
@@ -120,7 +128,7 @@ func StartService() (err error) {
 
 	singleTon.faceRegularNormal = truetype.NewFace(
 		singleTon.fontRegular,
-		&truetype.Options{Size: 22})
+		&truetype.Options{Size: 24})
 
 	singleTon.faceRegularLarge = truetype.NewFace(
 		singleTon.fontRegular,

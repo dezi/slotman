@@ -10,6 +10,8 @@ const (
 
 type Interface interface {
 	GetName() (name provider.Service)
+
+	GetTachosAttached() (tracks []bool)
 }
 
 func GetInstance() (iface Interface, err error) {

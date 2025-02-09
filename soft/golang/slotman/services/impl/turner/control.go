@@ -17,7 +17,7 @@ func (sv *Service) DoControlTask() {
 
 	sv.checkDisplays()
 
-	if sv.isProxyServer {
+	if !sv.isProxyServer {
 
 		state := sv.rce.GetRaceState()
 

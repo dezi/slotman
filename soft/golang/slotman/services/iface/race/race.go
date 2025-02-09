@@ -20,6 +20,12 @@ type Interface interface {
 	OnRaceStarted()
 
 	OnMotoronVoltage(tracks []int, voltageMv uint32)
+
+	OnEnterStartPosition(track int)
+	OnLeaveStartPosition(track int)
+	OnRoundCompleted(track int, roundMillis int)
+	OnSpeedMeasurement(track int, speed float64)
+	OnEmergencyStopNow(track int)
 }
 
 func GetInstance() (iface Interface, err error) {

@@ -35,13 +35,13 @@ func (sv *Service) patternRaceWaiting() {
 
 			if ready == 1 {
 				if state%2 == 0 {
-					pins |= 1 << pinsYellow[track]
+					pins |= 1 << pinsYellow[4-track]
 				}
 			}
 
 			if ready == 2 {
-				pins |= 1 << pinsYellow[track]
-				pins |= 1 << pinsGreen[track]
+				pins |= 1 << pinsYellow[4-track]
+				pins |= 1 << pinsGreen[4-track]
 			}
 		}
 

@@ -3,6 +3,7 @@ package race
 import (
 	"slotman/services/iface/ampel"
 	raceIface "slotman/services/iface/race"
+	"slotman/services/iface/speedi"
 	"slotman/services/iface/speedo"
 	"slotman/services/impl/provider"
 	raceTypes "slotman/services/type/race"
@@ -12,6 +13,7 @@ import (
 
 type Service struct {
 	amp ampel.Interface
+	sdi speedi.Interface
 	sdo speedo.Interface
 
 	raceState     raceTypes.RaceState

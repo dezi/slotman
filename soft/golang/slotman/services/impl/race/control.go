@@ -2,6 +2,7 @@ package race
 
 import (
 	"slotman/services/iface/ampel"
+	"slotman/services/iface/speedi"
 	"slotman/services/iface/speedo"
 	"slotman/utils/log"
 	"time"
@@ -29,6 +30,11 @@ func (sv *Service) checkServices() {
 	var tryErr error
 
 	sv.amp, tryErr = ampel.GetInstance()
+	if tryErr != nil {
+		return
+	}
+
+	sv.sdi, tryErr = speedi.GetInstance()
 	if tryErr != nil {
 		return
 	}

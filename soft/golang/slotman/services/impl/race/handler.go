@@ -65,3 +65,25 @@ func (sv *Service) OnRaceStarted() {
 	log.Printf("OnRaceStarted...")
 	sv.raceState = race.RaceStateRaceRunning
 }
+
+func (sv *Service) OnEnterStartPosition(track int) {
+	log.Printf("OnEnterStartPosition track=%d", track)
+	sv.tracksReady[track] = 2
+}
+
+func (sv *Service) OnLeaveStartPosition(track int) {
+	log.Printf("OnLeaveStartPosition track=%d", track)
+	sv.tracksReady[track] = 1
+}
+
+func (sv *Service) OnRoundCompleted(track int, roundMillis int) {
+	log.Printf("OnRoundCompleted     track=%d secs=%0.3f", track, float64(roundMillis)/1000)
+}
+
+func (sv *Service) OnSpeedMeasurement(track int, speed float64) {
+	log.Printf("OnSpeedMeasurement   track=%d speed=%5.1f km/h", track, speed)
+}
+
+func (sv *Service) OnEmergencyStopNow(track int) {
+	log.Printf("OnEmergencyStopNow   track=%d", track)
+}

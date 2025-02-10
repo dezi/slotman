@@ -2,8 +2,10 @@ package race
 
 import (
 	"slotman/services/iface/ampel"
+	"slotman/services/iface/pilots"
 	"slotman/services/iface/speedi"
 	"slotman/services/iface/speedo"
+	"slotman/services/iface/teams"
 	"slotman/utils/log"
 	"time"
 )
@@ -44,7 +46,26 @@ func (sv *Service) checkServices() {
 		return
 	}
 
+	sv.plt, tryErr = pilots.GetInstance()
+	if tryErr != nil {
+		return
+	}
+
+	sv.tms, tryErr = teams.GetInstance()
+	if tryErr != nil {
+		return
+	}
+
 	sv.servicesReady = true
+
+	//
+	// Test fake race start.
+	//
+
+	sv.OnAmpelClickLong()
+
+	sv.tracksReady[0] = 2
+	sv.tracksReady[1] = 2
 }
 
 func (sv *Service) checkLooper() {

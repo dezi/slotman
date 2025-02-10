@@ -41,6 +41,7 @@ type Service struct {
 	faceRegularNormal font.Face
 	faceRegularLarge  font.Face
 
+	raceIndex  int
 	teamIndex  int
 	pilotIndex int
 

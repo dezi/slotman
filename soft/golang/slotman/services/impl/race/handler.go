@@ -1,8 +1,11 @@
 package race
 
 import (
+	"math/rand"
 	"slotman/services/type/race"
+	"slotman/services/type/slotman"
 	"slotman/utils/log"
+	"sort"
 	"time"
 )
 
@@ -51,6 +54,33 @@ func (sv *Service) OnAmpelClickLong() {
 			sv.roundsToGo = 5
 		}
 
+		//
+		// Fake pilots setup.
+		//
+
+		pilots := sv.plt.GetAllPilots()
+
+		for shuffle := 0; shuffle < len(pilots); shuffle++ {
+
+			inx1 := rand.Intn(len(pilots))
+			inx2 := rand.Intn(len(pilots))
+
+			pilot := pilots[inx1]
+			pilots[inx1] = pilots[inx2]
+			pilots[inx2] = pilot
+		}
+
+		for tracks := 0; tracks < slotman.MaxTracks; tracks++ {
+
+			if tracks >= len(pilots) {
+				continue
+			}
+
+			sv.raceRecords[tracks] = race.RaceRecord{
+				Pilot: pilots[tracks],
+			}
+		}
+
 		sv.raceState = race.RaceStateRaceWaiting
 		return
 	}
@@ -90,10 +120,64 @@ func (sv *Service) OnLeaveStartPosition(track int) {
 }
 
 func (sv *Service) OnRoundCompleted(track int, roundMillis int) {
-	log.Printf("OnRoundCompleted     track=%d secs=%0.3f", track, float64(roundMillis)/1000)
+
+	if track < 0 || track >= slotman.MaxTracks {
+		return
+	}
+
+	secs := float64(roundMillis) / 1000
+
+	sv.raceRecords[track].Rounds++
+	sv.raceRecords[track].ActRound = secs
+	sv.raceRecords[track].LastRoundTime = time.Now()
+
+	if sv.raceRecords[track].TopRound == 0 ||
+		sv.raceRecords[track].TopRound > sv.raceRecords[track].ActRound {
+		sv.raceRecords[track].TopRound = sv.raceRecords[track].ActRound
+	}
+
+	log.Printf("OnRoundCompleted     track=%d secs=%0.3f", track, secs)
+
+	//
+	// Re-score pilots order.
+	//
+
+	sortRecords := make([]*race.RaceRecord, slotman.MaxTracks)
+
+	for inx := 0; inx < slotman.MaxTracks; inx++ {
+		sortRecords[inx] = &sv.raceRecords[inx]
+	}
+
+	sort.Slice(sortRecords, func(i, j int) bool {
+		if sortRecords[i].Rounds == sortRecords[j].Rounds {
+
+			return sortRecords[i].LastRoundTime.Unix() < sortRecords[j].LastRoundTime.Unix()
+
+		} else {
+
+			return sortRecords[i].Rounds > sortRecords[j].Rounds
+		}
+	})
+
+	for position, record := range sortRecords {
+		record.Position = position + 1
+	}
 }
 
 func (sv *Service) OnSpeedMeasurement(track int, speed float64) {
+
+	if track < 0 || track >= slotman.MaxTracks {
+		return
+	}
+
+	sv.raceRecords[track].Rounds++
+	sv.raceRecords[track].ActSpeed = speed
+
+	if sv.raceRecords[track].TopSpeed == 0 ||
+		sv.raceRecords[track].TopSpeed > sv.raceRecords[track].ActSpeed {
+		sv.raceRecords[track].TopSpeed = sv.raceRecords[track].ActSpeed
+	}
+
 	log.Printf("OnSpeedMeasurement   track=%d speed=%5.1f km/h", track, speed)
 }
 
@@ -109,11 +193,6 @@ func (sv *Service) OnEmergencyStopNow(track int) {
 
 	sv.sdo.SetTrackEnable(track, false)
 
-	err := sv.sdo.SetSpeed(track, -50, true)
-	log.Cerror(err)
-
-	time.Sleep(time.Millisecond * 250)
-
-	err = sv.sdo.SetSpeed(track, 0, true)
+	err := sv.sdo.SetSpeed(track, 0, true)
 	log.Cerror(err)
 }

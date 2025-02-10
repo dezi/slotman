@@ -2,9 +2,11 @@ package race
 
 import (
 	"slotman/services/iface/ampel"
+	"slotman/services/iface/pilots"
 	raceIface "slotman/services/iface/race"
 	"slotman/services/iface/speedi"
 	"slotman/services/iface/speedo"
+	"slotman/services/iface/teams"
 	"slotman/services/impl/provider"
 	raceTypes "slotman/services/type/race"
 	"slotman/services/type/slotman"
@@ -16,9 +18,12 @@ type Service struct {
 	amp ampel.Interface
 	sdi speedi.Interface
 	sdo speedo.Interface
+	tms teams.Interface
+	plt pilots.Interface
 
 	raceState     raceTypes.RaceState
 	raceStateDone raceTypes.RaceState
+	raceRecords   []raceTypes.RaceRecord
 
 	tracksReady   []int
 	tracksVoltage []int
@@ -47,6 +52,7 @@ func StartService() (err error) {
 
 	singleTon.tracksReady = make([]int, slotman.MaxTracks)
 	singleTon.tracksVoltage = make([]int, slotman.MaxTracks)
+	singleTon.raceRecords = make([]raceTypes.RaceRecord, slotman.MaxTracks)
 
 	provider.SetProvider(singleTon)
 

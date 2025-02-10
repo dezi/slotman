@@ -17,6 +17,9 @@ type Interface interface {
 	GetTracksVoltage() (tracksVoltage []int)
 	GetRoundsToGo() (rounds int)
 
+	GetRaceRecord(track int) (raceRecord race.RaceRecord, err error)
+	GetRaceRecords() (raceRecords []race.RaceRecord)
+
 	OnAmpelClickShort()
 	OnAmpelClickLong()
 

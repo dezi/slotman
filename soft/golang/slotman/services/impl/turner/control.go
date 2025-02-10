@@ -1,6 +1,7 @@
 package turner
 
 import (
+	"errors"
 	"fmt"
 	"github.com/fogleman/gg"
 	"image"
@@ -44,6 +45,38 @@ func (sv *Service) DoControlTask() {
 
 func (sv *Service) displayRace() {
 
+	tracksReady := sv.rce.GetTracksReady()
+
+	haveTrack := false
+
+	for inx := 0; inx < len(tracksReady); inx++ {
+
+		if tracksReady[sv.raceIndex] > 0 {
+			haveTrack = true
+			break
+		}
+
+		sv.raceIndex = (sv.raceIndex + 1) % slotman.MaxTracks
+	}
+
+	defer func() { sv.raceIndex = (sv.raceIndex + 1) % slotman.MaxTracks }()
+
+	if !haveTrack {
+		return
+	}
+
+	raceRecord, err := sv.rce.GetRaceRecord(sv.raceIndex)
+	if err != nil {
+		log.Cerror(err)
+		return
+	}
+
+	if raceRecord.Pilot == nil {
+		err = errors.New("no pilot for track")
+		log.Cerror(err)
+		return
+	}
+
 	img, err := sv.getSlotmanLogo()
 	if err != nil {
 		log.Cerror(err)
@@ -56,42 +89,38 @@ func (sv *Service) displayRace() {
 	dc.SetHexColor("#00000080")
 	dc.Fill()
 
+	pilotImg, err := sv.plt.GetCircularPilotPic(raceRecord.Pilot, 80)
+	if err != nil {
+		log.Cerror(err)
+		return
+	}
+
+	dc.DrawImage(pilotImg, 120-80/2, 8)
+
 	dc.SetHexColor(goldColor)
 	dc.SetFontFace(sv.faceBoldNormal)
 
-	text := fmt.Sprintf("Race - %d Rounds", sv.rce.GetRoundsToGo())
-	undr := strings.Repeat("_", len(text))
+	var text string
 
-	dc.DrawStringAnchored(text, 120, 44, 0.5, 0.0)
-	dc.DrawStringAnchored(undr, 120, 48, 0.5, 0.0)
+	yPos := 120.0
 
-	tracksReady := sv.rce.GetTracksReady()
-
-	yPos := 86
-
-	for track, ready := range tracksReady {
-
-		if ready == 0 {
-			continue
-		}
-
-		dc.SetHexColor(goldColor)
-		dc.SetFontFace(sv.faceBoldNormal)
-
-		text = fmt.Sprintf("%d:", track+1)
-		dc.DrawString(text, 30, float64(yPos))
-
-		text = fmt.Sprintf("%d", 12+track)
-		dc.DrawString(text, 60, float64(yPos))
-
-		text = fmt.Sprintf("%0.1fs", 2.4646)
-		dc.DrawString(text, 90, float64(yPos))
-
-		text = fmt.Sprintf("%1.0f km/h", 234.33444)
-		dc.DrawString(text, 120, float64(yPos))
-
-		yPos += 36
+	if raceRecord.Position == 0 {
+		text = fmt.Sprintf("n.a. - %d", raceRecord.Rounds)
+	} else {
+		text = fmt.Sprintf("#%d - %d", raceRecord.Position, raceRecord.Rounds)
 	}
+
+	dc.DrawStringAnchored(text, 120, yPos, 0.5, 0)
+
+	yPos += 30
+
+	text = fmt.Sprintf("%0.1f - %0.1f", raceRecord.ActRound, raceRecord.TopRound)
+	dc.DrawStringAnchored(text, 120, yPos, 0.5, 0)
+
+	yPos += 30
+
+	text = fmt.Sprintf("%0.0f - %0.0f", raceRecord.ActSpeed, raceRecord.TopSpeed)
+	dc.DrawStringAnchored(text, 120, yPos, 0.5, 0)
 
 	err = sv.blipFullImage(img)
 	log.Cerror(err)

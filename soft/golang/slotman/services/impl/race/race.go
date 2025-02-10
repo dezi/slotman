@@ -7,6 +7,7 @@ import (
 	"slotman/services/iface/speedo"
 	"slotman/services/impl/provider"
 	raceTypes "slotman/services/type/race"
+	"slotman/services/type/slotman"
 	"slotman/utils/log"
 	"time"
 )
@@ -19,8 +20,10 @@ type Service struct {
 	raceState     raceTypes.RaceState
 	raceStateDone raceTypes.RaceState
 
-	tracksReady []int
-	roundsToGo  int
+	tracksReady   []int
+	tracksVoltage []int
+
+	roundsToGo int
 
 	servicesReady bool
 	looperStarted bool
@@ -41,7 +44,9 @@ func StartService() (err error) {
 	singleTon = &Service{}
 
 	singleTon.raceState = raceTypes.RaceStateIdle
-	singleTon.tracksReady = make([]int, 8)
+
+	singleTon.tracksReady = make([]int, slotman.MaxTracks)
+	singleTon.tracksVoltage = make([]int, slotman.MaxTracks)
 
 	provider.SetProvider(singleTon)
 

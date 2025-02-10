@@ -13,6 +13,7 @@ type Interface interface {
 	GetName() (name provider.Service)
 
 	GetRaceState() (state race.RaceState)
+	GetTracksVoltage() (tracksVoltage []int)
 
 	OnAmpelClickShort()
 	OnAmpelClickLong()

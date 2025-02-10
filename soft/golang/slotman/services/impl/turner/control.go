@@ -126,6 +126,7 @@ func (sv *Service) displayControls(img *image.RGBA) {
 	tachosAttached := sv.tco.GetTachosAttached()
 	motoronsAttached := sv.sdo.GetMotoronsAttached()
 	speedControlsAttached := sv.sdi.GetSpeedControlsAttached()
+	tracksVoltage := sv.rce.GetTracksVoltage()
 
 	maxControls := 0
 	for _, attached := range speedControlsAttached {
@@ -153,32 +154,40 @@ func (sv *Service) displayControls(img *image.RGBA) {
 		showMax = 8
 	}
 
-	for inx := showMin; inx < showMax; inx++ {
+	for track := showMin; track < showMax; track++ {
 
 		dc.SetHexColor(goldColor)
-		text := fmt.Sprintf("%d:", inx+1)
-		dc.DrawString(text, 60, float64(86+inx*36))
+		dc.SetFontFace(sv.faceBoldLarge)
+		text := fmt.Sprintf("%d:", track+1)
+		dc.DrawString(text, 30, float64(86+track*36))
 
-		if motoronsAttached[inx] {
+		if motoronsAttached[track] {
 			dc.SetHexColor("00ff00")
 		} else {
 			dc.SetHexColor("ff0000")
 		}
-		dc.DrawString("M", 100, float64(86+inx*36))
+		dc.DrawString("M", 60, float64(86+track*36))
 
-		if speedControlsAttached[inx] {
+		if speedControlsAttached[track] {
 			dc.SetHexColor("00ff00")
 		} else {
 			dc.SetHexColor("ff0000")
 		}
-		dc.DrawString("C", 130, float64(86+inx*36))
+		dc.DrawString("C", 90, float64(86+track*36))
 
-		if tachosAttached[inx] {
+		if tachosAttached[track] {
 			dc.SetHexColor("00ff00")
 		} else {
 			dc.SetHexColor("ff0000")
 		}
-		dc.DrawString("T", 160, float64(86+inx*36))
+		dc.DrawString("T", 120, float64(86+track*36))
+
+		if motoronsAttached[track] {
+			text = fmt.Sprintf("%0.1fV", float64(tracksVoltage[track])/1000)
+			dc.SetHexColor("00ff00")
+			dc.SetFontFace(sv.faceRegularNormal)
+			dc.DrawString(text, 145, float64(86+track*36))
+		}
 	}
 }
 

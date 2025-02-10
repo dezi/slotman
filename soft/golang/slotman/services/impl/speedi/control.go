@@ -1,6 +1,7 @@
 package speedi
 
 import (
+	"slotman/services/type/slotman"
 	"slotman/things/ti/ads1115"
 	"slotman/utils/log"
 )
@@ -19,8 +20,8 @@ func (sv *Service) checkSpeedControls() {
 
 	log.Printf("Initializing speed controls...")
 
-	sv.speedControlAttached = make([]bool, maxTracks)
-	sv.speedControlChannels = make([]chan uint16, maxTracks)
+	sv.speedControlAttached = make([]bool, slotman.MaxTracks)
+	sv.speedControlChannels = make([]chan uint16, slotman.MaxTracks)
 
 	for track := range sv.speedControlChannels {
 		sv.speedControlChannels[track] = make(chan uint16, 3)
@@ -40,7 +41,7 @@ func (sv *Service) loadCalibrations() {
 
 	log.Printf("Initializing speed control calibrations...")
 
-	sv.speedControlCalibrations = make([]*SpeedControlCalibration, maxTracks)
+	sv.speedControlCalibrations = make([]*SpeedControlCalibration, slotman.MaxTracks)
 
 	for track := range sv.speedControlCalibrations {
 		sv.speedControlCalibrations[track] = &SpeedControlCalibration{

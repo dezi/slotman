@@ -4,6 +4,7 @@ import (
 	"slotman/services/iface/race"
 	"slotman/services/iface/speedo"
 	"slotman/services/impl/provider"
+	"slotman/services/type/slotman"
 	"slotman/things/pololu/mxt550"
 	"slotman/utils/log"
 	"time"
@@ -11,6 +12,8 @@ import (
 
 type Service struct {
 	rce race.Interface
+
+	tracksEnable []bool
 
 	mxt550s []*mxt550.MXT550
 
@@ -39,6 +42,8 @@ func StartService() (err error) {
 		log.Cerror(err)
 		return
 	}
+
+	singleTon.tracksEnable = make([]bool, slotman.MaxTracks)
 
 	provider.SetProvider(singleTon)
 

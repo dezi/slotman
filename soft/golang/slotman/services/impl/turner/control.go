@@ -127,6 +127,13 @@ func (sv *Service) displayControls(img *image.RGBA) {
 	motoronsAttached := sv.sdo.GetMotoronsAttached()
 	speedControlsAttached := sv.sdi.GetSpeedControlsAttached()
 
+	maxControls := 0
+	for _, attached := range speedControlsAttached {
+		if attached {
+			maxControls++
+		}
+	}
+
 	dc := gg.NewContextForRGBA(img)
 
 	dc.DrawRectangle(0, 0, 240, 240)
@@ -138,7 +145,15 @@ func (sv *Service) displayControls(img *image.RGBA) {
 	dc.DrawStringAnchored("Controls", 120, 44, 0.5, 0.0)
 	dc.DrawStringAnchored("________", 120, 48, 0.5, 0.0)
 
-	for inx := 0; inx < 4; inx++ {
+	showMin := 0
+	showMax := 4
+
+	if maxControls > 4 && sv.loopCount%8 == 6 {
+		showMin = 4
+		showMax = 8
+	}
+
+	for inx := showMin; inx < showMax; inx++ {
 
 		dc.SetHexColor(goldColor)
 		text := fmt.Sprintf("%d:", inx+1)

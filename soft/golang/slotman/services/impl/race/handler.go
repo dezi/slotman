@@ -29,10 +29,6 @@ func (sv *Service) OnAmpelClickShort() {
 		sv.amp.SetRoundsToGo(sv.roundsToGo)
 	}
 
-	if sv.raceState == race.RaceStateRaceWaiting {
-		sv.raceState = race.RaceStateRaceStarting
-	}
-
 	if sv.raceState == race.RaceStateRaceRunning {
 		sv.raceState = race.RaceStateRaceSuspended
 		return
@@ -67,8 +63,14 @@ func (sv *Service) OnRaceStarted() {
 }
 
 func (sv *Service) OnEnterStartPosition(track int) {
+
 	log.Printf("OnEnterStartPosition track=%d", track)
+
 	sv.tracksReady[track] = 2
+
+	if sv.raceState == race.RaceStateRaceWaiting {
+		sv.sdo.SetTrackEnable(track, false)
+	}
 }
 
 func (sv *Service) OnLeaveStartPosition(track int) {
@@ -85,5 +87,16 @@ func (sv *Service) OnSpeedMeasurement(track int, speed float64) {
 }
 
 func (sv *Service) OnEmergencyStopNow(track int) {
-	log.Printf("OnEmergencyStopNow   track=%d", track)
+
+	log.Printf("OnEmergencyStopNow track=%d", track)
+
+	if sv.raceState != race.RaceStateRaceWaiting {
+		return
+	}
+
+	log.Printf("OnEmergencyStopNow track=%d disable now", track)
+
+	sv.sdo.SetTrackEnable(track, false)
+	err := sv.sdo.SetSpeed(track, 0, true)
+	log.Cerror(err)
 }

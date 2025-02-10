@@ -12,6 +12,8 @@ type Interface interface {
 	GetName() (name provider.Service)
 
 	SetSpeed(track int, percent float64, now bool) (err error)
+	SetTrackEnable(track int, enable bool)
+	SetTrackEnableAll(enable bool)
 
 	GetMotoronsAttached() (tracks []bool)
 }

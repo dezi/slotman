@@ -44,6 +44,7 @@ func (sv *Service) looper() {
 
 			if tracksActive == tracksReady && time.Now().Unix()-waitingReady.Unix() > 3 {
 				sv.raceState = race.RaceStateRaceStarting
+				sv.sdo.SetTrackEnableAll(true)
 			}
 		}
 
@@ -56,6 +57,7 @@ func (sv *Service) looper() {
 		switch sv.raceState {
 
 		case race.RaceStateIdle:
+			sv.sdo.SetTrackEnableAll(true)
 			sv.amp.SetIdle()
 
 		case race.RaceStateRaceStarting:

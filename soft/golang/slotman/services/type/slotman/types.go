@@ -3,6 +3,7 @@ package slotman
 import "slotman/utils/simple"
 
 const Version = "v1.0"
+const MaxTracks = 8
 
 type Message struct {
 	What string `json:"what"`

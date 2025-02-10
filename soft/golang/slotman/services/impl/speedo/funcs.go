@@ -3,8 +3,30 @@ package speedo
 import (
 	"errors"
 	"fmt"
+	"slotman/services/type/slotman"
 	"slotman/things/pololu/mxt550"
+	"slotman/utils/log"
 )
+
+func (sv *Service) SetTrackEnable(track int, enable bool) {
+
+	if track < 0 || track >= slotman.MaxTracks {
+		return
+	}
+
+	log.Printf("SetTrackEnable track=%d enable=%v", track, enable)
+
+	sv.tracksEnable[track] = enable
+}
+
+func (sv *Service) SetTrackEnableAll(enable bool) {
+
+	log.Printf("SetTrackEnableAll enable=%v", enable)
+
+	for track := 0; track < slotman.MaxTracks; track++ {
+		sv.tracksEnable[track] = enable
+	}
+}
 
 func (sv *Service) GetMotoronsAttached() (tracks []bool) {
 
@@ -70,14 +92,19 @@ func (sv *Service) SetSpeed(track int, percent float64, now bool) (err error) {
 		return
 	}
 
-	speedValue := int16(800 * percent / 100)
+	speedValue := int16(0)
 
-	if speedValue < -800 {
-		speedValue = -800
-	}
+	if sv.tracksEnable[track] {
 
-	if speedValue > +800 {
-		speedValue = +800
+		speedValue = int16(800 * percent / 100)
+
+		if speedValue < -800 {
+			speedValue = -800
+		}
+
+		if speedValue > +800 {
+			speedValue = +800
+		}
 	}
 
 	if now {

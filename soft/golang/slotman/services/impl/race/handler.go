@@ -91,7 +91,7 @@ func (sv *Service) OnAmpelClickLong() {
 
 func (sv *Service) OnMotoronVoltage(tracks []int, voltageMv uint32) {
 
-	log.Printf("OnMotoronVoltage tracks=%v voltageMv=%d", tracks, voltageMv)
+	//log.Printf("OnMotoronVoltage tracks=%v voltageMv=%d", tracks, voltageMv)
 
 	for _, track := range tracks {
 		sv.tracksVoltage[track] = int(voltageMv)

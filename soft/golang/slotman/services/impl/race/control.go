@@ -6,7 +6,6 @@ import (
 	"slotman/services/iface/speedi"
 	"slotman/services/iface/speedo"
 	"slotman/services/iface/teams"
-	"slotman/utils/log"
 	"time"
 )
 
@@ -14,7 +13,7 @@ func (sv *Service) DoControlTask() {
 	sv.checkServices()
 	sv.checkLooper()
 
-	log.Printf("Race raceState=%s", sv.raceState)
+	//log.Printf("Race raceState=%s", sv.raceState)
 }
 
 func (sv *Service) checkServices() {

@@ -3,6 +3,7 @@ package race
 import (
 	"slotman/services/type/race"
 	"slotman/utils/log"
+	"time"
 )
 
 func (sv *Service) OnAmpelClickShort() {
@@ -45,6 +46,11 @@ func (sv *Service) OnAmpelClickLong() {
 	log.Printf("OnAmpelClickLong...")
 
 	if sv.raceState == race.RaceStateIdle {
+
+		if sv.roundsToGo == 0 {
+			sv.roundsToGo = 5
+		}
+
 		sv.raceState = race.RaceStateRaceWaiting
 		return
 	}
@@ -102,6 +108,12 @@ func (sv *Service) OnEmergencyStopNow(track int) {
 	log.Printf("OnEmergencyStopNow track=%d disable now", track)
 
 	sv.sdo.SetTrackEnable(track, false)
-	err := sv.sdo.SetSpeed(track, 0, true)
+
+	err := sv.sdo.SetSpeed(track, -50, true)
+	log.Cerror(err)
+
+	time.Sleep(time.Millisecond * 250)
+
+	err = sv.sdo.SetSpeed(track, 0, true)
 	log.Cerror(err)
 }

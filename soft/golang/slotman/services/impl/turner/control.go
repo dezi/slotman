@@ -18,28 +18,86 @@ func (sv *Service) DoControlTask() {
 
 	sv.checkDisplays()
 
-	if !sv.isProxyServer {
+	if sv.isProxyServer {
+		return
+	}
 
-		state := sv.rce.GetRaceState()
+	state := sv.rce.GetRaceState()
 
-		if state == race.RaceStateIdle {
-			switch sv.loopCount % 2 {
-			case 0:
-				sv.displayState()
-			case 1:
-				sv.displayTeams()
-			}
+	if state == race.RaceStateIdle {
+		switch sv.loopCount % 2 {
+		case 0:
+			sv.displayState()
+		case 1:
+			sv.displayTeams()
 		}
+	}
+
+	if state == race.RaceStateRaceWaiting ||
+		state == race.RaceStateRaceRunning ||
+		state == race.RaceStateRaceSuspended {
+		sv.displayRace()
 	}
 
 	sv.loopCount++
 }
 
-func (sv *Service) displayState() {
+func (sv *Service) displayRace() {
 
-	if sv.isProxyServer {
+	img, err := sv.getSlotmanLogo()
+	if err != nil {
+		log.Cerror(err)
 		return
 	}
+
+	dc := gg.NewContextForRGBA(img)
+
+	dc.DrawRectangle(0, 0, 240, 240)
+	dc.SetHexColor("#00000080")
+	dc.Fill()
+
+	dc.SetHexColor(goldColor)
+	dc.SetFontFace(sv.faceBoldNormal)
+
+	text := fmt.Sprintf("Race - %d Rounds", sv.rce.GetRoundsToGo())
+	undr := strings.Repeat("_", len(text))
+
+	dc.DrawStringAnchored(text, 120, 44, 0.5, 0.0)
+	dc.DrawStringAnchored(undr, 120, 48, 0.5, 0.0)
+
+	tracksReady := sv.rce.GetTracksReady()
+
+	yPos := 86
+
+	for track, ready := range tracksReady {
+
+		if ready == 0 {
+			continue
+		}
+
+		dc.SetHexColor(goldColor)
+		dc.SetFontFace(sv.faceBoldNormal)
+
+		text = fmt.Sprintf("%d:", track+1)
+		dc.DrawString(text, 30, float64(yPos))
+
+		text = fmt.Sprintf("%d", 12+track)
+		dc.DrawString(text, 60, float64(yPos))
+
+		text = fmt.Sprintf("%0.1fs", 2.4646)
+		dc.DrawString(text, 90, float64(yPos))
+
+		text = fmt.Sprintf("%1.0f km/h", 234.33444)
+		dc.DrawString(text, 120, float64(yPos))
+
+		yPos += 36
+	}
+
+	err = sv.blipFullImage(img)
+	log.Cerror(err)
+}
+
+func (sv *Service) displayState() {
 
 	img, err := sv.getSlotmanLogo()
 	if err != nil {
@@ -193,10 +251,6 @@ func (sv *Service) displayControls(img *image.RGBA) {
 
 func (sv *Service) displayPilots() {
 
-	if sv.isProxyServer {
-		return
-	}
-
 	pilots := sv.plt.GetAllPilots()
 
 	sv.pilotIndex = (sv.pilotIndex + 1) % len(pilots)
@@ -236,10 +290,6 @@ func (sv *Service) displayPilots() {
 }
 
 func (sv *Service) displayTeams() {
-
-	if sv.isProxyServer {
-		return
-	}
 
 	teams := sv.tms.GetAllTeams()
 

@@ -7,7 +7,17 @@ func (sv *Service) GetRaceState() (state race.RaceState) {
 	return
 }
 
+func (sv *Service) GetTracksReady() (tracksReady []int) {
+	tracksReady = sv.tracksReady
+	return
+}
+
 func (sv *Service) GetTracksVoltage() (tracksVoltage []int) {
 	tracksVoltage = sv.tracksVoltage
+	return
+}
+
+func (sv *Service) GetRoundsToGo() (rounds int) {
+	rounds = sv.roundsToGo
 	return
 }

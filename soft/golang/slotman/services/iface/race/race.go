@@ -13,7 +13,9 @@ type Interface interface {
 	GetName() (name provider.Service)
 
 	GetRaceState() (state race.RaceState)
+	GetTracksReady() (tracksReady []int)
 	GetTracksVoltage() (tracksVoltage []int)
+	GetRoundsToGo() (rounds int)
 
 	OnAmpelClickShort()
 	OnAmpelClickLong()

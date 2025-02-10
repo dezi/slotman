@@ -94,7 +94,7 @@ func (sv *Service) SetSpeed(track int, percent float64, now bool) (err error) {
 
 	speedValue := int16(0)
 
-	if sv.tracksEnable[track] {
+	if sv.tracksEnable[track] || percent < 0 {
 
 		speedValue = int16(800 * percent / 100)
 

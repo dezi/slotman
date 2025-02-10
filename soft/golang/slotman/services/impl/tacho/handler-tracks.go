@@ -77,5 +77,5 @@ func (sv *Service) OnEmergencyStopNow(track int) {
 
 	log.Printf("OnEmergencyStopNow track=%d", track)
 
-	sv.rce.OnEmergencyStopNow(track)
+	go sv.rce.OnEmergencyStopNow(track)
 }

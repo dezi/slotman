@@ -6,6 +6,7 @@ import (
 	"image"
 	"os"
 	"slotman/services/type/race"
+	"slotman/services/type/slotman"
 	"slotman/things/galaxycore/gc9a01"
 	"slotman/utils/log"
 	"slotman/utils/simple"
@@ -111,6 +112,13 @@ func (sv *Service) displayHardware(img *image.RGBA) {
 
 	dc.SetFontFace(sv.faceBoldNormal)
 	dc.DrawStringAnchored(goos, 120, float64(86+2*36), 0.5, 0.0)
+
+	//
+	// Software version.
+	//
+
+	dc.SetFontFace(sv.faceBoldNormal)
+	dc.DrawStringAnchored(slotman.Version, 120, float64(86+3*36), 0.5, 0.0)
 }
 
 func (sv *Service) displayControls(img *image.RGBA) {

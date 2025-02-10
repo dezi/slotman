@@ -2,6 +2,8 @@ package slotman
 
 import "slotman/utils/simple"
 
+const Version = "v1.0"
+
 type Message struct {
 	What string `json:"what"`
 }

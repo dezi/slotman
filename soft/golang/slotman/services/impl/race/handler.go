@@ -30,7 +30,7 @@ func (sv *Service) OnAmpelClickShort() {
 	}
 
 	if sv.raceState == race.RaceStateRaceWaiting {
-		sv.raceState = race.RaceStateRaceStart
+		sv.raceState = race.RaceStateRaceStarting
 	}
 
 	if sv.raceState == race.RaceStateRaceRunning {

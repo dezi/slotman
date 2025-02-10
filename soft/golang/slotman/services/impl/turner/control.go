@@ -114,12 +114,12 @@ func (sv *Service) displayRace() {
 
 	yPos += 30
 
-	text = fmt.Sprintf("%0.1f - %0.1f", raceRecord.ActRound, raceRecord.TopRound)
+	text = fmt.Sprintf("%0.1f - %0.1f", raceRecord.TopRound, raceRecord.ActRound)
 	dc.DrawStringAnchored(text, 120, yPos, 0.5, 0)
 
 	yPos += 30
 
-	text = fmt.Sprintf("%0.0f - %0.0f", raceRecord.ActSpeed, raceRecord.TopSpeed)
+	text = fmt.Sprintf("%0.0f - %0.0f", raceRecord.TopSpeed, raceRecord.ActSpeed)
 	dc.DrawStringAnchored(text, 120, yPos, 0.5, 0)
 
 	err = sv.blipFullImage(img)

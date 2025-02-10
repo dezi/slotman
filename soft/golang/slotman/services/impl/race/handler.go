@@ -99,8 +99,14 @@ func (sv *Service) OnMotoronVoltage(tracks []int, voltageMv uint32) {
 }
 
 func (sv *Service) OnRaceStarted() {
+
 	log.Printf("OnRaceStarted...")
+
 	sv.raceState = race.RaceStateRaceRunning
+
+	for track := range sv.raceRecords {
+		sv.raceRecords[track].LastRoundTime = time.Now()
+	}
 }
 
 func (sv *Service) OnEnterStartPosition(track int) {
@@ -174,7 +180,7 @@ func (sv *Service) OnSpeedMeasurement(track int, speed float64) {
 	sv.raceRecords[track].ActSpeed = speed
 
 	if sv.raceRecords[track].TopSpeed == 0 ||
-		sv.raceRecords[track].TopSpeed > sv.raceRecords[track].ActSpeed {
+		sv.raceRecords[track].TopSpeed < sv.raceRecords[track].ActSpeed {
 		sv.raceRecords[track].TopSpeed = sv.raceRecords[track].ActSpeed
 	}
 

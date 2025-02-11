@@ -51,7 +51,7 @@ func (sv *Service) OnAmpelClickLong() {
 	if sv.raceState == slotman.RaceStateIdle {
 
 		if sv.roundsToGo == 0 {
-			sv.roundsToGo = 5
+			sv.roundsToGo = 10
 		}
 
 		//
@@ -87,8 +87,8 @@ func (sv *Service) OnAmpelClickLong() {
 
 		sv.raceState = slotman.RaceStateRaceWaiting
 
-		sv.sdo.SetTrackFixedSpeed(0, 45)
-		sv.sdo.SetTrackFixedSpeed(1, 45)
+		sv.sdo.SetTrackFixedSpeed(0, 44)
+		sv.sdo.SetTrackFixedSpeed(1, 44)
 
 		return
 	}
@@ -150,7 +150,8 @@ func (sv *Service) OnRoundCompleted(track int, roundMillis int) {
 		sv.raceInfos[track].TopRound = sv.raceInfos[track].ActRound
 	}
 
-	log.Printf("OnRoundCompleted     track=%d secs=%0.3f", track, secs)
+	log.Printf("OnRoundCompleted     track=%d rounds=%d secs=%0.3f",
+		track, sv.raceInfos[track].Rounds, secs)
 
 	//
 	// Re-score pilots order.
@@ -200,7 +201,6 @@ func (sv *Service) OnSpeedMeasurement(track int, speed float64) {
 		return
 	}
 
-	sv.raceInfos[track].Rounds++
 	sv.raceInfos[track].ActSpeed = speed
 
 	if sv.raceInfos[track].TopSpeed == 0 ||
@@ -215,14 +215,28 @@ func (sv *Service) OnEmergencyStopNow(track int) {
 
 	log.Printf("OnEmergencyStopNow track=%d", track)
 
-	if sv.raceState != slotman.RaceStateRaceWaiting {
+	if sv.raceState == slotman.RaceStateRaceWaiting {
+
+		log.Printf("OnEmergencyStopNow track=%d disable now", track)
+
+		sv.sdo.SetTrackEnable(track, false)
+
+		err := sv.sdo.SetSpeed(track, 0, true)
+		log.Cerror(err)
+
 		return
 	}
 
-	log.Printf("OnEmergencyStopNow track=%d disable now", track)
+	if sv.raceState == slotman.RaceStateRaceRunning {
 
-	sv.sdo.SetTrackEnable(track, false)
+		if sv.raceInfos[track].Rounds >= sv.roundsToGo {
 
-	err := sv.sdo.SetSpeed(track, 0, true)
-	log.Cerror(err)
+			log.Printf("OnEmergencyStopNow track=%d finished now", track)
+
+			sv.sdo.SetTrackEnable(track, false)
+
+			err := sv.sdo.SetSpeed(track, 0, true)
+			log.Cerror(err)
+		}
+	}
 }

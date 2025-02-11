@@ -27,8 +27,8 @@ class MainDrawer extends StatelessWidget {
             ),
           ),
           ListTile(
-            leading: Icon(Icons.account_circle),
-            title: Text('Start Page'),
+            leading: Icon(Icons.info_outline),
+            title: Text('Race Info'),
             onTap: () {
               // Update the state of the app
 

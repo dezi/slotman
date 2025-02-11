@@ -51,7 +51,7 @@ func (sv *Service) OnAmpelClickLong() {
 	if sv.raceState == slotman.RaceStateIdle {
 
 		if sv.roundsToGo == 0 {
-			sv.roundsToGo = 10
+			sv.roundsToGo = 50
 		}
 
 		//
@@ -229,7 +229,7 @@ func (sv *Service) OnEmergencyStopNow(track int) {
 
 	if sv.raceState == slotman.RaceStateRaceRunning {
 
-		if sv.raceInfos[track].Rounds >= sv.roundsToGo {
+		if sv.raceInfos[track].Rounds+1 >= sv.roundsToGo {
 
 			log.Printf("OnEmergencyStopNow track=%d finished now", track)
 

@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:slotman/locals.dart';
+import 'package:slotman/pages/info.dart';
 import 'package:slotman/pages/join.dart';
 import 'package:slotman/pages/start.dart';
 import 'package:slotman/pages/setup_pilot.dart';
@@ -43,7 +44,7 @@ class _MainAppState extends State<MainApp> {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const StartPage(),
+      home: const InfoPage(),
       routes: {
         '/join': (context) => JoinPage(),
         '/setup/race': (context) => SetupRacePage(),

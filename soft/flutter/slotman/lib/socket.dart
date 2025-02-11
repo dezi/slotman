@@ -29,9 +29,10 @@ class Socket {
     log('########### channel ready $channel');
 
     channel!.stream.listen((json) {
-      log('########### channel rcv $json');
+      // log('########### channel rcv $json');
 
       var message = Message.fromJson(jsonDecode(json));
+      log('########### channel rcv tag=${message.tag()}');
 
       switch (message.tag()) {
         case 'race|set':

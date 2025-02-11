@@ -1,9 +1,11 @@
 package server
 
 import (
+	"slotman/services/iface/pilots"
 	"slotman/services/type/slotman"
 	"slotman/utils/log"
 	"slotman/utils/simple"
+	"time"
 )
 
 func (sv *Service) DoControlTask() {
@@ -15,6 +17,19 @@ func (sv *Service) checkSetup() {
 
 	if sv.setup != nil {
 		return
+	}
+
+	var plt pilots.Interface
+	var tryErr error
+
+	for {
+
+		plt, tryErr = pilots.GetInstance()
+		if tryErr == nil {
+			break
+		}
+
+		time.Sleep(time.Millisecond * 250)
 	}
 
 	sv.setup = &slotman.Setup{
@@ -36,6 +51,12 @@ func (sv *Service) checkSetup() {
 		},
 
 		Pilots: make(map[simple.UUIDHex]*slotman.Pilot),
+	}
+
+	allPilots := plt.GetAllPilots()
+
+	for _, pilot := range allPilots {
+		sv.setup.Pilots[pilot.Uuid] = pilot
 	}
 }
 

@@ -72,6 +72,7 @@ class Locals {
   static void sndPilot() {
 
     var pilot = Pilot(
+      uuid: appUuid,
       appUuid: appUuid,
       firstName: pilotFirstName,
       lastName: pilotLastName,

@@ -85,6 +85,8 @@ func (sv *Service) handleWs(w http.ResponseWriter, r *http.Request) {
 		}
 
 		switch message.What {
+		case "init":
+			err = sv.handleInit(appId, ws, jsonBytes)
 		case "race":
 			err = sv.handleRace(appId, ws, jsonBytes)
 		case "pilot":

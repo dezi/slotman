@@ -20,7 +20,7 @@ func (sv *Service) handlePilot(appId simple.UUIDHex, ws *websocket.Conn, jsonByt
 	if pilot.Mode == "set" {
 
 		sv.mapsLock.Lock()
-		sv.setup.Pilots[pilot.AppUuid] = pilot
+		sv.setup.Pilots[pilot.Uuid] = pilot
 		sv.mapsLock.Unlock()
 
 		log.Printf("Pilot first=%s last=%s car=%s",

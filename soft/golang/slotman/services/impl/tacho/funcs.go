@@ -1,5 +1,7 @@
 package tacho
 
+import "time"
+
 func (sv *Service) GetTachosAttached() (tracks []bool) {
 
 	sv.mapsLock.Lock()
@@ -15,4 +17,18 @@ func (sv *Service) GetTachosAttached() (tracks []bool) {
 	}
 
 	return
+}
+
+func (sv *Service) OnRaceStarted() {
+
+	sv.mapsLock.Lock()
+
+	for track := range sv.trackStates {
+		trackState := sv.trackStates[track]
+		trackState.RoundTs = time.Now()
+		sv.trackStates[track] = trackState
+	}
+
+	sv.mapsLock.Unlock()
+
 }

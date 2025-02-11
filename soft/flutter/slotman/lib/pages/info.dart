@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:slotman/drawer.dart';
 import 'package:slotman/messages/info.dart';
@@ -37,15 +35,23 @@ class InfoPageState extends State<InfoPage> {
       child: Text(
         text,
         style: const TextStyle(
-          fontSize: 22,
+          fontSize: 20,
           fontWeight: FontWeight.bold,
         ),
       ),
     );
   }
 
-  List<Widget> buildPositions() {
+  Widget divider() {
+    return Center(
+      child: SizedBox(
+        width: width,
+        child: Divider(thickness: 2),
+      ),
+    );
+  }
 
+  List<Widget> buildPositions() {
     final List<Widget> positions = [];
 
     final List<Info> sorted = [];
@@ -56,7 +62,7 @@ class InfoPageState extends State<InfoPage> {
 
     sorted.sort((a, b) => a.position.compareTo(b.position));
 
-    positions.add(SizedBox(height: 16));
+    positions.add(SizedBox(height: 24));
 
     positions.add(Center(
       child: Text(
@@ -76,7 +82,7 @@ class InfoPageState extends State<InfoPage> {
           width: width,
           child: Row(
             children: [
-              stdBox(50, "Pos"),
+              stdBox(50, "#"),
               stdBox(160, "Pilot"),
               stdBox(50, "Lap"),
               stdBox(80, "Round"),
@@ -87,14 +93,7 @@ class InfoPageState extends State<InfoPage> {
       ),
     );
 
-    positions.add(
-      Center(
-        child: SizedBox(
-          width: width,
-          child: Divider(thickness: 4),
-        ),
-      ),
-    );
+    positions.add(divider());
 
     var position = 1;
 
@@ -124,11 +123,12 @@ class InfoPageState extends State<InfoPage> {
       position++;
     }
 
+    positions.add(divider());
+
     return positions;
   }
 
   List<Widget> buildTopRounds() {
-
     final List<Widget> positions = [];
 
     final List<Info> sorted = [];
@@ -139,7 +139,7 @@ class InfoPageState extends State<InfoPage> {
 
     sorted.sort((a, b) => a.topRound.compareTo(b.topRound));
 
-    positions.add(SizedBox(height: 16));
+    positions.add(SizedBox(height: 24));
 
     positions.add(Center(
       child: Text(
@@ -159,7 +159,7 @@ class InfoPageState extends State<InfoPage> {
           width: width,
           child: Row(
             children: [
-              stdBox(50, "Pos"),
+              stdBox(50, "#"),
               stdBox(160, "Pilot"),
               stdBox(80, "Round"),
             ],
@@ -168,14 +168,7 @@ class InfoPageState extends State<InfoPage> {
       ),
     );
 
-    positions.add(
-      Center(
-        child: SizedBox(
-          width: width,
-          child: Divider(thickness: 4),
-        ),
-      ),
-    );
+    positions.add(divider());
 
     var position = 1;
 
@@ -203,11 +196,12 @@ class InfoPageState extends State<InfoPage> {
       position++;
     }
 
+    positions.add(divider());
+
     return positions;
   }
 
   List<Widget> buildTopSpeeds() {
-
     final List<Widget> positions = [];
 
     final List<Info> sorted = [];
@@ -218,7 +212,7 @@ class InfoPageState extends State<InfoPage> {
 
     sorted.sort((a, b) => b.topSpeed.compareTo(a.topSpeed));
 
-    positions.add(SizedBox(height: 16));
+    positions.add(SizedBox(height: 24));
 
     positions.add(Center(
       child: Text(
@@ -238,7 +232,7 @@ class InfoPageState extends State<InfoPage> {
           width: width,
           child: Row(
             children: [
-              stdBox(50, "Pos"),
+              stdBox(50, "#"),
               stdBox(160, "Pilot"),
               stdBox(80, "Speed"),
             ],
@@ -247,14 +241,7 @@ class InfoPageState extends State<InfoPage> {
       ),
     );
 
-    positions.add(
-      Center(
-        child: SizedBox(
-          width: width,
-          child: Divider(thickness: 4),
-        ),
-      ),
-    );
+    positions.add(divider());
 
     var position = 1;
 
@@ -282,18 +269,14 @@ class InfoPageState extends State<InfoPage> {
       position++;
     }
 
+    positions.add(divider());
+
     return positions;
   }
 
   @override
   Widget build(BuildContext context) {
     injector = this;
-
-    log("###infos ${infos.length}");
-
-    var positions = buildPositions();
-    var topRounds = buildTopRounds();
-    var topSpeeds = buildTopSpeeds();
 
     return Scaffold(
       appBar: AppBar(
@@ -321,9 +304,9 @@ class InfoPageState extends State<InfoPage> {
               ),
             ),
           ),
-          ...positions,
-          ...topRounds,
-          ...topSpeeds,
+          ...buildPositions(),
+          ...buildTopRounds(),
+          ...buildTopSpeeds(),
         ],
       ),
     );

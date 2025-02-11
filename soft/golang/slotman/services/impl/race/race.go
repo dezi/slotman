@@ -7,6 +7,7 @@ import (
 	"slotman/services/iface/server"
 	"slotman/services/iface/speedi"
 	"slotman/services/iface/speedo"
+	"slotman/services/iface/tacho"
 	"slotman/services/iface/teams"
 	"slotman/services/impl/provider"
 	"slotman/services/type/slotman"
@@ -19,6 +20,7 @@ type Service struct {
 	amp ampel.Interface
 	sdi speedi.Interface
 	sdo speedo.Interface
+	tco tacho.Interface
 	tms teams.Interface
 	plt pilots.Interface
 

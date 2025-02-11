@@ -51,7 +51,7 @@ func (sv *Service) OnAmpelClickLong() {
 	if sv.raceState == slotman.RaceStateIdle {
 
 		if sv.roundsToGo == 0 {
-			sv.roundsToGo = 50
+			sv.roundsToGo = 10
 		}
 
 		//
@@ -89,6 +89,8 @@ func (sv *Service) OnAmpelClickLong() {
 
 		sv.sdo.SetTrackFixedSpeed(0, 44)
 		sv.sdo.SetTrackFixedSpeed(1, 44)
+
+		sv.tco.OnRaceStarted()
 
 		return
 	}

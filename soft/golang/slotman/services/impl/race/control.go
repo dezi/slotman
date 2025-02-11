@@ -6,6 +6,7 @@ import (
 	"slotman/services/iface/server"
 	"slotman/services/iface/speedi"
 	"slotman/services/iface/speedo"
+	"slotman/services/iface/tacho"
 	"slotman/services/iface/teams"
 	"time"
 )
@@ -47,6 +48,11 @@ func (sv *Service) checkServices() {
 	}
 
 	sv.sdo, tryErr = speedo.GetInstance()
+	if tryErr != nil {
+		return
+	}
+
+	sv.tco, tryErr = tacho.GetInstance()
 	if tryErr != nil {
 		return
 	}

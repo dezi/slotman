@@ -12,6 +12,8 @@ type Interface interface {
 	GetName() (name provider.Service)
 
 	GetTachosAttached() (tracks []bool)
+
+	OnRaceStarted()
 }
 
 func GetInstance() (iface Interface, err error) {

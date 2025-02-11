@@ -69,6 +69,16 @@ class SetupTracksPageState extends State<SetupTracksPage> {
                 });
               },
             ),
+            RadioListTile<int>(
+              title: Text('8 Tracks'),
+              value: 8,
+              groupValue: tracks.tracks,
+              onChanged: (int? value) {
+                setState(() {
+                  tracks.tracks = value!;
+                });
+              },
+            ),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 foregroundColor: Colors.blue,

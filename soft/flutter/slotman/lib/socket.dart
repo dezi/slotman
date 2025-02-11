@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 import 'package:slotman/locals.dart';
 import 'package:slotman/messages/controller.dart';
+import 'package:slotman/messages/info.dart';
 import 'package:slotman/messages/message.dart';
 import 'package:slotman/messages/pilot.dart';
 import 'package:slotman/messages/race.dart';
@@ -47,6 +48,9 @@ class Socket {
         case 'pilot|set':
           var pilot = Pilot.fromJson(jsonDecode(json));
           Status.rcvPilot(pilot);
+        case 'info|set':
+          var info = Info.fromJson(jsonDecode(json));
+          Status.rcvInfo(info);
       }
     });
   }

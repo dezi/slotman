@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:slotman/messages/controller.dart';
+import 'package:slotman/messages/info.dart';
 import 'package:slotman/messages/pilot.dart';
 import 'package:slotman/messages/race.dart';
 import 'package:slotman/messages/tracks.dart';
@@ -15,6 +16,7 @@ class Status {
   static Tracks tracks = Tracks();
   static Controller controller = Controller();
   static Map<String,Pilot> pilots = <String,Pilot>{};
+  static Map<int,Info> infos = <int,Info>{};
 
   static Future<void> initialize() async {
     var tracks = Tracks(mode: 'get');
@@ -31,6 +33,10 @@ class Status {
 
   static void rcvPilot(Pilot pilot) {
     pilots[pilot.appUuid] = pilot;
+  }
+
+  static void rcvInfo(Info info) {
+    infos[info.track] = info;
   }
 
   static void sndRace(Race race) {

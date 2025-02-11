@@ -2,9 +2,6 @@ package slotman
 
 import "slotman/utils/simple"
 
-const Version = "v1.0"
-const MaxTracks = 8
-
 type Message struct {
 	What string `json:"what"`
 }
@@ -47,16 +44,6 @@ type Pilot struct {
 	ProfilePic string `json:"profilePic"`
 
 	IsMockup bool `json:"-"`
-}
-
-type Race struct {
-	What string `json:"what,omitempty"`
-	Mode string `json:"mode,omitempty"`
-
-	Title string `json:"title"`
-
-	Tracks int `json:"tracks"`
-	Rounds int `json:"rounds"`
 }
 
 type Controller struct {

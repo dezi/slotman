@@ -2,7 +2,7 @@ package race
 
 import (
 	"slotman/services/impl/provider"
-	"slotman/services/type/race"
+	"slotman/services/type/slotman"
 )
 
 const (
@@ -12,13 +12,13 @@ const (
 type Interface interface {
 	GetName() (name provider.Service)
 
-	GetRaceState() (state race.RaceState)
+	GetRaceState() (state slotman.RaceState)
 	GetTracksReady() (tracksReady []int)
 	GetTracksVoltage() (tracksVoltage []int)
 	GetRoundsToGo() (rounds int)
 
-	GetRaceRecord(track int) (raceRecord race.RaceRecord, err error)
-	GetRaceRecords() (raceRecords []race.RaceRecord)
+	GetRaceInfo(track int) (raceInfo *slotman.RaceInfo, err error)
+	GetRaceInfos() (raceInfos []*slotman.RaceInfo)
 
 	OnAmpelClickShort()
 	OnAmpelClickLong()

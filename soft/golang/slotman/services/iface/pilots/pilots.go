@@ -4,6 +4,7 @@ import (
 	"image"
 	"slotman/services/impl/provider"
 	"slotman/services/type/slotman"
+	"slotman/utils/simple"
 )
 
 const (
@@ -13,6 +14,7 @@ const (
 type Interface interface {
 	GetName() (name provider.Service)
 
+	GetPilot(pilotUuid simple.UUIDHex) (pilot *slotman.Pilot, err error)
 	GetAllPilots() (pilots []*slotman.Pilot)
 	GetScaledPilotPic(pilot *slotman.Pilot, size int) (img *image.RGBA, err error)
 	GetCircularPilotPic(pilot *slotman.Pilot, size int) (img *image.RGBA, err error)

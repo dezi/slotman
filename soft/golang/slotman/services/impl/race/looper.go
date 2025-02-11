@@ -1,7 +1,7 @@
 package race
 
 import (
-	"slotman/services/type/race"
+	"slotman/services/type/slotman"
 	"slotman/utils/log"
 	"time"
 )
@@ -17,9 +17,9 @@ func (sv *Service) looper() {
 
 		time.Sleep(time.Millisecond * 40)
 
-		if sv.raceState == race.RaceStateRaceWaiting {
+		if sv.raceState == slotman.RaceStateRaceWaiting {
 
-			if sv.raceStateDone != race.RaceStateRaceWaiting {
+			if sv.raceStateDone != slotman.RaceStateRaceWaiting {
 				waitingReady = time.Now()
 			}
 
@@ -43,7 +43,7 @@ func (sv *Service) looper() {
 			}
 
 			if tracksActive == tracksReady && time.Now().Unix()-waitingReady.Unix() > 3 {
-				sv.raceState = race.RaceStateRaceStarting
+				sv.raceState = slotman.RaceStateRaceStarting
 				sv.sdo.SetTrackEnableAll(true)
 			}
 		}
@@ -56,20 +56,20 @@ func (sv *Service) looper() {
 
 		switch sv.raceState {
 
-		case race.RaceStateIdle:
+		case slotman.RaceStateIdle:
 			sv.sdo.SetTrackEnableAll(true)
 			sv.amp.SetIdle()
 
-		case race.RaceStateRaceStarting:
+		case slotman.RaceStateRaceStarting:
 			sv.amp.SetRaceStart()
 
-		case race.RaceStateRaceRunning:
+		case slotman.RaceStateRaceRunning:
 			sv.amp.SetRaceRunning()
 
-		case race.RaceStateRaceSuspended:
+		case slotman.RaceStateRaceSuspended:
 			sv.amp.SetRaceSuspended()
 
-		case race.RaceStateRaceWaiting:
+		case slotman.RaceStateRaceWaiting:
 			sv.amp.SetRaceWaiting(sv.tracksReady)
 		}
 	}

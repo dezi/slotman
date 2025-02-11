@@ -8,7 +8,6 @@ import (
 	"slotman/services/iface/speedo"
 	"slotman/services/iface/teams"
 	"slotman/services/impl/provider"
-	raceTypes "slotman/services/type/race"
 	"slotman/services/type/slotman"
 	"slotman/utils/log"
 	"time"
@@ -21,9 +20,10 @@ type Service struct {
 	tms teams.Interface
 	plt pilots.Interface
 
-	raceState     raceTypes.RaceState
-	raceStateDone raceTypes.RaceState
-	raceRecords   []raceTypes.RaceRecord
+	raceState     slotman.RaceState
+	raceStateDone slotman.RaceState
+
+	raceInfos []*slotman.RaceInfo
 
 	tracksReady   []int
 	tracksVoltage []int
@@ -48,11 +48,16 @@ func StartService() (err error) {
 
 	singleTon = &Service{}
 
-	singleTon.raceState = raceTypes.RaceStateIdle
+	singleTon.raceState = slotman.RaceStateIdle
 
 	singleTon.tracksReady = make([]int, slotman.MaxTracks)
 	singleTon.tracksVoltage = make([]int, slotman.MaxTracks)
-	singleTon.raceRecords = make([]raceTypes.RaceRecord, slotman.MaxTracks)
+
+	singleTon.raceInfos = make([]*slotman.RaceInfo, slotman.MaxTracks)
+
+	for track := range singleTon.raceInfos {
+		singleTon.raceInfos[track] = &slotman.RaceInfo{Track: track}
+	}
 
 	provider.SetProvider(singleTon)
 

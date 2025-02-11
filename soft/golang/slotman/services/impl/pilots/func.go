@@ -1,6 +1,7 @@
 package pilots
 
 import (
+	"errors"
 	"golang.org/x/image/draw"
 	"image"
 	"slotman/services/type/slotman"
@@ -9,6 +10,22 @@ import (
 	"slotman/utils/simple"
 	"sort"
 )
+
+func (sv *Service) GetPilot(pilotUuid simple.UUIDHex) (pilot *slotman.Pilot, err error) {
+
+	sv.mapsLock.Lock()
+	defer sv.mapsLock.Unlock()
+
+	pilot = sv.pilots[pilotUuid]
+
+	if pilot == nil {
+		err = errors.New("no pilot for uuid")
+		log.Cerror(err)
+		return
+	}
+
+	return
+}
 
 func (sv *Service) GetAllPilots() (pilots []*slotman.Pilot) {
 

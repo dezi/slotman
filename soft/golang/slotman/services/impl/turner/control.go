@@ -6,7 +6,6 @@ import (
 	"github.com/fogleman/gg"
 	"image"
 	"os"
-	"slotman/services/type/race"
 	"slotman/services/type/slotman"
 	"slotman/things/galaxycore/gc9a01"
 	"slotman/utils/log"
@@ -25,7 +24,7 @@ func (sv *Service) DoControlTask() {
 
 	state := sv.rce.GetRaceState()
 
-	if state == race.RaceStateIdle {
+	if state == slotman.RaceStateIdle {
 		switch sv.loopCount % 2 {
 		case 0:
 			sv.displayState()
@@ -34,9 +33,9 @@ func (sv *Service) DoControlTask() {
 		}
 	}
 
-	if state == race.RaceStateRaceWaiting ||
-		state == race.RaceStateRaceRunning ||
-		state == race.RaceStateRaceSuspended {
+	if state == slotman.RaceStateRaceWaiting ||
+		state == slotman.RaceStateRaceRunning ||
+		state == slotman.RaceStateRaceSuspended {
 		sv.displayRace()
 	}
 
@@ -65,14 +64,20 @@ func (sv *Service) displayRace() {
 		return
 	}
 
-	raceRecord, err := sv.rce.GetRaceRecord(sv.raceIndex)
+	raceInfo, err := sv.rce.GetRaceInfo(sv.raceIndex)
 	if err != nil {
 		log.Cerror(err)
 		return
 	}
 
-	if raceRecord.Pilot == nil {
+	if raceInfo.PilotUuid == "" {
 		err = errors.New("no pilot for track")
+		log.Cerror(err)
+		return
+	}
+
+	pilot, err := sv.plt.GetPilot(raceInfo.PilotUuid)
+	if err != nil {
 		log.Cerror(err)
 		return
 	}
@@ -89,7 +94,7 @@ func (sv *Service) displayRace() {
 	dc.SetHexColor("#00000080")
 	dc.Fill()
 
-	pilotImg, err := sv.plt.GetCircularPilotPic(raceRecord.Pilot, 80)
+	pilotImg, err := sv.plt.GetCircularPilotPic(pilot, 80)
 	if err != nil {
 		log.Cerror(err)
 		return
@@ -104,22 +109,22 @@ func (sv *Service) displayRace() {
 
 	yPos := 120.0
 
-	if raceRecord.Position == 0 {
-		text = fmt.Sprintf("n.a. - %d", raceRecord.Rounds)
+	if raceInfo.Position == 0 {
+		text = fmt.Sprintf("n.a. - %d", raceInfo.Rounds)
 	} else {
-		text = fmt.Sprintf("#%d - %d", raceRecord.Position, raceRecord.Rounds)
+		text = fmt.Sprintf("#%d - %d", raceInfo.Position, raceInfo.Rounds)
 	}
 
 	dc.DrawStringAnchored(text, 120, yPos, 0.5, 0)
 
 	yPos += 30
 
-	text = fmt.Sprintf("%0.1f - %0.1f", raceRecord.TopRound, raceRecord.ActRound)
+	text = fmt.Sprintf("%0.1f - %0.1f", raceInfo.TopRound, raceInfo.ActRound)
 	dc.DrawStringAnchored(text, 120, yPos, 0.5, 0)
 
 	yPos += 30
 
-	text = fmt.Sprintf("%0.0f - %0.0f", raceRecord.TopSpeed, raceRecord.ActSpeed)
+	text = fmt.Sprintf("%0.0f - %0.0f", raceInfo.TopSpeed, raceInfo.ActSpeed)
 	dc.DrawStringAnchored(text, 120, yPos, 0.5, 0)
 
 	err = sv.blipFullImage(img)
@@ -136,7 +141,7 @@ func (sv *Service) displayState() {
 
 	raceState := sv.rce.GetRaceState()
 
-	if raceState == race.RaceStateIdle {
+	if raceState == slotman.RaceStateIdle {
 
 		if sv.loopCount%4 == 0 {
 			sv.displayHardware(img)

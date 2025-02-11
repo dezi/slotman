@@ -2,12 +2,11 @@ package race
 
 import (
 	"errors"
-	"slotman/services/type/race"
 	"slotman/services/type/slotman"
 	"slotman/utils/log"
 )
 
-func (sv *Service) GetRaceState() (state race.RaceState) {
+func (sv *Service) GetRaceState() (state slotman.RaceState) {
 	state = sv.raceState
 	return
 }
@@ -27,7 +26,7 @@ func (sv *Service) GetRoundsToGo() (rounds int) {
 	return
 }
 
-func (sv *Service) GetRaceRecord(track int) (raceRecord race.RaceRecord, err error) {
+func (sv *Service) GetRaceInfo(track int) (raceInfo *slotman.RaceInfo, err error) {
 
 	if track < 0 || track >= slotman.MaxTracks {
 		err = errors.New("bad track number")
@@ -35,11 +34,11 @@ func (sv *Service) GetRaceRecord(track int) (raceRecord race.RaceRecord, err err
 		return
 	}
 
-	raceRecord = sv.raceRecords[track]
+	raceInfo = sv.raceInfos[track]
 	return
 }
 
-func (sv *Service) GetRaceRecords() (raceRecords []race.RaceRecord) {
-	raceRecords = sv.raceRecords
+func (sv *Service) GetRaceInfos() (raceInfos []*slotman.RaceInfo) {
+	raceInfos = sv.raceInfos
 	return
 }

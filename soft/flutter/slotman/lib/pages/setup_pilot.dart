@@ -17,7 +17,7 @@ class SetupPilotPageState extends State<SetupPilotPage> {
   var appUuidCtl = TextEditingController(text: Status.pilot.appUuid);
   var firstNameCtl = TextEditingController(text: Status.pilot.firstName);
   var lastNameCtl = TextEditingController(text: Status.pilot.lastName);
-  var carModelCtl = TextEditingController(text: Status.pilot.carModel);
+  var carModelCtl = TextEditingController(text: Status.pilot.car);
   var minSpeedCtl = TextEditingController(text: '${Status.pilot.minSpeed}');
   var maxSpeedCtl = TextEditingController(text: '${Status.pilot.maxSpeed}');
 
@@ -81,7 +81,7 @@ class SetupPilotPageState extends State<SetupPilotPage> {
               maxLength: 20,
               onChanged: (text) {
                 setState(() {
-                  pilot.carModel = text;
+                  pilot.car = text;
                 });
               },
             ),

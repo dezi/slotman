@@ -42,7 +42,7 @@ class SetupRacePageState extends State<SetupRacePage> {
       pilots.add(
         UserAccountsDrawerHeader(
           accountName: Text("${pilot.firstName} ${pilot.lastName}"),
-          accountEmail: Text(pilot.carModel),
+          accountEmail: Text(pilot.car),
           currentAccountPicture: CircleAvatar(
             backgroundColor: Colors.orange,
             child: Text(

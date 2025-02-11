@@ -75,7 +75,7 @@ class Locals {
       appUuid: appUuid,
       firstName: pilotFirstName,
       lastName: pilotLastName,
-      carModel: pilotCarModel,
+      car: pilotCarModel,
       minSpeed: pilotMinSpeed,
       maxSpeed: pilotMaxSpeed,
     );

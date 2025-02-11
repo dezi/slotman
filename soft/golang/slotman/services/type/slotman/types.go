@@ -34,6 +34,8 @@ type Pilot struct {
 
 	Uuid simple.UUIDHex `json:"uuid"`
 
+	AppUuid simple.UUIDHex `json:"appUuid"`
+
 	FirstName string `json:"firstName"`
 	LastName  string `json:"lastName"`
 	Team      string `json:"team"`

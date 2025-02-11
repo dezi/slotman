@@ -17,7 +17,7 @@ class MainDrawer extends StatelessWidget {
         children: <Widget>[
           UserAccountsDrawerHeader(
             accountName: Text("${Status.pilot.firstName} ${Status.pilot.lastName}"),
-            accountEmail: Text(Status.pilot.carModel),
+            accountEmail: Text(Status.pilot.car),
             currentAccountPicture: CircleAvatar(
               backgroundColor: Colors.orange,
               child: Text(

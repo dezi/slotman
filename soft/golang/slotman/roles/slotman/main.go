@@ -6,6 +6,7 @@ import (
 	"slotman/services/impl/provider"
 	"slotman/services/impl/proxy"
 	"slotman/services/impl/race"
+	"slotman/services/impl/server"
 	"slotman/services/impl/speedi"
 	"slotman/services/impl/speedo"
 	"slotman/services/impl/tacho"
@@ -25,6 +26,7 @@ func startup() {
 	log.SetCallerLength(48)
 
 	_ = provider.StartService()
+	_ = server.StartService()
 	_ = proxy.StartService()
 
 	_ = race.StartService()
@@ -48,5 +50,6 @@ func startup() {
 	_ = race.StopService()
 
 	_ = proxy.StopService()
+	_ = server.StartService()
 	_ = provider.StopService()
 }

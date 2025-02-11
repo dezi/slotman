@@ -1,6 +1,7 @@
 package race
 
 import (
+	"encoding/json"
 	"math/rand"
 	"slotman/services/type/slotman"
 	"slotman/utils/log"
@@ -75,16 +76,20 @@ func (sv *Service) OnAmpelClickLong() {
 				continue
 			}
 
-			sv.raceInfos[tracks].PilotUuid = pilots[tracks].Uuid
 			sv.raceInfos[tracks].Rounds = 0
 			sv.raceInfos[tracks].Position = 0
 			sv.raceInfos[tracks].ActRound = 0
 			sv.raceInfos[tracks].TopRound = 0
 			sv.raceInfos[tracks].ActSpeed = 0
 			sv.raceInfos[tracks].TopSpeed = 0
+			sv.raceInfos[tracks].PilotUuid = pilots[tracks].Uuid
 		}
 
 		sv.raceState = slotman.RaceStateRaceWaiting
+
+		sv.sdo.SetTrackFixedSpeed(0, 45)
+		sv.sdo.SetTrackFixedSpeed(1, 45)
+
 		return
 	}
 
@@ -170,6 +175,22 @@ func (sv *Service) OnRoundCompleted(track int, roundMillis int) {
 
 	for position, record := range sortRecords {
 		record.Position = position + 1
+	}
+
+	for ti, info := range sv.raceInfos {
+
+		if sv.tracksReady[ti] == 0 {
+			continue
+		}
+
+		resBytes, err := json.Marshal(info)
+		if err != nil {
+			log.Cerror(err)
+			continue
+		}
+
+		err = sv.srv.Broadcast(resBytes)
+		log.Cerror(err)
 	}
 }
 

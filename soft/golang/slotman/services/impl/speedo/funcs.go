@@ -8,6 +8,17 @@ import (
 	"slotman/utils/log"
 )
 
+func (sv *Service) SetTrackFixedSpeed(track int, percent int) {
+
+	if track < 0 || track >= slotman.MaxTracks {
+		return
+	}
+
+	log.Printf("SetTrackFixedSpeed track=%d percent=%v", track, percent)
+
+	sv.tracksFixed[track] = percent
+}
+
 func (sv *Service) SetTrackEnable(track int, enable bool) {
 
 	if track < 0 || track >= slotman.MaxTracks {
@@ -90,6 +101,10 @@ func (sv *Service) SetSpeed(track int, percent float64, now bool) (err error) {
 	if motoron == nil {
 		err = errors.New(fmt.Sprintf("motoron %d not found", track))
 		return
+	}
+
+	if sv.tracksFixed[track] > 0 {
+		percent = float64(sv.tracksFixed[track])
 	}
 
 	speedValue := int16(0)

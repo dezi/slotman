@@ -27,7 +27,8 @@ type Race struct {
 }
 
 type RaceInfo struct {
-	PilotUuid simple.UUIDHex `json:"pilotUuid"`
+	What string `json:"what,omitempty"`
+	Mode string `json:"mode,omitempty"`
 
 	Track    int `json:"track"`
 	Rounds   int `json:"rounds"`
@@ -38,6 +39,8 @@ type RaceInfo struct {
 
 	ActSpeed float64 `json:"actSpeed"`
 	TopSpeed float64 `json:"topSpeed"`
+
+	PilotUuid simple.UUIDHex `json:"pilotUuid"`
 
 	LastRoundTime time.Time `json:"-"`
 }

@@ -14,6 +14,7 @@ type Service struct {
 	rce race.Interface
 
 	tracksEnable []bool
+	tracksFixed  []int
 
 	mxt550s []*mxt550.MXT550
 
@@ -44,6 +45,7 @@ func StartService() (err error) {
 	}
 
 	singleTon.tracksEnable = make([]bool, slotman.MaxTracks)
+	singleTon.tracksFixed = make([]int, slotman.MaxTracks)
 
 	provider.SetProvider(singleTon)
 

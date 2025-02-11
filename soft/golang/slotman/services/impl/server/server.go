@@ -19,8 +19,11 @@ type Service struct {
 
 	setup *slotman.Setup
 
-	webSockets map[simple.UUIDHex]*websocket.Conn
-	mapsLock   sync.Mutex
+	webClientsConns      map[simple.UUIDHex]*websocket.Conn
+	webClientsConnsLocks map[simple.UUIDHex]*sync.Mutex
+	webClientsLock       sync.Mutex
+
+	mapsLock sync.Mutex
 }
 
 var (
@@ -35,7 +38,8 @@ func StartService() (err error) {
 
 	singleTon = &Service{}
 
-	singleTon.webSockets = make(map[simple.UUIDHex]*websocket.Conn)
+	singleTon.webClientsConns = make(map[simple.UUIDHex]*websocket.Conn)
+	singleTon.webClientsConnsLocks = make(map[simple.UUIDHex]*sync.Mutex)
 
 	provider.SetProvider(singleTon)
 

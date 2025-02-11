@@ -14,6 +14,7 @@ type Interface interface {
 	SetSpeed(track int, percent float64, now bool) (err error)
 	SetTrackEnable(track int, enable bool)
 	SetTrackEnableAll(enable bool)
+	SetTrackFixedSpeed(track int, percent int)
 
 	GetMotoronsAttached() (tracks []bool)
 }

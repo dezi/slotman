@@ -3,7 +3,8 @@ package race
 import (
 	"slotman/services/iface/ampel"
 	"slotman/services/iface/pilots"
-	raceIface "slotman/services/iface/race"
+	"slotman/services/iface/race"
+	"slotman/services/iface/server"
 	"slotman/services/iface/speedi"
 	"slotman/services/iface/speedo"
 	"slotman/services/iface/teams"
@@ -14,6 +15,7 @@ import (
 )
 
 type Service struct {
+	srv server.Interface
 	amp ampel.Interface
 	sdi speedi.Interface
 	sdo speedo.Interface
@@ -56,7 +58,11 @@ func StartService() (err error) {
 	singleTon.raceInfos = make([]*slotman.RaceInfo, slotman.MaxTracks)
 
 	for track := range singleTon.raceInfos {
-		singleTon.raceInfos[track] = &slotman.RaceInfo{Track: track}
+		singleTon.raceInfos[track] = &slotman.RaceInfo{
+			What:  "info",
+			Mode:  "set",
+			Track: track,
+		}
 	}
 
 	provider.SetProvider(singleTon)
@@ -84,7 +90,7 @@ func StopService() (err error) {
 }
 
 func (sv *Service) GetName() (name provider.Service) {
-	return raceIface.Service
+	return race.Service
 }
 
 func (sv *Service) GetControlOptions() (interval time.Duration) {

@@ -10,6 +10,8 @@ const (
 
 type Interface interface {
 	GetName() (name provider.Service)
+
+	Broadcast(resBytes []byte) (err error)
 }
 
 func GetInstance() (iface Interface, err error) {

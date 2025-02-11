@@ -8,6 +8,7 @@ import (
 	"slotman/utils/log"
 	"slotman/utils/simple"
 	"strings"
+	"sync"
 )
 
 func (sv *Service) handleWs(w http.ResponseWriter, r *http.Request) {
@@ -46,13 +47,16 @@ func (sv *Service) handleWs(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	var wsLock sync.Mutex
+
 	sv.mapsLock.Lock()
 
-	if sv.webSockets[appId] != nil {
-		_ = sv.webSockets[appId].Close()
+	if sv.webClientsConns[appId] != nil {
+		_ = sv.webClientsConns[appId].Close()
 	}
 
-	sv.webSockets[appId] = ws
+	sv.webClientsConns[appId] = ws
+	sv.webClientsConnsLocks[appId] = &wsLock
 
 	sv.mapsLock.Unlock()
 
@@ -94,9 +98,9 @@ func (sv *Service) handleWs(w http.ResponseWriter, r *http.Request) {
 
 	sv.mapsLock.Lock()
 
-	if sv.webSockets[appId] == ws {
+	if sv.webClientsConns[appId] == ws {
 		_ = ws.Close()
-		delete(sv.webSockets, appId)
+		delete(sv.webClientsConns, appId)
 	}
 
 	sv.mapsLock.Unlock()
@@ -106,9 +110,9 @@ func (sv *Service) broadcast(appId simple.UUIDHex, message []byte) {
 
 	sv.mapsLock.Lock()
 
-	log.Printf("########## bcast len=%d", len(sv.webSockets))
+	log.Printf("########## bcast len=%d", len(sv.webClientsConns))
 
-	for appIdOld, ws := range sv.webSockets {
+	for appIdOld, ws := range sv.webClientsConns {
 
 		if appIdOld == appId {
 			continue

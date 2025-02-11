@@ -3,6 +3,7 @@ package race
 import (
 	"slotman/services/iface/ampel"
 	"slotman/services/iface/pilots"
+	"slotman/services/iface/server"
 	"slotman/services/iface/speedi"
 	"slotman/services/iface/speedo"
 	"slotman/services/iface/teams"
@@ -29,6 +30,11 @@ func (sv *Service) checkServices() {
 	time.Sleep(time.Second)
 
 	var tryErr error
+
+	sv.srv, tryErr = server.GetInstance()
+	if tryErr != nil {
+		return
+	}
 
 	sv.amp, tryErr = ampel.GetInstance()
 	if tryErr != nil {

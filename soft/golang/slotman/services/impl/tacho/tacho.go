@@ -5,6 +5,7 @@ import (
 	"slotman/services/iface/race"
 	"slotman/services/iface/tacho"
 	"slotman/services/impl/provider"
+	"slotman/services/type/slotman"
 	"slotman/things/mcp/mcp23017"
 	"slotman/utils/log"
 	"slotman/utils/simple"
@@ -18,9 +19,9 @@ type Service struct {
 
 	tachoSensor *mcp23017.MCP23017
 	tachoChan   chan TachoRead
-	tachoStates map[int]TachoState
+	tachoStates []TachoState
 
-	trackStates map[int]TrackState
+	trackStates []TrackState
 
 	mapsLock  sync.Mutex
 	waitGroup sync.WaitGroup
@@ -44,8 +45,8 @@ func StartService() (err error) {
 	singleTon = &Service{}
 
 	singleTon.tachoChan = make(chan TachoRead, 10)
-	singleTon.tachoStates = make(map[int]TachoState)
-	singleTon.trackStates = make(map[int]TrackState)
+	singleTon.tachoStates = make([]TachoState, slotman.MaxTracks)
+	singleTon.trackStates = make([]TrackState, slotman.MaxTracks)
 
 	singleTon.isProxyServer = simple.GetExecName() == "proxy"
 	singleTon.isProxyClient = simple.GOOS == "darwin"

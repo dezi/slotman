@@ -29,6 +29,8 @@ func (sv *Service) OnLeaveStartPosition(track int) {
 	trackState.RoundTs = time.Now()
 	sv.trackStates[track] = trackState
 
+	log.Printf("################ RoundTs AAA reset track=%d", track)
+
 	sv.mapsLock.Unlock()
 
 	log.Printf("OnLeaveStartPosition track=%d", track)

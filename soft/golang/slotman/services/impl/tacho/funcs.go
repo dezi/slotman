@@ -1,6 +1,9 @@
 package tacho
 
-import "time"
+import (
+	"slotman/utils/log"
+	"time"
+)
 
 func (sv *Service) GetTachosAttached() (tracks []bool) {
 
@@ -23,10 +26,14 @@ func (sv *Service) OnRaceStarted() {
 
 	sv.mapsLock.Lock()
 
+	log.Printf("################ OnRaceStarted...")
+
 	for track := range sv.trackStates {
 		trackState := sv.trackStates[track]
 		trackState.RoundTs = time.Now()
 		sv.trackStates[track] = trackState
+
+		log.Printf("################ BBB RoundTs reset track=%d", track)
 	}
 
 	sv.mapsLock.Unlock()

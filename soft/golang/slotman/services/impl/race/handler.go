@@ -245,7 +245,7 @@ func (sv *Service) OnEmergencyStopNow(track int) {
 
 			go func(track int) {
 
-				time.Sleep(time.Millisecond * 150)
+				time.Sleep(time.Millisecond * 100)
 				sv.sdo.SetTrackFixedSpeed(track, 0)
 				_ = sv.sdo.SetSpeed(track, 0, true)
 

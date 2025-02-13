@@ -2,6 +2,7 @@ package ampel
 
 import (
 	"slotman/services/impl/provider"
+	"slotman/services/type/slotman"
 )
 
 const (
@@ -19,7 +20,7 @@ type Interface interface {
 	SetRaceRunning()
 	SetRaceSuspended()
 
-	SetRaceWaiting(tracksReady []int)
+	SetRaceWaiting(trackStates []slotman.TrackState)
 }
 
 func GetInstance() (iface Interface, err error) {

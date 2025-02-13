@@ -4,6 +4,7 @@ import (
 	"slotman/services/iface/ampel"
 	"slotman/services/iface/race"
 	"slotman/services/impl/provider"
+	"slotman/services/type/slotman"
 	"slotman/things/mcp/mcp23017"
 	"slotman/utils/log"
 	"sync"
@@ -17,7 +18,7 @@ type Service struct {
 	ampelLock sync.Mutex
 
 	waitingTracks      int
-	waitingTracksReady []int
+	waitingTracksReady []slotman.TrackState
 
 	ampelState AmpelState
 	roundsToGo int

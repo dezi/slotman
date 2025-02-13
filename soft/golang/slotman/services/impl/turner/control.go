@@ -44,7 +44,7 @@ func (sv *Service) DoControlTask() {
 
 func (sv *Service) displayRace() {
 
-	tracksReady := sv.rce.GetTracksReady()
+	tracksReady := sv.rce.GetTrackStates()
 
 	haveTrack := false
 
@@ -218,7 +218,7 @@ func (sv *Service) displayControls(img *image.RGBA) {
 	tachosAttached := sv.tco.GetTachosAttached()
 	motoronsAttached := sv.sdo.GetMotoronsAttached()
 	speedControlsAttached := sv.sdi.GetSpeedControlsAttached()
-	tracksVoltage := sv.rce.GetTracksVoltage()
+	tracksVoltage := sv.rce.GetTrackVoltages()
 
 	maxControls := 0
 	for _, attached := range speedControlsAttached {

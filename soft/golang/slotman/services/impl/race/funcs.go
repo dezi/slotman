@@ -11,13 +11,13 @@ func (sv *Service) GetRaceState() (state slotman.RaceState) {
 	return
 }
 
-func (sv *Service) GetTracksReady() (tracksReady []int) {
-	tracksReady = sv.tracksReady
+func (sv *Service) GetTrackStates() (trackStates []slotman.TrackState) {
+	trackStates = sv.trackStates
 	return
 }
 
-func (sv *Service) GetTracksVoltage() (tracksVoltage []int) {
-	tracksVoltage = sv.tracksVoltage
+func (sv *Service) GetTrackVoltages() (trackVoltages []int) {
+	trackVoltages = sv.trackVoltages
 	return
 }
 

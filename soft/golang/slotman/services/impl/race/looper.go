@@ -26,7 +26,7 @@ func (sv *Service) looper() {
 			tracksReady := 0
 			tracksActive := 0
 
-			for _, ready := range sv.tracksReady {
+			for _, ready := range sv.trackStates {
 
 				if ready == 0 {
 					continue
@@ -70,7 +70,7 @@ func (sv *Service) looper() {
 			sv.amp.SetRaceSuspended()
 
 		case slotman.RaceStateRaceWaiting:
-			sv.amp.SetRaceWaiting(sv.tracksReady)
+			sv.amp.SetRaceWaiting(sv.trackStates)
 		}
 	}
 }

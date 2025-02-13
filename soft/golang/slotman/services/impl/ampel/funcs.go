@@ -1,5 +1,7 @@
 package ampel
 
+import "slotman/services/type/slotman"
+
 func (sv *Service) SetRoundsToGo(roundsToGo int) {
 	sv.roundsToGo = roundsToGo
 }
@@ -14,9 +16,9 @@ func (sv *Service) SetRaceStart() {
 	go sv.patternRaceStart()
 }
 
-func (sv *Service) SetRaceWaiting(tracksReady []int) {
+func (sv *Service) SetRaceWaiting(trackStates []slotman.TrackState) {
 
-	sv.waitingTracksReady = tracksReady
+	sv.waitingTracksReady = trackStates
 
 	if sv.ampelState != AmpelStateRaceWaiting {
 		sv.ampelState = AmpelStateRaceWaiting

@@ -8,6 +8,7 @@ import (
 	"slotman/services/iface/speedo"
 	"slotman/services/iface/tacho"
 	"slotman/services/iface/teams"
+	"slotman/services/type/slotman"
 	"time"
 )
 
@@ -75,8 +76,8 @@ func (sv *Service) checkServices() {
 
 	sv.OnAmpelClickLong()
 
-	sv.tracksReady[0] = 2
-	sv.tracksReady[1] = 2
+	sv.trackStates[0] = slotman.TrackStateReady
+	sv.trackStates[1] = slotman.TrackStateReady
 }
 
 func (sv *Service) checkLooper() {

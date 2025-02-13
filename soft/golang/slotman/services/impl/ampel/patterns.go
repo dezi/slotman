@@ -1,6 +1,7 @@
 package ampel
 
 import (
+	"slotman/services/type/slotman"
 	"slotman/things/mcp/mcp23017"
 	"slotman/utils/log"
 	"time"
@@ -27,19 +28,19 @@ func (sv *Service) patternRaceWaiting() {
 		pins, _ := ampelGpio.ReadPins()
 		pins &= 0x8000
 
-		for track, ready := range sv.waitingTracksReady {
+		for track, trackState := range sv.waitingTracksReady {
 
-			if track > 4 || ready == 0 {
+			if track > 4 || trackState == slotman.TrackStateInactive {
 				continue
 			}
 
-			if ready == 1 {
+			if trackState == slotman.TrackStateActive {
 				if state%2 == 0 {
 					pins |= 1 << pinsYellow[4-track]
 				}
 			}
 
-			if ready == 2 {
+			if trackState == slotman.TrackStateReady {
 				pins |= 1 << pinsYellow[4-track]
 				pins |= 1 << pinsGreen[4-track]
 			}

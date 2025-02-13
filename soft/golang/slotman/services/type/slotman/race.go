@@ -44,3 +44,12 @@ type RaceInfo struct {
 
 	LastRoundTime time.Time `json:"-"`
 }
+
+type TrackState int
+
+const (
+	TrackStateInactive TrackState = 0
+	TrackStateActive   TrackState = 1
+	TrackStateReady    TrackState = 2
+	TrackStateFinished TrackState = 3
+)

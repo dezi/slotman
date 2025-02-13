@@ -13,8 +13,8 @@ type Interface interface {
 	GetName() (name provider.Service)
 
 	GetRaceState() (state slotman.RaceState)
-	GetTracksReady() (tracksReady []int)
-	GetTracksVoltage() (tracksVoltage []int)
+	GetTrackStates() (trackStates []slotman.TrackState)
+	GetTrackVoltages() (trackVoltages []int)
 	GetRoundsToGo() (rounds int)
 
 	GetRaceInfo(track int) (raceInfo *slotman.RaceInfo, err error)

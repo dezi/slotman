@@ -29,8 +29,8 @@ type Service struct {
 
 	raceInfos []*slotman.RaceInfo
 
-	tracksReady   []int
-	tracksVoltage []int
+	trackStates   []slotman.TrackState
+	trackVoltages []int
 
 	roundsToGo int
 
@@ -54,8 +54,8 @@ func StartService() (err error) {
 
 	singleTon.raceState = slotman.RaceStateIdle
 
-	singleTon.tracksReady = make([]int, slotman.MaxTracks)
-	singleTon.tracksVoltage = make([]int, slotman.MaxTracks)
+	singleTon.trackStates = make([]slotman.TrackState, slotman.MaxTracks)
+	singleTon.trackVoltages = make([]int, slotman.MaxTracks)
 
 	singleTon.raceInfos = make([]*slotman.RaceInfo, slotman.MaxTracks)
 

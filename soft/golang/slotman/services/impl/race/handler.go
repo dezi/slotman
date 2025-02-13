@@ -104,7 +104,7 @@ func (sv *Service) OnMotoronVoltage(tracks []int, voltageMv uint32) {
 	//log.Printf("OnMotoronVoltage tracks=%v voltageMv=%d", tracks, voltageMv)
 
 	for _, track := range tracks {
-		sv.tracksVoltage[track] = int(voltageMv)
+		sv.trackVoltages[track] = int(voltageMv)
 	}
 }
 
@@ -123,7 +123,7 @@ func (sv *Service) OnEnterStartPosition(track int) {
 
 	log.Printf("OnEnterStartPosition track=%d", track)
 
-	sv.tracksReady[track] = 2
+	sv.trackStates[track] = slotman.TrackStateReady
 
 	if sv.raceState == slotman.RaceStateRaceWaiting {
 		sv.sdo.SetTrackEnable(track, false)
@@ -132,7 +132,7 @@ func (sv *Service) OnEnterStartPosition(track int) {
 
 func (sv *Service) OnLeaveStartPosition(track int) {
 	log.Printf("OnLeaveStartPosition track=%d", track)
-	sv.tracksReady[track] = 1
+	sv.trackStates[track] = slotman.TrackStateActive
 }
 
 func (sv *Service) OnRoundCompleted(track int, roundMillis int) {
@@ -182,7 +182,7 @@ func (sv *Service) OnRoundCompleted(track int, roundMillis int) {
 
 	for ti, info := range sv.raceInfos {
 
-		if sv.tracksReady[ti] == 0 {
+		if sv.trackStates[ti] == slotman.TrackStateInactive {
 			continue
 		}
 
@@ -215,7 +215,8 @@ func (sv *Service) OnSpeedMeasurement(track int, speed float64) {
 
 func (sv *Service) OnEmergencyStopNow(track int) {
 
-	log.Printf("OnEmergencyStopNow track=%d", track)
+	log.Printf("OnEmergencyStopNow track=%d rounds=%d",
+		track, sv.raceInfos[track].Rounds+1)
 
 	if sv.raceState == slotman.RaceStateRaceWaiting {
 
@@ -233,12 +234,48 @@ func (sv *Service) OnEmergencyStopNow(track int) {
 
 		if sv.raceInfos[track].Rounds+1 >= sv.roundsToGo {
 
-			log.Printf("OnEmergencyStopNow track=%d finished now", track)
+			log.Printf("################### OnEmergencyStopNow track=%d finished now", track)
+
+			sv.trackStates[track] = slotman.TrackStateFinished
 
 			sv.sdo.SetTrackEnable(track, false)
 
-			err := sv.sdo.SetSpeed(track, 0, true)
-			log.Cerror(err)
+			sv.sdo.SetTrackFixedSpeed(track, -100)
+			_ = sv.sdo.SetSpeed(track, -100, true)
+
+			go func(track int) {
+
+				time.Sleep(time.Millisecond * 150)
+				sv.sdo.SetTrackFixedSpeed(track, 0)
+				_ = sv.sdo.SetSpeed(track, 0, true)
+
+			}(track)
+		}
+
+		//
+		// Check if all pilots finished.
+		//
+
+		totalTracks := 0
+		finishedTracks := 0
+
+		for _, state := range sv.trackStates {
+
+			if state == slotman.TrackStateInactive {
+				continue
+			}
+
+			if state == slotman.TrackStateFinished {
+				finishedTracks++
+			}
+
+			totalTracks++
+		}
+
+		log.Printf("############ finishedTracks=%d == totalTracks=%d", finishedTracks, totalTracks)
+
+		if finishedTracks == totalTracks {
+			sv.raceState = slotman.RaceStateRaceFinished
 		}
 	}
 }

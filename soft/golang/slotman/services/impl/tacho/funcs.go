@@ -30,5 +30,4 @@ func (sv *Service) OnRaceStarted() {
 	}
 
 	sv.mapsLock.Unlock()
-
 }

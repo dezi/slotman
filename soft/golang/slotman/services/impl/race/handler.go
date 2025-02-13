@@ -279,3 +279,7 @@ func (sv *Service) OnEmergencyStopNow(track int) {
 		}
 	}
 }
+
+func (sv *Service) OnAsciiKeyPress(ascii byte) {
+	log.Printf("OnAsciiKeyPress ascii=%d", ascii)
+}

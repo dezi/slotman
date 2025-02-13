@@ -2,6 +2,7 @@ package race
 
 import (
 	"slotman/services/iface/ampel"
+	"slotman/services/iface/keyin"
 	"slotman/services/iface/pilots"
 	"slotman/services/iface/race"
 	"slotman/services/iface/server"
@@ -17,6 +18,7 @@ import (
 
 type Service struct {
 	srv server.Interface
+	kin keyin.Interface
 	amp ampel.Interface
 	sdi speedi.Interface
 	sdo speedo.Interface
@@ -52,6 +54,11 @@ func StartService() (err error) {
 
 	singleTon = &Service{}
 
+	singleTon.kin, err = keyin.GetInstance()
+	if err != nil {
+		return
+	}
+
 	singleTon.raceState = slotman.RaceStateIdle
 
 	singleTon.trackStates = make([]slotman.TrackState, slotman.MaxTracks)
@@ -67,6 +74,8 @@ func StartService() (err error) {
 		}
 	}
 
+	singleTon.kin.Subscribe(singleTon)
+
 	provider.SetProvider(singleTon)
 
 	return
@@ -81,6 +90,8 @@ func StopService() (err error) {
 	provider.UnsetProvider(singleTon)
 
 	log.Printf("Stopping service...")
+
+	singleTon.kin.Unsubscribe(singleTon)
 
 	singleTon.doExit = true
 

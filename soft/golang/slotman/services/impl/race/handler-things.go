@@ -194,7 +194,7 @@ func (sv *Service) OnRoundCompleted(track int, roundMillis int) {
 			continue
 		}
 
-		err = sv.srv.Broadcast(resBytes)
+		err = sv.srv.Broadcast("", resBytes)
 		log.Cerror(err)
 	}
 }

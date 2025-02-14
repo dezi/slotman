@@ -6,7 +6,6 @@ import (
 	serverIface "slotman/services/iface/server"
 	"slotman/services/impl/provider"
 	serverTypes "slotman/services/type/server"
-	"slotman/services/type/slotman"
 	"slotman/utils/log"
 	"slotman/utils/simple"
 	"sync"
@@ -26,8 +25,6 @@ type Service struct {
 	subscribersLock sync.Mutex
 
 	mapsLock sync.Mutex
-
-	setup *slotman.Setup
 }
 
 var (

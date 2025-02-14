@@ -13,6 +13,7 @@ import (
 	"slotman/services/impl/provider"
 	"slotman/services/type/slotman"
 	"slotman/utils/log"
+	"sync"
 	"time"
 )
 
@@ -34,7 +35,8 @@ type Service struct {
 	trackStates   []slotman.TrackState
 	trackVoltages []int
 
-	setup *slotman.Setup
+	setup     *slotman.Setup
+	setupLock sync.Mutex
 
 	roundsToGo int
 
@@ -83,6 +85,9 @@ func StartService() (err error) {
 
 	singleTon.kin.Subscribe(singleTon)
 
+	singleTon.srv.Subscribe("init", singleTon)
+	singleTon.srv.Subscribe("race", singleTon)
+	singleTon.srv.Subscribe("pilot", singleTon)
 	singleTon.srv.Subscribe("tracks", singleTon)
 
 	provider.SetProvider(singleTon)
@@ -101,6 +106,9 @@ func StopService() (err error) {
 	log.Printf("Stopping service...")
 
 	singleTon.srv.Unsubscribe("tracks")
+	singleTon.srv.Unsubscribe("pilot")
+	singleTon.srv.Unsubscribe("race")
+	singleTon.srv.Unsubscribe("init")
 
 	singleTon.kin.Unsubscribe(singleTon)
 

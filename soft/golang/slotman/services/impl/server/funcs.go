@@ -41,14 +41,18 @@ func (sv *Service) Transmit(appId simple.UUIDHex, resBytes []byte) (err error) {
 	return
 }
 
-func (sv *Service) Broadcast(resBytes []byte) (err error) {
+func (sv *Service) Broadcast(appId simple.UUIDHex, resBytes []byte) (err error) {
 
 	sv.webClientsLock.Lock()
 	defer sv.webClientsLock.Unlock()
 
-	for appId, webClientsConn := range sv.webClientsConns {
+	for appIdBc, webClientsConn := range sv.webClientsConns {
 
-		webClientsConnLock := sv.webClientsConnsLocks[appId]
+		if appId == appIdBc {
+			continue
+		}
+
+		webClientsConnLock := sv.webClientsConnsLocks[appIdBc]
 
 		if webClientsConn == nil || webClientsConnLock == nil {
 			continue

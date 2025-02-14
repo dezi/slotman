@@ -17,7 +17,7 @@ type Interface interface {
 	Unsubscribe(what string)
 
 	Transmit(appId simple.UUIDHex, resBytes []byte) (err error)
-	Broadcast(resBytes []byte) (err error)
+	Broadcast(appId simple.UUIDHex, resBytes []byte) (err error)
 }
 
 func GetInstance() (iface Interface, err error) {

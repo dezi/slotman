@@ -90,16 +90,6 @@ func (sv *Service) handleWs(w http.ResponseWriter, r *http.Request) {
 
 		if subscriber != nil {
 			go subscriber.OnRequestFromClient(appId, message.What, reqBytes)
-			continue
-		}
-
-		switch message.What {
-		case "init":
-			err = sv.handleInit(appId, ws, reqBytes)
-		case "race":
-			err = sv.handleRace(appId, ws, reqBytes)
-		case "pilot":
-			err = sv.handlePilot(appId, ws, reqBytes)
 		}
 	}
 

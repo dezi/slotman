@@ -309,5 +309,4 @@ func (sv *Service) OnAsciiKeyPress(ascii byte) {
 
 		return
 	}
-
 }

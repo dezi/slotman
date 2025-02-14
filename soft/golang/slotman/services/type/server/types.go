@@ -1,11 +1,14 @@
 package server
 
+import (
+	"slotman/utils/simple"
+)
+
 type Message struct {
 	What string `json:"what"`
 	Mode string `json:"mode,omitempty"`
 }
 
 type Subscriber interface {
-	OnMessageFromClient(reqBytes []byte) (resBytes []byte, err error)
-	OnMessageFromServer(resBytes []byte)
+	OnRequestFromClient(appId simple.UUIDHex, what string, reqBytes []byte)
 }

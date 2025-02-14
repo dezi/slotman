@@ -2,6 +2,8 @@ package server
 
 import (
 	"slotman/services/impl/provider"
+	"slotman/services/type/server"
+	"slotman/utils/simple"
 )
 
 const (
@@ -11,6 +13,10 @@ const (
 type Interface interface {
 	GetName() (name provider.Service)
 
+	Subscribe(what string, handler server.Subscriber)
+	Unsubscribe(what string)
+
+	Transmit(appId simple.UUIDHex, resBytes []byte) (err error)
 	Broadcast(resBytes []byte) (err error)
 }
 

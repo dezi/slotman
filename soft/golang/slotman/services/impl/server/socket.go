@@ -62,11 +62,11 @@ func (sv *Service) handleWs(w http.ResponseWriter, r *http.Request) {
 
 	var mType int
 	var tryErr error
-	var jsonBytes []byte
+	var reqBytes []byte
 
 	for {
 
-		mType, jsonBytes, tryErr = ws.ReadMessage()
+		mType, reqBytes, tryErr = ws.ReadMessage()
 		if tryErr != nil {
 			break
 		}
@@ -75,26 +75,31 @@ func (sv *Service) handleWs(w http.ResponseWriter, r *http.Request) {
 			continue
 		}
 
-		//log.Printf("Message mType=%d jsonBytes=%sd", mType, string(jsonBytes))
+		//log.Printf("Message mType=%d reqBytes=%sd", mType, string(reqBytes))
 
 		message := server.Message{}
-		err = json.Unmarshal(jsonBytes, &message)
+		err = json.Unmarshal(reqBytes, &message)
 		if err != nil {
 			log.Cerror(err)
 			break
 		}
 
+		sv.subscribersLock.Lock()
+		subscriber := sv.subscribers[message.What]
+		sv.subscribersLock.Unlock()
+
+		if subscriber != nil {
+			go subscriber.OnRequestFromClient(appId, message.What, reqBytes)
+			continue
+		}
+
 		switch message.What {
 		case "init":
-			err = sv.handleInit(appId, ws, jsonBytes)
+			err = sv.handleInit(appId, ws, reqBytes)
 		case "race":
-			err = sv.handleRace(appId, ws, jsonBytes)
+			err = sv.handleRace(appId, ws, reqBytes)
 		case "pilot":
-			err = sv.handlePilot(appId, ws, jsonBytes)
-		case "tracks":
-			err = sv.handleTracks(appId, ws, jsonBytes)
-		case "controller":
-			err = sv.handleController(appId, ws, jsonBytes)
+			err = sv.handlePilot(appId, ws, reqBytes)
 		}
 	}
 

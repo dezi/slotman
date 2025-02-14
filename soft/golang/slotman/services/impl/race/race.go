@@ -34,6 +34,8 @@ type Service struct {
 	trackStates   []slotman.TrackState
 	trackVoltages []int
 
+	setup *slotman.Setup
+
 	roundsToGo int
 
 	servicesReady bool
@@ -53,6 +55,11 @@ func StartService() (err error) {
 	}
 
 	singleTon = &Service{}
+
+	singleTon.srv, err = server.GetInstance()
+	if err != nil {
+		return
+	}
 
 	singleTon.kin, err = keyin.GetInstance()
 	if err != nil {
@@ -76,6 +83,8 @@ func StartService() (err error) {
 
 	singleTon.kin.Subscribe(singleTon)
 
+	singleTon.srv.Subscribe("tracks", singleTon)
+
 	provider.SetProvider(singleTon)
 
 	return
@@ -90,6 +99,8 @@ func StopService() (err error) {
 	provider.UnsetProvider(singleTon)
 
 	log.Printf("Stopping service...")
+
+	singleTon.srv.Unsubscribe("tracks")
 
 	singleTon.kin.Unsubscribe(singleTon)
 

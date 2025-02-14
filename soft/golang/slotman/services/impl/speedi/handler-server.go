@@ -1,8 +1,7 @@
-package server
+package speedi
 
 import (
 	"encoding/json"
-	"github.com/gorilla/websocket"
 	"math/rand"
 	"slotman/services/type/slotman"
 	"slotman/utils/log"
@@ -10,10 +9,12 @@ import (
 	"time"
 )
 
-func (sv *Service) handleController(appId simple.UUIDHex, ws *websocket.Conn, jsonBytes []byte) (err error) {
+func (sv *Service) OnRequestFromClient(appId simple.UUIDHex, what string, reqBytes []byte) {
+
+	_ = what
 
 	controller := &slotman.Controller{}
-	err = json.Unmarshal(jsonBytes, controller)
+	err := json.Unmarshal(reqBytes, controller)
 	if err != nil {
 		log.Cerror(err)
 		return
@@ -24,7 +25,7 @@ func (sv *Service) handleController(appId simple.UUIDHex, ws *websocket.Conn, js
 		log.Printf("Controller controller=%d isCalibrating=%v",
 			controller.Controller, controller.IsCalibrating)
 
-		go sv.fakeControllerCalibration(appId, ws, controller.Controller, controller.IsCalibrating)
+		go sv.fakeControllerCalibration(appId, controller.Controller, controller.IsCalibrating)
 
 		return
 	}
@@ -34,7 +35,7 @@ func (sv *Service) handleController(appId simple.UUIDHex, ws *websocket.Conn, js
 
 var isCalibratingNow bool
 
-func (sv *Service) fakeControllerCalibration(appId simple.UUIDHex, ws *websocket.Conn, selected int, isCalibrating bool) {
+func (sv *Service) fakeControllerCalibration(appId simple.UUIDHex, selected int, isCalibrating bool) {
 
 	isCalibratingNow = isCalibrating
 
@@ -74,13 +75,13 @@ func (sv *Service) fakeControllerCalibration(appId simple.UUIDHex, ws *websocket
 			isCalibratingNow = false
 		}
 
-		jsonBytes, err := simple.MarshalJsonClean(controller)
+		resBytes, err := simple.MarshalJsonClean(controller)
 		if err != nil {
 			log.Cerror(err)
 			return
 		}
 
-		tryErr := ws.WriteMessage(websocket.TextMessage, jsonBytes)
+		tryErr := sv.srv.Transmit(appId, resBytes)
 		if tryErr != nil {
 			break
 		}

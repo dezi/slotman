@@ -10,6 +10,7 @@ const (
 	AmpelStateRaceWaiting   AmpelState = "ampel.race.waiting"
 	AmpelStateRaceSuspended AmpelState = "ampel.race.suspend"
 	AmpelStateRaceRunning   AmpelState = "ampel.race.restart"
+	AmpelStateRaceFinished  AmpelState = "ampel.race.finished"
 )
 
 var (

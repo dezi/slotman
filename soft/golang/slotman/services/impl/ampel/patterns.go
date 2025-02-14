@@ -112,6 +112,76 @@ func (sv *Service) patternRaceSuspended() {
 	}
 }
 
+func (sv *Service) patternRaceFinished() {
+
+	log.Printf("Pattern race finished started...")
+	defer log.Printf("Pattern race finished done.")
+
+	state := 0
+	delay := 250
+
+	for !sv.doExit && sv.ampelState == AmpelStateRaceFinished {
+
+		ampelGpio := sv.ampelGpio
+		if ampelGpio == nil {
+			time.Sleep(time.Second)
+			continue
+		}
+
+		sv.ampelLock.Lock()
+
+		pins, _ := ampelGpio.ReadPins()
+		pins &= 0x8000
+
+		switch state {
+		case 0: // * _ _ _ *
+			pins |= 1 << pinsRed[0]
+			pins |= 1 << pinsRed[4]
+			pins |= 1 << pinsGreen[0]
+			pins |= 1 << pinsGreen[4]
+			pins |= 1 << pinsYellow[0]
+			pins |= 1 << pinsYellow[4]
+		case 1: // _ * _ * _
+			pins |= 1 << pinsRed[1]
+			pins |= 1 << pinsRed[3]
+			pins |= 1 << pinsGreen[1]
+			pins |= 1 << pinsGreen[3]
+			pins |= 1 << pinsYellow[1]
+			pins |= 1 << pinsYellow[3]
+		case 2: // _ _ * _ _
+			pins |= 1 << pinsRed[2]
+			pins |= 1 << pinsGreen[2]
+			pins |= 1 << pinsYellow[2]
+		case 3: // _ * _ * _
+			pins |= 1 << pinsRed[1]
+			pins |= 1 << pinsRed[3]
+			pins |= 1 << pinsGreen[1]
+			pins |= 1 << pinsGreen[3]
+			pins |= 1 << pinsYellow[1]
+			pins |= 1 << pinsYellow[3]
+		case 4: // * _ _ _ *
+			pins |= 1 << pinsRed[0]
+			pins |= 1 << pinsRed[4]
+			pins |= 1 << pinsGreen[0]
+			pins |= 1 << pinsGreen[4]
+			pins |= 1 << pinsYellow[0]
+			pins |= 1 << pinsYellow[4]
+		}
+
+		_ = ampelGpio.WritePins(pins)
+
+		sv.ampelLock.Unlock()
+
+		state = (state + 1) % 4
+
+		wait := delay
+		for !sv.doExit && sv.ampelState == AmpelStateRaceFinished && wait > 0 {
+			time.Sleep(time.Millisecond * 20)
+			wait -= 20
+		}
+	}
+}
+
 func (sv *Service) patternRaceRunning() {
 
 	log.Printf("Pattern race running started...")

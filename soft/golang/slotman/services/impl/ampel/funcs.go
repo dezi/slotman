@@ -35,3 +35,8 @@ func (sv *Service) SetRaceRunning() {
 	sv.ampelState = AmpelStateRaceRunning
 	go sv.patternRaceRunning()
 }
+
+func (sv *Service) SetRaceFinished(trackStates []slotman.TrackState) {
+	sv.ampelState = AmpelStateRaceFinished
+	go sv.patternRaceFinished()
+}

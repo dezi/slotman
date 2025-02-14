@@ -42,7 +42,8 @@ func (sv *Service) looper() {
 				tracksReady++
 			}
 
-			if tracksActive == tracksReady && time.Now().Unix()-waitingReady.Unix() > 3 {
+			if tracksActive > 0 && tracksActive == tracksReady &&
+				time.Now().Unix()-waitingReady.Unix() > 3 {
 				sv.raceState = slotman.RaceStateRaceStarting
 				sv.sdo.SetTrackEnableAll(true)
 			}
@@ -71,6 +72,9 @@ func (sv *Service) looper() {
 
 		case slotman.RaceStateRaceWaiting:
 			sv.amp.SetRaceWaiting(sv.trackStates)
+
+		case slotman.RaceStateRaceFinished:
+			sv.amp.SetRaceFinished(sv.trackStates)
 		}
 	}
 }

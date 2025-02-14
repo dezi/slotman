@@ -31,14 +31,18 @@ func (sv *Service) OnAmpelClickShort() {
 		}
 
 		sv.amp.SetRoundsToGo(sv.roundsToGo)
+
+		log.Printf("OnAmpelClickShort roundsToGo=%d", sv.roundsToGo)
 	}
 
 	if sv.raceState == slotman.RaceStateRaceRunning {
+		log.Printf("OnAmpelClickShort suspend race...")
 		sv.raceState = slotman.RaceStateRaceSuspended
 		return
 	}
 
 	if sv.raceState == slotman.RaceStateRaceSuspended {
+		log.Printf("OnAmpelClickShort resume race...")
 		sv.raceState = slotman.RaceStateRaceRunning
 		return
 	}
@@ -85,12 +89,10 @@ func (sv *Service) OnAmpelClickLong() {
 			sv.raceInfos[tracks].PilotUuid = pilots[tracks].Uuid
 		}
 
+		sv.trackStates[0] = slotman.TrackStateActive
+		sv.trackStates[1] = slotman.TrackStateActive
+
 		sv.raceState = slotman.RaceStateRaceWaiting
-
-		sv.sdo.SetTrackFixedSpeed(0, 44)
-		sv.sdo.SetTrackFixedSpeed(1, 44)
-
-		sv.tco.OnRaceStarted()
 
 		return
 	}
@@ -234,7 +236,7 @@ func (sv *Service) OnEmergencyStopNow(track int) {
 
 		if sv.raceInfos[track].Rounds+1 >= sv.roundsToGo {
 
-			log.Printf("################### OnEmergencyStopNow track=%d finished now", track)
+			log.Printf("OnEmergencyStopNow track=%d finished now", track)
 
 			sv.trackStates[track] = slotman.TrackStateFinished
 
@@ -272,7 +274,7 @@ func (sv *Service) OnEmergencyStopNow(track int) {
 			totalTracks++
 		}
 
-		log.Printf("############ finishedTracks=%d == totalTracks=%d", finishedTracks, totalTracks)
+		log.Printf("Check finishedTracks=%d totalTracks=%d", finishedTracks, totalTracks)
 
 		if finishedTracks == totalTracks {
 			sv.raceState = slotman.RaceStateRaceFinished
@@ -281,5 +283,31 @@ func (sv *Service) OnEmergencyStopNow(track int) {
 }
 
 func (sv *Service) OnAsciiKeyPress(ascii byte) {
+
 	log.Printf("OnAsciiKeyPress ascii=%d", ascii)
+
+	if ascii == ' ' {
+		sv.OnAmpelClickShort()
+		return
+	}
+
+	if ascii == '\n' {
+		sv.OnAmpelClickLong()
+		return
+	}
+
+	if ascii == '#' {
+
+		sv.trackStates[0] = slotman.TrackStateReady
+		sv.trackStates[1] = slotman.TrackStateReady
+
+		sv.sdo.SetTrackFixedSpeed(0, 44)
+		sv.sdo.SetTrackFixedSpeed(1, 44)
+
+		sv.tco.OnRaceStarted()
+		sv.OnRaceStarted()
+
+		return
+	}
+
 }

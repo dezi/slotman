@@ -27,14 +27,14 @@ func (sv *Service) looper() {
 			continue
 		}
 
+		log.Printf("Keyboard input=%d", input[0])
+
 		sv.subscribersLock.Lock()
 
 		for subscriber := range sv.subscribers {
-			subscriber.OnAsciiKeyPress(input[0])
+			go subscriber.OnAsciiKeyPress(input[0])
 		}
 
 		sv.subscribersLock.Unlock()
-
-		log.Printf("Keyboard input=%d", input[0])
 	}
 }

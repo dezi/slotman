@@ -26,14 +26,12 @@ func (sv *Service) OnRaceStarted() {
 
 	sv.mapsLock.Lock()
 
-	log.Printf("################ OnRaceStarted...")
+	log.Printf("OnRaceStarted...")
 
 	for track := range sv.trackStates {
 		trackState := sv.trackStates[track]
 		trackState.RoundTs = time.Now()
 		sv.trackStates[track] = trackState
-
-		log.Printf("################ BBB RoundTs reset track=%d", track)
 	}
 
 	sv.mapsLock.Unlock()

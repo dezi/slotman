@@ -21,6 +21,7 @@ type Interface interface {
 	SetRaceSuspended()
 
 	SetRaceWaiting(trackStates []slotman.TrackState)
+	SetRaceFinished(trackStates []slotman.TrackState)
 }
 
 func GetInstance() (iface Interface, err error) {

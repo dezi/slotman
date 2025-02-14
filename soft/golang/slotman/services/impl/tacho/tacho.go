@@ -45,7 +45,7 @@ func StartService() (err error) {
 	singleTon = &Service{}
 
 	singleTon.tachoChan = make(chan TachoRead, 10)
-	singleTon.tachoStates = make([]TachoState, slotman.MaxTracks)
+	singleTon.tachoStates = make([]TachoState, slotman.MaxTracks*2)
 	singleTon.trackStates = make([]TrackState, slotman.MaxTracks)
 
 	singleTon.isProxyServer = simple.GetExecName() == "proxy"

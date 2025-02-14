@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"github.com/gorilla/websocket"
 	"net/http"
-	"slotman/services/type/slotman"
+	"slotman/services/type/server"
 	"slotman/utils/log"
 	"slotman/utils/simple"
 	"strings"
@@ -77,7 +77,7 @@ func (sv *Service) handleWs(w http.ResponseWriter, r *http.Request) {
 
 		//log.Printf("Message mType=%d jsonBytes=%sd", mType, string(jsonBytes))
 
-		message := slotman.Message{}
+		message := server.Message{}
 		err = json.Unmarshal(jsonBytes, &message)
 		if err != nil {
 			log.Cerror(err)

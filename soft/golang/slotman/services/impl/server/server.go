@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"slotman/services/iface/server"
 	"slotman/services/impl/provider"
+	proxyTypes "slotman/services/type/proxy"
 	"slotman/services/type/slotman"
 	"slotman/utils/log"
 	"slotman/utils/simple"
@@ -22,6 +23,9 @@ type Service struct {
 	webClientsConns      map[simple.UUIDHex]*websocket.Conn
 	webClientsConnsLocks map[simple.UUIDHex]*sync.Mutex
 	webClientsLock       sync.Mutex
+
+	subscribers     map[string]proxyTypes.Subscriber
+	subscribersLock sync.Mutex
 
 	mapsLock sync.Mutex
 }

@@ -3,14 +3,14 @@ package server
 import (
 	"encoding/json"
 	"github.com/gorilla/websocket"
-	"slotman/services/type/slotman"
+	"slotman/services/type/server"
 	"slotman/utils/log"
 	"slotman/utils/simple"
 )
 
 func (sv *Service) handleInit(appId simple.UUIDHex, ws *websocket.Conn, jsonBytes []byte) (err error) {
 
-	init := slotman.Message{}
+	init := server.Message{}
 	err = json.Unmarshal(jsonBytes, &init)
 	if err != nil {
 		log.Cerror(err)

@@ -6,7 +6,7 @@ import (
 )
 
 const (
-	Service provider.Service = "serviceDisplay"
+	Service provider.Service = "serviceIdentity"
 )
 
 type Interface interface {

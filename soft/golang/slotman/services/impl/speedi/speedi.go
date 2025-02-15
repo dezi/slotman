@@ -69,7 +69,7 @@ func StartService() (err error) {
 	}
 
 	singleTon.prx.Subscribe(AreaSpeedi, singleTon)
-	singleTon.srv.Subscribe("control", singleTon)
+	singleTon.srv.Subscribe("controller", singleTon)
 
 	provider.SetProvider(singleTon)
 
@@ -86,7 +86,7 @@ func StopService() (err error) {
 
 	log.Printf("Stopping service...")
 
-	singleTon.srv.Unsubscribe("control")
+	singleTon.srv.Unsubscribe("controller")
 	singleTon.prx.Unsubscribe(AreaSpeedi)
 
 	singleTon.doExit = true

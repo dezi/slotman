@@ -10,6 +10,9 @@ import (
 
 func (sv *Service) OnRequestFromClient(appId simple.UUIDHex, what string, reqBytes []byte) {
 	switch what {
+	case "init":
+		err := sv.handleInit(appId, reqBytes)
+		log.Cerror(err)
 	case "race":
 		err := sv.handleRace(appId, reqBytes)
 		log.Cerror(err)

@@ -1,8 +1,10 @@
 package server
 
 import (
+	"errors"
 	"github.com/gorilla/websocket"
 	"slotman/services/type/server"
+	"slotman/utils/log"
 	"slotman/utils/simple"
 )
 
@@ -31,6 +33,8 @@ func (sv *Service) Transmit(appId simple.UUIDHex, resBytes []byte) (err error) {
 	webClientsConnLock := sv.webClientsConnsLocks[appId]
 
 	if webClientsConn == nil || webClientsConnLock == nil {
+		err = errors.New("unknown app id")
+		log.Cerror(err)
 		return
 	}
 

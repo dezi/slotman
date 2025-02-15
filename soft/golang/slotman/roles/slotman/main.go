@@ -2,6 +2,7 @@ package main
 
 import (
 	"slotman/services/impl/ampel"
+	"slotman/services/impl/identity"
 	"slotman/services/impl/keyin"
 	"slotman/services/impl/pilots"
 	"slotman/services/impl/provider"
@@ -10,6 +11,7 @@ import (
 	"slotman/services/impl/server"
 	"slotman/services/impl/speedi"
 	"slotman/services/impl/speedo"
+	"slotman/services/impl/storage"
 	"slotman/services/impl/tacho"
 	"slotman/services/impl/teams"
 	"slotman/services/impl/turner"
@@ -27,6 +29,8 @@ func startup() {
 	log.SetCallerLength(48)
 
 	_ = provider.StartService()
+	_ = identity.StartService()
+	_ = storage.StartService()
 	_ = server.StartService()
 	_ = proxy.StartService()
 	_ = keyin.StartService()
@@ -53,6 +57,8 @@ func startup() {
 
 	_ = keyin.StopService()
 	_ = proxy.StopService()
-	_ = server.StartService()
+	_ = server.StopService()
+	_ = storage.StopService()
+	_ = identity.StopService()
 	_ = provider.StopService()
 }

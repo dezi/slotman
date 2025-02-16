@@ -53,13 +53,13 @@ func StartService() (err error) {
 		return
 	}
 
-	singleTon.srv, err = server.GetInstance()
-	if err != nil {
-		log.Cerror(err)
-		return
-	}
-
 	if !singleTon.isProxyServer {
+
+		singleTon.srv, err = server.GetInstance()
+		if err != nil {
+			log.Cerror(err)
+			return
+		}
 
 		singleTon.sdo, err = speedo.GetInstance()
 		if err != nil {

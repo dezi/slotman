@@ -53,6 +53,8 @@ func StartService() (err error) {
 		return
 	}
 
+	singleTon.prx.Subscribe(AreaSpeedi, singleTon)
+
 	if !singleTon.isProxyServer {
 
 		singleTon.srv, err = server.GetInstance()
@@ -66,10 +68,9 @@ func StartService() (err error) {
 			log.Cerror(err)
 			return
 		}
-	}
 
-	singleTon.prx.Subscribe(AreaSpeedi, singleTon)
-	singleTon.srv.Subscribe("controller", singleTon)
+		singleTon.srv.Subscribe("controller", singleTon)
+	}
 
 	provider.SetProvider(singleTon)
 
@@ -86,7 +87,10 @@ func StopService() (err error) {
 
 	log.Printf("Stopping service...")
 
-	singleTon.srv.Unsubscribe("controller")
+	if !singleTon.isProxyServer {
+		singleTon.srv.Unsubscribe("controller")
+	}
+
 	singleTon.prx.Unsubscribe(AreaSpeedi)
 
 	singleTon.doExit = true

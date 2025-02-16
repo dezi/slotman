@@ -40,7 +40,7 @@ func (sv *Service) checkSensors() {
 					continue
 				}
 
-				err = sensor.SetPinDirections(0x000f)
+				err = sensor.SetPinDirections(0xffff)
 				if err != nil {
 					log.Cerror(err)
 					_ = sensor.Close()

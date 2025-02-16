@@ -53,7 +53,7 @@ func (sv *Service) tachoRead() {
 		// Remark: missing pull down resistors...
 		//
 
-		thisInputs = rd1 & 0x000f
+		//thisInputs = rd1 & 0x000f
 
 		if thisInputs == lastInputs {
 			continue

@@ -48,7 +48,7 @@ func (se *LD2461) GetModelInfo() (vendor, model, short string) {
 
 func (se *LD2461) Open() (err error) {
 
-	shaData := fmt.Sprintf("%s|%s|%s|%s", simple.ZeroUuidHex(), se.Model, se.Vendor, se.DevicePath)
+	shaData := fmt.Sprintf("%s|%s|%s|%s", things.ThingSystemUuid, se.Model, se.Vendor, se.DevicePath)
 	se.Uuid = simple.UuidHexFromSha256([]byte(shaData))
 
 	uartPort := uart.NewDevice(se.DevicePath, se.BaudRate)

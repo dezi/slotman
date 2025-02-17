@@ -53,7 +53,7 @@ func (se *AHT20) GetModelInfo() (vendor, model, short string) {
 
 func (se *AHT20) Open() (err error) {
 
-	shaData := fmt.Sprintf("%s|%s|%s|%s", simple.ZeroUuidHex(), se.Model, se.Vendor, se.DevicePath)
+	shaData := fmt.Sprintf("%s|%s|%s|%s", things.ThingSystemUuid, se.Model, se.Vendor, se.DevicePath)
 	se.Uuid = simple.UuidHexFromSha256([]byte(shaData))
 
 	parts := strings.Split(se.DevicePath, ":")

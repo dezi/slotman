@@ -57,7 +57,7 @@ func (se *MCP23017) Open() (err error) {
 		return
 	}
 
-	shaData := fmt.Sprintf("%s|%s|%s|%s", simple.ZeroUuidHex(), se.Model, se.Vendor, se.DevicePath)
+	shaData := fmt.Sprintf("%s|%s|%s|%s", things.ThingSystemUuid, se.Model, se.Vendor, se.DevicePath)
 
 	se.Uuid = simple.UuidHexFromSha256([]byte(shaData))
 

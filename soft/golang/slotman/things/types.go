@@ -8,21 +8,21 @@ import (
 type ThingType string
 
 const (
-	ThingTypePresence      ThingType = "presence"
-	ThingTypeFallDetect    ThingType = "fall-detect"
-	ThingTypeSleepMonitor  ThingType = "sleep-monitor"
-	ThingTypeHumanTrack    ThingType = "human-track"
-	ThingTypeIllumination  ThingType = "illumination"
-	ThingTypeRfid          ThingType = "rfid"
-	ThingTypePressure      ThingType = "pressure"
-	ThingTypeHumidity      ThingType = "humidity"
-	ThingTypeTemperature   ThingType = "temperature"
-	ThingTypeRGBColor      ThingType = "rgb-color"
-	ThingTypeADConverter   ThingType = "ad-converter"
-	ThingTypeIOExpander    ThingType = "io-expander"
-	ThingTypeMotorDriver   ThingType = "motor-driver"
-	ThingTypeColorDisplay  ThingType = "color-display"
-	ThingTypeUartConverter ThingType = "uart-converter"
+	ThingTypePresence      ThingType = "tt-presence"
+	ThingTypeFallDetect    ThingType = "tt-fall-detect"
+	ThingTypeSleepMonitor  ThingType = "tt-sleep-monitor"
+	ThingTypeHumanTrack    ThingType = "tt-human-track"
+	ThingTypeIllumination  ThingType = "tt-illumination"
+	ThingTypeRfid          ThingType = "tt-rfid"
+	ThingTypePressure      ThingType = "tt-pressure"
+	ThingTypeHumidity      ThingType = "tt-humidity"
+	ThingTypeTemperature   ThingType = "tt-temperature"
+	ThingTypeRGBColor      ThingType = "tt-rgb-color"
+	ThingTypeADConverter   ThingType = "tt-ad-converter"
+	ThingTypeIOExpander    ThingType = "tt-io-expander"
+	ThingTypeMotorDriver   ThingType = "tt-motor-driver"
+	ThingTypeColorDisplay  ThingType = "tt-color-display"
+	ThingTypeUartConverter ThingType = "tt-uart-converter"
 )
 
 type Thing interface {

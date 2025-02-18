@@ -2,6 +2,7 @@ package ampel
 
 import (
 	"slotman/things/mcp/mcp23017"
+	"slotman/things/sensirion/sgp30"
 	"slotman/utils/log"
 )
 
@@ -10,6 +11,9 @@ func (sv *Service) DoControlTask() {
 }
 
 func (sv *Service) checkSensors() {
+
+	_, err := sgp30.ProbeThings(nil)
+	log.Cerror(err)
 
 	if sv.ampelGpio == nil {
 

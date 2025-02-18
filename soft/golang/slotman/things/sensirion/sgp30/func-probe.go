@@ -1,4 +1,4 @@
-package bmp280
+package sgp30
 
 import (
 	"fmt"
@@ -32,12 +32,14 @@ func ProbeThings(busyDevicePaths []string) (things []*SGP30, err error) {
 		i2cDev := i2c.NewDevice(devicePath, ThingI2CAddress)
 		tryErr := i2cDev.Open()
 		if tryErr != nil {
+			log.Cerror(tryErr)
 			continue
 		}
 
 		isValid := false
 
 		xfer, tryErr := i2cDev.WriteBytes([]byte{0x36, 0x82})
+		log.Cerror(tryErr)
 		if tryErr == nil && xfer == 2 {
 			log.Printf("Identified SGP30 devicePath=%s", devicePath)
 			isValid = true

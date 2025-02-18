@@ -1,4 +1,4 @@
-package bmp280
+package sgp30
 
 import (
 	"errors"

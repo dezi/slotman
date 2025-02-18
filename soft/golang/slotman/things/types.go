@@ -23,6 +23,7 @@ const (
 	ThingTypeMotorDriver   ThingType = "tt-motor-driver"
 	ThingTypeColorDisplay  ThingType = "tt-color-display"
 	ThingTypeUartConverter ThingType = "tt-uart-converter"
+	ThingTypeCo2Sensor     ThingType = "tt-co2-sensor"
 )
 
 type Thing interface {

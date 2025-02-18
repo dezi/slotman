@@ -69,13 +69,6 @@ func (se *SGP30) Open() (err error) {
 	se.i2cDev = i2cDev
 	se.IsOpen = true
 
-	se.SetThreshold(0.3)
-
-	_ = se.ResetSensor()
-	_ = se.SetPowerMode(PowerModeNormal, PowerInterval1000ms)
-	_ = se.SetMeasureMode(Oversampling16, Oversampling2)
-	_ = se.readCompensation()
-
 	if se.handler != nil {
 		se.handler.OnThingOpened(se)
 	}

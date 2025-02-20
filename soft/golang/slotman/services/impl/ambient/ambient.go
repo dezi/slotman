@@ -9,7 +9,7 @@ import (
 )
 
 type Service struct {
-	sgp40Co2 *sgp40.SGP40
+	sgp40 *sgp40.SGP40
 
 	doExit bool
 }
@@ -43,9 +43,9 @@ func StopService() (err error) {
 
 	singleTon.doExit = true
 
-	if singleTon.sgp40Co2 != nil {
-		_ = singleTon.sgp40Co2.Close()
-		singleTon.sgp40Co2 = nil
+	if singleTon.sgp40 != nil {
+		_ = singleTon.sgp40.Close()
+		singleTon.sgp40 = nil
 	}
 
 	log.Printf("Stopped service.")

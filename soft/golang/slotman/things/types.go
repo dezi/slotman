@@ -24,7 +24,7 @@ const (
 	ThingTypeMotorDriver   ThingType = "tt-motor-driver"
 	ThingTypeColorDisplay  ThingType = "tt-color-display"
 	ThingTypeUartConverter ThingType = "tt-uart-converter"
-	ThingTypeCo2Sensor     ThingType = "tt-co2-sensor"
+	ThingTypeAirQuality    ThingType = "tt-air-quality"
 	ThingTypeGpsPosition   ThingType = "tt-gps-position"
 )
 

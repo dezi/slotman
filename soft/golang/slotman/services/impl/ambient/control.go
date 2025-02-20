@@ -6,12 +6,12 @@ import (
 )
 
 func (sv *Service) DoControlTask() {
-	sv.checkSensors()
+	sv.checkThingSGP40()
 }
 
-func (sv *Service) checkSensors() {
+func (sv *Service) checkThingSGP40() {
 
-	if sv.sgp40Co2 == nil {
+	if sv.sgp40 == nil {
 
 		sensors, err := sgp40.ProbeThings(nil)
 
@@ -44,7 +44,7 @@ func (sv *Service) checkSensors() {
 				log.Printf("Registered co2 sensor SGP40 path=%s uuid=%s",
 					sensor.DevicePath, sensor.GetUuid()[:8])
 
-				sv.sgp40Co2 = sensor
+				sv.sgp40 = sensor
 			}
 		}
 	}

@@ -26,7 +26,7 @@ func (se *SGP40) GetUuid() (uuid simple.UUIDHex) {
 }
 
 func (se *SGP40) GetThingTypes() (thingTypes []things.ThingType) {
-	thingTypes = []things.ThingType{things.ThingTypeCo2Sensor}
+	thingTypes = []things.ThingType{things.ThingTypeAirQuality}
 	return
 }
 

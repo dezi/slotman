@@ -9,7 +9,7 @@ import (
 	"strings"
 )
 
-func NewBMP280(devicePath string) (se *SGP30) {
+func NewSGP30(devicePath string) (se *SGP30) {
 	se = &SGP30{
 		Vendor:     "SENSIRION",
 		Model:      "SGP30 co2 sensor",

@@ -1,7 +1,7 @@
-package ampel
+package ambient
 
 import (
-	"slotman/things/mcp/mcp23017"
+	"slotman/things/sensirion/sgp40"
 	"slotman/utils/log"
 )
 
@@ -11,9 +11,9 @@ func (sv *Service) DoControlTask() {
 
 func (sv *Service) checkSensors() {
 
-	if sv.ampelGpio == nil {
+	if sv.sgp40Co2 == nil {
 
-		sensors, err := mcp23017.ProbeThings(nil, []byte{0x20})
+		sensors, err := sgp40.ProbeThings(nil)
 
 		if err != nil {
 			log.Cerror(err)
@@ -29,6 +29,9 @@ func (sv *Service) checkSensors() {
 					continue
 				}
 
+				_, _ = sensor.DoSelfTest()
+				_, _ = sensor.ReadSerial()
+
 				err = sensor.Start()
 				if err != nil {
 					log.Cerror(err)
@@ -36,26 +39,12 @@ func (sv *Service) checkSensors() {
 					continue
 				}
 
-				err = sensor.SetPinDirections(0x8000)
-				if err != nil {
-					log.Cerror(err)
-					_ = sensor.Close()
-					return
-				}
+				_ = sensor.SetTemperature(2)
 
-				err = sensor.WritePins(0x0000)
-				if err != nil {
-					log.Cerror(err)
-					_ = sensor.Close()
-					return
-				}
-
-				log.Printf("Registered ampel MCP23017 path=%s uuid=%s",
+				log.Printf("Registered co2 sensor SGP40 path=%s uuid=%s",
 					sensor.DevicePath, sensor.GetUuid()[:8])
 
-				sv.ampelGpio = sensor
-
-				go sv.buttonLoop()
+				sv.sgp40Co2 = sensor
 			}
 		}
 	}

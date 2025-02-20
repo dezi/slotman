@@ -1,6 +1,7 @@
 package main
 
 import (
+	"slotman/services/impl/ambient"
 	"slotman/services/impl/ampel"
 	"slotman/services/impl/identity"
 	"slotman/services/impl/keyin"
@@ -43,9 +44,11 @@ func startup() {
 	_ = tacho.StartService()
 	_ = turner.StartService()
 	_ = ampel.StartService()
+	_ = ambient.StartService()
 
 	_ = exitter.WaitUntilTermination()
 
+	_ = ambient.StopService()
 	_ = ampel.StopService()
 	_ = turner.StopService()
 	_ = tacho.StopService()

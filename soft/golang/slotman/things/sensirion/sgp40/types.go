@@ -4,6 +4,7 @@ import (
 	"slotman/drivers/impl/i2c"
 	"slotman/things"
 	"slotman/utils/simple"
+	"sync"
 )
 
 type SGP40 struct {
@@ -18,12 +19,25 @@ type SGP40 struct {
 	IsStarted bool
 
 	i2cDev  *i2c.Device
+	lock    sync.Mutex
 	handler Handler
 	debug   bool
+
+	humidity    int
+	temperature int
 }
 
 type Control interface {
 	SetHandler(handler Handler)
+
+	DoSelfTest() (ok bool, err error)
+	ReadSerial() (serial string, err error)
+
+	SetHumidity(percent int) (err error)
+	SetTemperature(celsius int) (err error)
+
+	MeasureRawSignal() (signal, rawSignal int, err error)
+	MeasureAirQuality() (percent float64, err error)
 }
 
 type Handler interface {
@@ -31,6 +45,5 @@ type Handler interface {
 	OnThingClosed(thing things.Thing)
 	OnThingStarted(thing things.Thing)
 	OnThingStopped(thing things.Thing)
-	//OnPressure(thing things.Thing, hPa float64)
-	//OnTemperature(thing things.Thing, celsius float64)
+	OnAirQuality(thing things.Thing, percent float64)
 }

@@ -48,7 +48,7 @@ func ProbeThings(busyDevicePaths []string) (things []*SGP30, err error) {
 		_ = i2cDev.Close()
 
 		if isValid {
-			things = append(things, NewBMP280(deviceAddrPath))
+			things = append(things, NewSGP30(deviceAddrPath))
 		}
 	}
 

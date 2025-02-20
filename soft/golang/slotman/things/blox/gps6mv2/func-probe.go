@@ -1,4 +1,4 @@
-package ld2461
+package gps6mv2
 
 import (
 	"runtime"
@@ -6,15 +6,18 @@ import (
 	"slotman/utils/log"
 	"slotman/utils/simple"
 	"strings"
+	"time"
 )
 
-func ProbeThings(busySerialPaths []string) (things []*LD2461, err error) {
+func ProbeThings(busySerialPaths []string) (things []*GPS6MV2, err error) {
 
 	devicePaths, err := uart.GetDevicePaths()
 	if err != nil {
 		log.Cerror(err)
 		return
 	}
+
+	devicePaths = []string{"/dev/tty.usbserial-10"}
 
 	for _, devicePath := range devicePaths {
 
@@ -37,9 +40,9 @@ func ProbeThings(busySerialPaths []string) (things []*LD2461, err error) {
 
 		for _, baudRate := range baudRates {
 
-			log.Printf("Probing LD2461 devicePath=%s baudRate=%d", devicePath, baudRate)
+			log.Printf("Probing GPS6MV2 devicePath=%s baudRate=%d", devicePath, baudRate)
 
-			se := NewLD2461(devicePath, baudRate)
+			se := NewGPS6MV2(devicePath, baudRate)
 
 			se.isProbe = true
 
@@ -51,22 +54,17 @@ func ProbeThings(busySerialPaths []string) (things []*LD2461, err error) {
 
 			isValid := false
 
-			for try := 1; try <= 3; try++ {
-
-				var date, version, uid string
-				date, version, uid, tryErr = se.GetVersion()
-				if tryErr == nil {
-					log.Printf("Identified LD2461 devicePath=%s baudRate=%d", devicePath, baudRate)
-					log.Printf("Identified LD2461 date=%s version=%s uid=%s ", date, version, uid)
-					isValid = true
-					break
-				}
+			select {
+			case <-time.After(time.Second * 4):
+			case line := <-se.results:
+				isValid = strings.HasPrefix(line, "$")
 			}
 
 			_ = se.Close()
 			se.isProbe = false
 
 			if isValid {
+				log.Printf("Identified GPS6MV2 devicePath=%s baudRate=%d", devicePath, baudRate)
 				things = append(things, se)
 			}
 		}

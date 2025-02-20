@@ -1,7 +1,5 @@
 package bmp280
 
-import "slotman/utils/log"
-
 func (se *BMP280) readCompensation() (err error) {
 
 	var val uint16
@@ -50,17 +48,18 @@ func (se *BMP280) readCompensation() (err error) {
 		}
 	}
 
-	log.Printf("Compensation digT1=%d", se.digT1)
-	log.Printf("Compensation digT2=%d", se.digT2)
-	log.Printf("Compensation digT3=%d", se.digT3)
-	log.Printf("Compensation digP1=%d", se.digP1)
-	log.Printf("Compensation digP2=%d", se.digP2)
-	log.Printf("Compensation digP3=%d", se.digP3)
-	log.Printf("Compensation digP4=%d", se.digP4)
-	log.Printf("Compensation digP5=%d", se.digP5)
-	log.Printf("Compensation digP6=%d", se.digP6)
-	log.Printf("Compensation digP7=%d", se.digP7)
-	log.Printf("Compensation digP8=%d", se.digP8)
-	log.Printf("Compensation digP9=%d", se.digP9)
+	//log.Printf("Compensation digT1=%d", se.digT1)
+	//log.Printf("Compensation digT2=%d", se.digT2)
+	//log.Printf("Compensation digT3=%d", se.digT3)
+	//log.Printf("Compensation digP1=%d", se.digP1)
+	//log.Printf("Compensation digP2=%d", se.digP2)
+	//log.Printf("Compensation digP3=%d", se.digP3)
+	//log.Printf("Compensation digP4=%d", se.digP4)
+	//log.Printf("Compensation digP5=%d", se.digP5)
+	//log.Printf("Compensation digP6=%d", se.digP6)
+	//log.Printf("Compensation digP7=%d", se.digP7)
+	//log.Printf("Compensation digP8=%d", se.digP8)
+	//log.Printf("Compensation digP9=%d", se.digP9)
+
 	return
 }

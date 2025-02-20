@@ -3,6 +3,7 @@ package things
 import (
 	"errors"
 	"slotman/utils/simple"
+	"time"
 )
 
 type ThingType string
@@ -24,6 +25,7 @@ const (
 	ThingTypeColorDisplay  ThingType = "tt-color-display"
 	ThingTypeUartConverter ThingType = "tt-uart-converter"
 	ThingTypeCo2Sensor     ThingType = "tt-co2-sensor"
+	ThingTypeGpsPosition   ThingType = "tt-gps-position"
 )
 
 type Thing interface {
@@ -44,6 +46,13 @@ type Handler interface {
 	OnThingClosed(thing Thing)
 	OnThingStarted(thing Thing)
 	OnThingStopped(thing Thing)
+}
+
+type ThingData interface {
+	GetUuid() (uuid *simple.UUIDHex)
+	GetTime() (time *time.Time)
+	GetModelInfo() (vendor, model string)
+	CleanForStorage()
 }
 
 var (

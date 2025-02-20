@@ -5,7 +5,6 @@ import (
 	"slotman/drivers/impl/i2c"
 	"slotman/utils/log"
 	"slotman/utils/simple"
-	"time"
 )
 
 func ProbeThings(busyDevicePaths []string) (things []*SGP40, err error) {
@@ -40,22 +39,9 @@ func ProbeThings(busyDevicePaths []string) (things []*SGP40, err error) {
 		isValid := false
 
 		xfer, tryErr := i2cDev.WriteBytes([]byte{0x36, 0x82})
-		//xfer, tryErr := i2cDev.WriteBytes([]byte{0x28, 0x0E})
 		log.Cerror(tryErr)
 		if tryErr == nil && xfer == 2 {
 			log.Printf("Identified SGP40 devicePath=%s", devicePath)
-
-			time.Sleep(time.Millisecond * 500)
-
-			result := make([]byte, 9)
-			xfer, tryErr = i2cDev.ReadBytes(result)
-
-			log.Printf("############ ReadBytes xfer=%d result=[ %02x ] tryErr=%v",
-				xfer, result, tryErr)
-
-			log.Printf("############# crc=%02x", calculateCrc(result[0:2]))
-			log.Printf("############# crc=%02x", calculateCrc(result[3:5]))
-			log.Printf("############# crc=%02x", calculateCrc(result[6:8]))
 			isValid = true
 		}
 

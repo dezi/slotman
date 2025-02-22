@@ -99,6 +99,10 @@ func (i2c *Device) TransLock() (err error) {
 		time.Sleep(time.Millisecond * 100)
 	}
 
+	if i2c.addr == 0x59 {
+		log.Printf("TransLock fail...")
+	}
+
 	err = errors.New("transaction lock not acquired")
 	return
 }

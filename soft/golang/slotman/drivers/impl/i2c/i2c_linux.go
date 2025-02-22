@@ -102,7 +102,7 @@ func (i2c *Device) TransLock() (err error) {
 func (i2c *Device) TransUnlock() (err error) {
 
 	if i2c.addr == 0x59 {
-		log.Printf("TransUnlock dirty...")
+		log.Printf("TransUnlock...")
 	}
 
 	transLockDA := fmt.Sprintf("%s-%02x", i2c.device, i2c.addr)

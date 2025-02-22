@@ -4,6 +4,11 @@ import (
 	"slotman/drivers/impl/i2c"
 	"slotman/things"
 	"slotman/utils/simple"
+	"sync"
+)
+
+var (
+	multiOpenLock sync.Mutex
 )
 
 type TCS34725 struct {

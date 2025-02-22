@@ -1,6 +1,8 @@
 package tcs34725
 
-import "time"
+import (
+	"time"
+)
 
 func (se *TCS34725) SetHandler(handler Handler) {
 	se.handler = handler
@@ -29,6 +31,9 @@ func (se *TCS34725) SetThreshold(threshold float64) {
 
 func (se *TCS34725) SetEnabled(enabled bool) (err error) {
 
+	multiOpenLock.Lock()
+	defer multiOpenLock.Unlock()
+
 	if !enabled {
 		err = se.i2cDev.WriteRegByte(byte(RegisterEnable), 0)
 	} else {
@@ -41,32 +46,52 @@ func (se *TCS34725) SetEnabled(enabled bool) (err error) {
 		time.Sleep(time.Millisecond * 3)
 		err = se.i2cDev.WriteRegByte(byte(RegisterEnable), EnablePON|EnableAEN)
 	}
+
 	return
 }
 
 func (se *TCS34725) GetGain() (gain Gain, err error) {
+
+	multiOpenLock.Lock()
+	defer multiOpenLock.Unlock()
+
 	val, err := se.i2cDev.ReadRegByte(byte(RegisterControl))
 	gain = Gain(val)
 	return
 }
 
 func (se *TCS34725) SetGain(gain Gain) (err error) {
+
+	multiOpenLock.Lock()
+	defer multiOpenLock.Unlock()
+
 	err = se.i2cDev.WriteRegByte(byte(RegisterControl), byte(gain))
 	return
 }
 
 func (se *TCS34725) GetIntegrationTime() (it IntegrationTime, err error) {
+
+	multiOpenLock.Lock()
+	defer multiOpenLock.Unlock()
+
 	val, err := se.i2cDev.ReadRegByte(byte(RegisterATime))
 	it = IntegrationTime(val)
 	return
 }
 
 func (se *TCS34725) SetIntegrationTime(it IntegrationTime) (err error) {
+
+	multiOpenLock.Lock()
+	defer multiOpenLock.Unlock()
+
 	err = se.i2cDev.WriteRegByte(byte(RegisterATime), byte(it))
 	return
 }
 
 func (se *TCS34725) ReadRgbColor() (r, g, b, lux int, err error) {
+
+	multiOpenLock.Lock()
+	defer multiOpenLock.Unlock()
 
 	rLo, _ := se.i2cDev.ReadRegByte(byte(RegisterRDataL))
 	rHi, _ := se.i2cDev.ReadRegByte(byte(RegisterRDataH))

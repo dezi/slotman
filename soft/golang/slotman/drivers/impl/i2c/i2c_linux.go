@@ -64,7 +64,7 @@ func (i2c *Device) TransLock() (err error) {
 	// After that time, a new lock is unconditionally granted.
 	//
 
-	for try := 0; try < 99; try++ {
+	for try := 0; try < 12; try++ {
 
 		transLock.Lock()
 
@@ -79,7 +79,7 @@ func (i2c *Device) TransLock() (err error) {
 			return
 		}
 
-		if time.Now().UnixMilli()-transLocks[transLockDA] > 10000 {
+		if time.Now().UnixMilli()-transLocks[transLockDA] > 1000 {
 			transLocks[transLockDA] = time.Now().UnixMilli()
 			transLock.Unlock()
 

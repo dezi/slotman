@@ -8,6 +8,8 @@ const (
 	I2cWhatGetDevicePaths I2cWhat = "i2c.get.device-paths"
 	I2cWhatOpen           I2cWhat = "i2c.open"
 	I2cWhatClose          I2cWhat = "i2c.close"
+	I2cWhatTransLock      I2cWhat = "i2c.trans.lock"
+	I2cWhatTransUnlock    I2cWhat = "i2c.trans.unlock"
 	I2cWhatWrite          I2cWhat = "i2c.write"
 	I2cWhatRead           I2cWhat = "i2c.read"
 )

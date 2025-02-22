@@ -7,6 +7,9 @@ type I2c interface {
 	GetDevice() (device string)
 	GetAddr() (addr uint8)
 
+	TransLock() (err error)
+	TransUnlock() (err error)
+
 	Write(data []byte) (xfer int, err error)
 	Read(data []byte) (xfer int, err error)
 

@@ -55,6 +55,38 @@ func (sv *Service) I2cClose(i2c i2c.I2c) (err error) {
 	return
 }
 
+func (sv *Service) I2cTransLock(i2c i2c.I2c) (err error) {
+
+	req := &proxy.I2c{
+		Area: proxy.AreaI2c,
+		What: proxy.I2cWhatTransLock,
+	}
+
+	res, err := sv.i2cExecuteRequest(req, i2c)
+	if err != nil {
+		return
+	}
+
+	err = res.NE
+	return
+}
+
+func (sv *Service) I2cTransUnlock(i2c i2c.I2c) (err error) {
+
+	req := &proxy.I2c{
+		Area: proxy.AreaI2c,
+		What: proxy.I2cWhatTransUnlock,
+	}
+
+	res, err := sv.i2cExecuteRequest(req, i2c)
+	if err != nil {
+		return
+	}
+
+	err = res.NE
+	return
+}
+
 func (sv *Service) I2cWrite(i2c i2c.I2c, data []byte) (xfer int, err error) {
 
 	req := &proxy.I2c{

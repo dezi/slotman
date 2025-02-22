@@ -40,6 +40,28 @@ func (i2c *Device) Close() (err error) {
 	return
 }
 
+func (i2c *Device) TransLock() (err error) {
+
+	prx, err := proxy.GetInstance()
+	if err != nil {
+		return
+	}
+
+	err = prx.I2cTransLock(i2c)
+	return
+}
+
+func (i2c *Device) TransUnlock() (err error) {
+
+	prx, err := proxy.GetInstance()
+	if err != nil {
+		return
+	}
+
+	err = prx.I2cTransUnlock(i2c)
+	return
+}
+
 func (i2c *Device) Write(data []byte) (xfer int, err error) {
 
 	prx, err := proxy.GetInstance()

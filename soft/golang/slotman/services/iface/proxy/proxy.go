@@ -50,6 +50,9 @@ type Interface interface {
 	I2cOpen(i2c i2c.I2c) (err error)
 	I2cClose(i2c i2c.I2c) (err error)
 
+	I2cTransLock(i2c i2c.I2c) (err error)
+	I2cTransUnlock(i2c i2c.I2c) (err error)
+
 	I2cWrite(i2c i2c.I2c, data []byte) (xfer int, err error)
 	I2cRead(i2c i2c.I2c, data []byte) (xfer int, err error)
 

@@ -54,6 +54,53 @@ func (i2c *Device) Close() (err error) {
 	return
 }
 
+func (i2c *Device) TransLock() (err error) {
+
+	transLockDA := fmt.Sprintf("%s-%02x", i2c.device, i2c.addr)
+
+	//
+	// A transaction lock can be acquired for max 1 second.
+	// After that time, a new lock is unconditionally granted.
+	//
+
+	for try := 0; try < 12; try++ {
+
+		transLock.Lock()
+
+		if transLocks[transLockDA] == 0 {
+			transLocks[transLockDA] = time.Now().UnixMilli()
+			transLock.Unlock()
+			return
+		}
+
+		if time.Now().UnixMilli()-transLocks[transLockDA] > 1000 {
+			transLocks[transLockDA] = time.Now().UnixMilli()
+			transLock.Unlock()
+			return
+		}
+
+		transLock.Unlock()
+
+		time.Sleep(time.Millisecond * 100)
+	}
+
+	err = errors.New("transaction lock not acquired")
+}
+
+func (i2c *Device) TransUnlock() (err error) {
+
+	transLockDA := fmt.Sprintf("%s-%02x", i2c.device, i2c.addr)
+
+	transLock.Lock()
+	defer transLock.Unlock()
+
+	//
+	// Unlock unconditionally.
+	//
+
+	transLocks[transLockDA] = 0
+}
+
 func (i2c *Device) Write(data []byte) (xfer int, err error) {
 
 	locks[i2c.device].Lock()

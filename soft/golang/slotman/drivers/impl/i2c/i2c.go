@@ -1,9 +1,15 @@
 package i2c
 
-import "sync"
+import (
+	"fmt"
+	"sync"
+)
 
 var (
 	locks = make(map[string]*sync.Mutex)
+
+	transLock  sync.Mutex
+	transLocks = make(map[string]int64)
 )
 
 // NewDevice opens a connection for I2C-device.
@@ -26,6 +32,20 @@ func NewDevice(device string, addr uint8) (i2c *Device) {
 	if _, ok := locks[i2c.device]; !ok {
 		locks[i2c.device] = &sync.Mutex{}
 	}
+
+	//
+	// Create transaction mutexes for device plus addr.
+	//
+
+	transLockDA := fmt.Sprintf("%s-%02x", i2c.device, i2c.addr)
+
+	transLock.Lock()
+
+	if _, ok := locks[transLockDA]; !ok {
+		transLocks[transLockDA] = 0
+	}
+
+	transLock.Unlock()
 
 	return
 }

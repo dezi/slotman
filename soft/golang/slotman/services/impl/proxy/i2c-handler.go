@@ -64,6 +64,12 @@ func (sv *Service) handleI2c(sender string, reqBytes []byte) (resBytes []byte, e
 		log.Printf("I2C  Close dev=%s addr=%02x err=%v",
 			i2cDev.GetDevice(), i2cDev.GetAddr(), req.NE)
 
+	case proxy.I2cWhatTransLock:
+		req.NE = i2cDev.TransLock()
+
+	case proxy.I2cWhatTransUnlock:
+		req.NE = i2cDev.TransUnlock()
+
 	case proxy.I2cWhatWrite:
 		req.Xfer, req.NE = i2cDev.Write(req.Write)
 		//log.Printf("I2C  Write write=%d xfer=%d dev=%s addr=%02x err=%v",

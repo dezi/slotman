@@ -4,6 +4,7 @@ import (
 	"slotman/drivers/impl/i2c"
 	"slotman/things"
 	"slotman/utils/simple"
+	"sync"
 )
 
 type SGP30 struct {
@@ -18,6 +19,7 @@ type SGP30 struct {
 	IsStarted bool
 
 	i2cDev  *i2c.Device
+	lock    sync.Mutex
 	handler Handler
 	debug   bool
 }

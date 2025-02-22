@@ -4,6 +4,11 @@ import (
 	"slotman/drivers/impl/i2c"
 	"slotman/things"
 	"slotman/utils/simple"
+	"sync"
+)
+
+var (
+	multiOpenLock sync.Mutex
 )
 
 type BMP280 struct {
@@ -17,8 +22,10 @@ type BMP280 struct {
 	IsOpen    bool
 	IsStarted bool
 
-	i2cDev    *i2c.Device
-	handler   Handler
+	i2cDev  *i2c.Device
+	handler Handler
+	lock    sync.Mutex
+
 	threshold float64
 	debug     bool
 

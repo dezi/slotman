@@ -9,7 +9,18 @@ func (se *BMP280) SetHandler(handler Handler) {
 	se.handler = handler
 }
 
+func (se *BMP280) SetThreshold(threshold float64) {
+	se.threshold = threshold
+	return
+}
+
 func (se *BMP280) ResetSensor() (err error) {
+
+	se.lock.Lock()
+	defer se.lock.Unlock()
+
+	multiOpenLock.Lock()
+	defer multiOpenLock.Unlock()
 
 	err = se.i2cDev.WriteRegByte(byte(RegisterReset), 0xb6)
 	if err != nil {
@@ -21,16 +32,24 @@ func (se *BMP280) ResetSensor() (err error) {
 }
 
 func (se *BMP280) GetSensorId() (id byte, err error) {
+
+	se.lock.Lock()
+	defer se.lock.Unlock()
+
+	multiOpenLock.Lock()
+	defer multiOpenLock.Unlock()
+
 	id, err = se.i2cDev.ReadRegByte(byte(RegisterId))
 	return
 }
 
-func (se *BMP280) SetThreshold(threshold float64) {
-	se.threshold = threshold
-	return
-}
-
 func (se *BMP280) GetStatus() (measuring, imUpdate bool, err error) {
+
+	se.lock.Lock()
+	defer se.lock.Unlock()
+
+	multiOpenLock.Lock()
+	defer multiOpenLock.Unlock()
 
 	mask, err := se.i2cDev.ReadRegByte(byte(RegisterStatus))
 	if err != nil {
@@ -43,6 +62,12 @@ func (se *BMP280) GetStatus() (measuring, imUpdate bool, err error) {
 }
 
 func (se *BMP280) SetMeasureMode(pressOver, tempOver Oversampling) (err error) {
+
+	se.lock.Lock()
+	defer se.lock.Unlock()
+
+	multiOpenLock.Lock()
+	defer multiOpenLock.Unlock()
 
 	mask, err := se.i2cDev.ReadRegByte(byte(RegisterCtrlMeas))
 	if err != nil {
@@ -59,6 +84,12 @@ func (se *BMP280) SetMeasureMode(pressOver, tempOver Oversampling) (err error) {
 
 func (se *BMP280) SetIrrFilter(irrFilter IrrFilter) (err error) {
 
+	se.lock.Lock()
+	defer se.lock.Unlock()
+
+	multiOpenLock.Lock()
+	defer multiOpenLock.Unlock()
+
 	mask, err := se.i2cDev.ReadRegByte(byte(RegisterConfig))
 	if err != nil {
 		return
@@ -72,6 +103,12 @@ func (se *BMP280) SetIrrFilter(irrFilter IrrFilter) (err error) {
 }
 
 func (se *BMP280) SetPowerMode(pm PowerMode, pi PowerInterval) (err error) {
+
+	se.lock.Lock()
+	defer se.lock.Unlock()
+
+	multiOpenLock.Lock()
+	defer multiOpenLock.Unlock()
 
 	mask, err := se.i2cDev.ReadRegByte(byte(RegisterCtrlMeas))
 	if err != nil {
@@ -100,6 +137,12 @@ func (se *BMP280) SetPowerMode(pm PowerMode, pi PowerInterval) (err error) {
 }
 
 func (se *BMP280) ReadTemperature() (celsius float64, err error) {
+
+	se.lock.Lock()
+	defer se.lock.Unlock()
+
+	multiOpenLock.Lock()
+	defer multiOpenLock.Unlock()
 
 	msb, err := se.i2cDev.ReadRegByte(byte(RegisterTempMsb))
 	if err != nil {
@@ -146,6 +189,12 @@ func (se *BMP280) ReadPressure() (hPa float64, err error) {
 	if err != nil {
 		return
 	}
+
+	se.lock.Lock()
+	defer se.lock.Unlock()
+
+	multiOpenLock.Lock()
+	defer multiOpenLock.Unlock()
 
 	msb, err := se.i2cDev.ReadRegByte(byte(RegisterPressMsb))
 	if err != nil {

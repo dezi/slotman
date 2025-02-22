@@ -144,6 +144,10 @@ func (i2c *Device) Write(data []byte) (xfer int, err error) {
 	txt := strings.Replace(err.Error(), ": ", fmt.Sprintf("-%02x: ", i2c.addr), 1)
 	err = errors.New(txt)
 
+	if i2c.addr == 0x59 {
+		log.Cerror(err)
+	}
+
 	return
 }
 
@@ -164,6 +168,10 @@ func (i2c *Device) Read(data []byte) (xfer int, err error) {
 
 	txt := strings.Replace(err.Error(), ": ", fmt.Sprintf("-%02x: ", i2c.addr), 1)
 	err = errors.New(txt)
+
+	if i2c.addr == 0x59 {
+		log.Cerror(err)
+	}
 
 	return
 }

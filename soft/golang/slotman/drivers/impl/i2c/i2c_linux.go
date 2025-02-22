@@ -85,6 +85,7 @@ func (i2c *Device) TransLock() (err error) {
 	}
 
 	err = errors.New("transaction lock not acquired")
+	return
 }
 
 func (i2c *Device) TransUnlock() (err error) {
@@ -99,6 +100,7 @@ func (i2c *Device) TransUnlock() (err error) {
 	//
 
 	transLocks[transLockDA] = 0
+	return
 }
 
 func (i2c *Device) Write(data []byte) (xfer int, err error) {

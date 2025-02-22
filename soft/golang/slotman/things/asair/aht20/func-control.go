@@ -16,9 +16,6 @@ func (se *AHT20) SetThreshold(threshold float64) {
 
 func (se *AHT20) Init() (err error) {
 
-	se.lock.Lock()
-	defer se.lock.Unlock()
-
 	multiOpenLock.Lock()
 	defer multiOpenLock.Unlock()
 
@@ -33,9 +30,6 @@ func (se *AHT20) Init() (err error) {
 
 func (se *AHT20) Reset() (err error) {
 
-	se.lock.Lock()
-	defer se.lock.Unlock()
-
 	multiOpenLock.Lock()
 	defer multiOpenLock.Unlock()
 
@@ -49,9 +43,6 @@ func (se *AHT20) Reset() (err error) {
 }
 
 func (se *AHT20) ReadMeasurement() (humidity, celsius float64, err error) {
-
-	se.lock.Lock()
-	defer se.lock.Unlock()
 
 	multiOpenLock.Lock()
 	defer multiOpenLock.Unlock()

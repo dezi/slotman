@@ -24,7 +24,6 @@ type BMP280 struct {
 
 	i2cDev  *i2c.Device
 	handler Handler
-	lock    sync.Mutex
 
 	threshold float64
 	debug     bool

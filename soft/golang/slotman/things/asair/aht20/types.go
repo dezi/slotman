@@ -23,7 +23,6 @@ type AHT20 struct {
 	IsStarted bool
 
 	i2cDev *i2c.Device
-	lock   sync.Mutex
 
 	handler   Handler
 	threshold float64

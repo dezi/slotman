@@ -16,9 +16,6 @@ func (se *BMP280) SetThreshold(threshold float64) {
 
 func (se *BMP280) ResetSensor() (err error) {
 
-	se.lock.Lock()
-	defer se.lock.Unlock()
-
 	multiOpenLock.Lock()
 	defer multiOpenLock.Unlock()
 
@@ -33,9 +30,6 @@ func (se *BMP280) ResetSensor() (err error) {
 
 func (se *BMP280) GetSensorId() (id byte, err error) {
 
-	se.lock.Lock()
-	defer se.lock.Unlock()
-
 	multiOpenLock.Lock()
 	defer multiOpenLock.Unlock()
 
@@ -44,9 +38,6 @@ func (se *BMP280) GetSensorId() (id byte, err error) {
 }
 
 func (se *BMP280) GetStatus() (measuring, imUpdate bool, err error) {
-
-	se.lock.Lock()
-	defer se.lock.Unlock()
 
 	multiOpenLock.Lock()
 	defer multiOpenLock.Unlock()
@@ -62,9 +53,6 @@ func (se *BMP280) GetStatus() (measuring, imUpdate bool, err error) {
 }
 
 func (se *BMP280) SetMeasureMode(pressOver, tempOver Oversampling) (err error) {
-
-	se.lock.Lock()
-	defer se.lock.Unlock()
 
 	multiOpenLock.Lock()
 	defer multiOpenLock.Unlock()
@@ -84,9 +72,6 @@ func (se *BMP280) SetMeasureMode(pressOver, tempOver Oversampling) (err error) {
 
 func (se *BMP280) SetIrrFilter(irrFilter IrrFilter) (err error) {
 
-	se.lock.Lock()
-	defer se.lock.Unlock()
-
 	multiOpenLock.Lock()
 	defer multiOpenLock.Unlock()
 
@@ -103,9 +88,6 @@ func (se *BMP280) SetIrrFilter(irrFilter IrrFilter) (err error) {
 }
 
 func (se *BMP280) SetPowerMode(pm PowerMode, pi PowerInterval) (err error) {
-
-	se.lock.Lock()
-	defer se.lock.Unlock()
 
 	multiOpenLock.Lock()
 	defer multiOpenLock.Unlock()
@@ -137,9 +119,6 @@ func (se *BMP280) SetPowerMode(pm PowerMode, pi PowerInterval) (err error) {
 }
 
 func (se *BMP280) ReadTemperature() (celsius float64, err error) {
-
-	se.lock.Lock()
-	defer se.lock.Unlock()
 
 	multiOpenLock.Lock()
 	defer multiOpenLock.Unlock()
@@ -189,9 +168,6 @@ func (se *BMP280) ReadPressure() (hPa float64, err error) {
 	if err != nil {
 		return
 	}
-
-	se.lock.Lock()
-	defer se.lock.Unlock()
 
 	multiOpenLock.Lock()
 	defer multiOpenLock.Unlock()

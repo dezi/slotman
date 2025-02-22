@@ -79,7 +79,7 @@ func (i2c *Device) TransLock() (err error) {
 			return
 		}
 
-		if time.Now().UnixMilli()-transLocks[transLockDA] > 1000 {
+		if time.Now().UnixMilli()-transLocks[transLockDA] > 10000 {
 			transLocks[transLockDA] = time.Now().UnixMilli()
 			transLock.Unlock()
 

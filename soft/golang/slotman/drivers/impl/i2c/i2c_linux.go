@@ -64,29 +64,29 @@ func (i2c *Device) TransLock() (err error) {
 	// After that time, a new lock is unconditionally granted.
 	//
 
-	for try := 0; try < 25; try++ {
+	for try := 0; try < 99; try++ {
 
 		transLock.Lock()
 
 		if transLocks[transLockDA] == 0 {
+			transLocks[transLockDA] = time.Now().UnixMilli()
+			transLock.Unlock()
 
 			if i2c.addr == 0x59 {
 				log.Printf("TransLock clean...")
 			}
 
-			transLocks[transLockDA] = time.Now().UnixMilli()
-			transLock.Unlock()
 			return
 		}
 
 		if time.Now().UnixMilli()-transLocks[transLockDA] > 1000 {
+			transLocks[transLockDA] = time.Now().UnixMilli()
+			transLock.Unlock()
 
 			if i2c.addr == 0x59 {
 				log.Printf("TransLock dirty...")
 			}
 
-			transLocks[transLockDA] = time.Now().UnixMilli()
-			transLock.Unlock()
 			return
 		}
 

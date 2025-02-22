@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"slotman/utils/log"
 	"strings"
 	"syscall"
 	"time"
@@ -68,12 +69,22 @@ func (i2c *Device) TransLock() (err error) {
 		transLock.Lock()
 
 		if transLocks[transLockDA] == 0 {
+
+			if i2c.addr == 0x59 {
+				log.Printf("TransLock clean...")
+			}
+
 			transLocks[transLockDA] = time.Now().UnixMilli()
 			transLock.Unlock()
 			return
 		}
 
 		if time.Now().UnixMilli()-transLocks[transLockDA] > 1000 {
+
+			if i2c.addr == 0x59 {
+				log.Printf("TransLock dirty...")
+			}
+
 			transLocks[transLockDA] = time.Now().UnixMilli()
 			transLock.Unlock()
 			return
@@ -89,6 +100,10 @@ func (i2c *Device) TransLock() (err error) {
 }
 
 func (i2c *Device) TransUnlock() (err error) {
+
+	if i2c.addr == 0x59 {
+		log.Printf("TransUnlock dirty...")
+	}
 
 	transLockDA := fmt.Sprintf("%s-%02x", i2c.device, i2c.addr)
 

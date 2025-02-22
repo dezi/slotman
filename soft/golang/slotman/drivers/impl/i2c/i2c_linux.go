@@ -92,6 +92,10 @@ func (i2c *Device) TransLock() (err error) {
 
 		transLock.Unlock()
 
+		if i2c.addr == 0x59 {
+			log.Printf("TransLock wait...")
+		}
+
 		time.Sleep(time.Millisecond * 100)
 	}
 

@@ -64,7 +64,7 @@ func (i2c *Device) TransLock() (err error) {
 	// After that time, a new lock is unconditionally granted.
 	//
 
-	for try := 0; try < 12; try++ {
+	for try := 0; try < 25; try++ {
 
 		transLock.Lock()
 

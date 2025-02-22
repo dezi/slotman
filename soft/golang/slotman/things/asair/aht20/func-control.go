@@ -2,6 +2,7 @@ package aht20
 
 import (
 	"errors"
+	"slotman/utils/log"
 	"time"
 )
 
@@ -16,8 +17,16 @@ func (se *AHT20) SetThreshold(threshold float64) {
 
 func (se *AHT20) Init() (err error) {
 
-	multiOpenLock.Lock()
-	defer multiOpenLock.Unlock()
+	err = se.i2cDev.TransLock()
+	if err != nil {
+		log.Cerror(err)
+		return
+	}
+
+	defer func() {
+		drr := se.i2cDev.TransUnlock()
+		log.Cerror(drr)
+	}()
 
 	err = se.i2cDev.WriteRegBytes(byte(RegisterInit), []byte{0x08, 0x00})
 	if err != nil {
@@ -30,8 +39,16 @@ func (se *AHT20) Init() (err error) {
 
 func (se *AHT20) Reset() (err error) {
 
-	multiOpenLock.Lock()
-	defer multiOpenLock.Unlock()
+	err = se.i2cDev.TransLock()
+	if err != nil {
+		log.Cerror(err)
+		return
+	}
+
+	defer func() {
+		drr := se.i2cDev.TransUnlock()
+		log.Cerror(drr)
+	}()
 
 	err = se.i2cDev.WriteReg(byte(RegisterReset))
 	if err != nil {
@@ -44,8 +61,16 @@ func (se *AHT20) Reset() (err error) {
 
 func (se *AHT20) ReadMeasurement() (humidity, celsius float64, err error) {
 
-	multiOpenLock.Lock()
-	defer multiOpenLock.Unlock()
+	err = se.i2cDev.TransLock()
+	if err != nil {
+		log.Cerror(err)
+		return
+	}
+
+	defer func() {
+		drr := se.i2cDev.TransUnlock()
+		log.Cerror(drr)
+	}()
 
 	err = se.i2cDev.WriteRegBytes(byte(RegisterMeasure), []byte{0x33, 0x00})
 	if err != nil {

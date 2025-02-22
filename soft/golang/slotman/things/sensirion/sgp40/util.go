@@ -16,8 +16,16 @@ func (se *SGP40) writeCommandAndRead(
 		return
 	}
 
-	multiOpenLock.Lock()
-	defer multiOpenLock.Unlock()
+	err = se.i2cDev.TransLock()
+	if err != nil {
+		log.Cerror(err)
+		return
+	}
+
+	defer func() {
+		drr := se.i2cDev.TransUnlock()
+		log.Cerror(drr)
+	}()
 
 	xfer, err := se.i2cDev.WriteBytes(command)
 	if err != nil {

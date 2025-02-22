@@ -16,9 +16,6 @@ func (se *SGP40) writeCommandAndRead(
 		return
 	}
 
-	se.lock.Lock()
-	defer se.lock.Unlock()
-
 	multiOpenLock.Lock()
 	defer multiOpenLock.Unlock()
 

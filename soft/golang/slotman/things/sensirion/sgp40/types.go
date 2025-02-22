@@ -23,7 +23,6 @@ type SGP40 struct {
 	IsStarted bool
 
 	i2cDev  *i2c.Device
-	lock    sync.Mutex
 	handler Handler
 	debug   bool
 

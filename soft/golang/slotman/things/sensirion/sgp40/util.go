@@ -4,8 +4,11 @@ import (
 	"errors"
 	"slotman/things"
 	"slotman/utils/log"
+	"sync"
 	"time"
 )
+
+var multiOpenLock sync.Mutex
 
 func (se *SGP40) writeCommandAndRead(
 	command []byte, waitTime time.Duration, resultWords int) (
@@ -18,6 +21,9 @@ func (se *SGP40) writeCommandAndRead(
 
 	se.lock.Lock()
 	defer se.lock.Unlock()
+
+	multiOpenLock.Lock()
+	defer multiOpenLock.Unlock()
 
 	xfer, err := se.i2cDev.WriteBytes(command)
 	if err != nil {

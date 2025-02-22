@@ -6,7 +6,6 @@ package sgp40
 // Sensor is NOT detectable!
 //
 
-//goland:noinspection GoUnusedConst
 const (
 	ThingI2CAddress = 0x59
 )

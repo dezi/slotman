@@ -9,7 +9,18 @@ func (se *AHT20) SetHandler(handler Handler) {
 	se.handler = handler
 }
 
+func (se *AHT20) SetThreshold(threshold float64) {
+	se.threshold = threshold
+	return
+}
+
 func (se *AHT20) Init() (err error) {
+
+	se.lock.Lock()
+	defer se.lock.Unlock()
+
+	multiOpenLock.Lock()
+	defer multiOpenLock.Unlock()
 
 	err = se.i2cDev.WriteRegBytes(byte(RegisterInit), []byte{0x08, 0x00})
 	if err != nil {
@@ -22,6 +33,12 @@ func (se *AHT20) Init() (err error) {
 
 func (se *AHT20) Reset() (err error) {
 
+	se.lock.Lock()
+	defer se.lock.Unlock()
+
+	multiOpenLock.Lock()
+	defer multiOpenLock.Unlock()
+
 	err = se.i2cDev.WriteReg(byte(RegisterReset))
 	if err != nil {
 		return
@@ -31,12 +48,13 @@ func (se *AHT20) Reset() (err error) {
 	return
 }
 
-func (se *AHT20) SetThreshold(threshold float64) {
-	se.threshold = threshold
-	return
-}
-
 func (se *AHT20) ReadMeasurement() (humidity, celsius float64, err error) {
+
+	se.lock.Lock()
+	defer se.lock.Unlock()
+
+	multiOpenLock.Lock()
+	defer multiOpenLock.Unlock()
 
 	err = se.i2cDev.WriteRegBytes(byte(RegisterMeasure), []byte{0x33, 0x00})
 	if err != nil {

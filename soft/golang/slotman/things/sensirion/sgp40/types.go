@@ -7,6 +7,10 @@ import (
 	"sync"
 )
 
+var (
+	multiOpenLock sync.Mutex
+)
+
 type SGP40 struct {
 	Uuid simple.UUIDHex
 

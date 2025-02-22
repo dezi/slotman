@@ -4,6 +4,11 @@ import (
 	"slotman/drivers/impl/i2c"
 	"slotman/things"
 	"slotman/utils/simple"
+	"sync"
+)
+
+var (
+	multiOpenLock sync.Mutex
 )
 
 type AHT20 struct {
@@ -17,10 +22,13 @@ type AHT20 struct {
 	IsOpen    bool
 	IsStarted bool
 
-	i2cDev    *i2c.Device
+	i2cDev *i2c.Device
+	lock   sync.Mutex
+
 	handler   Handler
 	threshold float64
-	debug     bool
+
+	debug bool
 }
 
 type Control interface {

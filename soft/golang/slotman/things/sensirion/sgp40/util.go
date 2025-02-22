@@ -4,11 +4,8 @@ import (
 	"errors"
 	"slotman/things"
 	"slotman/utils/log"
-	"sync"
 	"time"
 )
-
-var multiOpenLock sync.Mutex
 
 func (se *SGP40) writeCommandAndRead(
 	command []byte, waitTime time.Duration, resultWords int) (

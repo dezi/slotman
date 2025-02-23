@@ -313,28 +313,27 @@ Edit the config file:
 
     sudo vi /boot/firmware/config.txt
 
-Identify following line:
+Identify following lines:
 
     dtparam=i2c_arm=on
+    dtparam=i2c_arm_baudrate=400000
 
 Add the following line:
 
-    dtparam=i2c_vc=on
+    dtoverlay=i2c-gpio,i2c_gpio_sda=0,i2c_gpio_scl=1,baudrate=400000,bus=5
 
 Save and reboot. After that log back in.
 
     liesa@pz2lts24a:~ $ ls -al /dev/i2c-*
-    crw-rw---- 1 root i2c 89,  0 Jan 29 09:45 /dev/i2c-0
-    crw-rw---- 1 root i2c 89,  1 Jan 29 09:45 /dev/i2c-1
-    crw-rw---- 1 root i2c 89, 10 Jan 29 09:45 /dev/i2c-10
-    crw-rw---- 1 root i2c 89, 11 Jan 29 09:45 /dev/i2c-11
-    crw-rw---- 1 root i2c 89,  2 Jan 29 09:45 /dev/i2c-2
+    crw-rw---- 1 root i2c 89, 1 Feb 22 09:40 /dev/i2c-1
+    crw-rw---- 1 root i2c 89, 2 Feb 22 09:40 /dev/i2c-2
+    crw-rw---- 1 root i2c 89, 5 Feb 22 09:40 /dev/i2c-5
 
-The new I2C bus is /dev/i2c-0.
+The new I2C bus is /dev/i2c-5.
 
 Hook up a device of Your choice to the new break-out and issue:
 
-    liesa@pz2lts24a:~ $ i2cdetect -y 0
+    liesa@pz2lts24a:~ $ i2cdetect -y 5
     0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
     00:                         -- -- -- -- -- -- -- --
     10: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --

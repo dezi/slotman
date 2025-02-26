@@ -272,7 +272,7 @@ The SPI-0 connector pins from left to right:
 Addendum Step 10
 ================
 
-We want to add a breakout for the second I2C interface at GPIO pins O and 1,
+We want to add a breakout for the second I2C interface at GPIO pins 0 and 1,
 named GPIO 0 EEPROM Serial Data (I2C) and GPIO 1 EEPROM Serial Clock (I2C).
 
 [<img src="images/raspberry-pi-hat-gpio-pins-a.jpg" width="400"/>](images/raspberry-pi-hat-gpio-pins-a.jpg)

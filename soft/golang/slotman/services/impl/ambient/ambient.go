@@ -5,6 +5,7 @@ import (
 	"slotman/services/impl/provider"
 	"slotman/things/asair/aht20"
 	"slotman/things/bosch/bmp280"
+	"slotman/things/sensirion/sgp30"
 	"slotman/things/sensirion/sgp40"
 	"slotman/things/taos/tcs34725"
 	"slotman/utils/log"
@@ -12,6 +13,7 @@ import (
 )
 
 type Service struct {
+	sgp30    *sgp30.SGP30
 	sgp40    *sgp40.SGP40
 	aht20    *aht20.AHT20
 	bmp280   *bmp280.BMP280

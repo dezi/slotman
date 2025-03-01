@@ -3,16 +3,34 @@ package ambient
 import (
 	"slotman/things/asair/aht20"
 	"slotman/things/bosch/bmp280"
+	"slotman/things/sensirion/sgp30"
 	"slotman/things/sensirion/sgp40"
 	"slotman/things/taos/tcs34725"
 	"slotman/utils/log"
 )
 
 func (sv *Service) DoControlTask() {
+	sv.checkThingSGP30()
 	sv.checkThingSGP40()
 	sv.checkThingAHT20()
 	sv.checkThingBMP280()
 	sv.checkThingTCS34725()
+}
+
+func (sv *Service) checkThingSGP30() {
+
+	if sv.sgp30 != nil {
+		return
+	}
+
+	sensors, err := sgp30.ProbeThings(nil)
+
+	if err != nil {
+		log.Cerror(err)
+		return
+	}
+
+	_ = sensors
 }
 
 func (sv *Service) checkThingSGP40() {

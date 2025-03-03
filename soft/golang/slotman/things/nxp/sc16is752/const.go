@@ -7,7 +7,6 @@ package sc16is752
 // https://github.com/nopnop2002/SC16IS752
 //
 
-//goland:noinspection GoUnusedGlobalVariable
 var (
 	ThingI2CAddresses = []byte{
 		ThingI2CAddressAA, ThingI2CAddressAB,

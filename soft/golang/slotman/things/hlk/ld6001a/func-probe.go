@@ -1,9 +1,11 @@
 package ld6001a
 
 import (
+	"runtime"
 	"slotman/drivers/impl/uart"
 	"slotman/utils/log"
 	"slotman/utils/simple"
+	"strings"
 )
 
 func ProbeThings(busySerialPaths []string) (things []*LD6001a, err error) {
@@ -24,14 +26,14 @@ func ProbeThings(busySerialPaths []string) (things []*LD6001a, err error) {
 			continue
 		}
 
-		//if runtime.GOOS == "darwin" && !strings.HasPrefix(devicePath, "/dev/tty.usbserial") {
-		//
-		//	//
-		//	// Exclude bogus devices on OSX to speed up testing.
-		//	//
-		//
-		//	continue
-		//}
+		if runtime.GOOS == "darwin" && !strings.HasPrefix(devicePath, "/dev/tty.usbserial") {
+
+			//
+			// Exclude bogus devices on OSX to speed up testing.
+			//
+
+			continue
+		}
 
 		for _, baudRate := range baudRates {
 
@@ -49,18 +51,20 @@ func ProbeThings(busySerialPaths []string) (things []*LD6001a, err error) {
 
 			isValid := false
 
-			for try := 1; try <= 3; try++ {
+			//for try := 1; try <= 3; try++ {
+			//
+			//		var date, version, uid string
+			//		date, version, uid, tryErr = se.GetVersion()
+			//		if tryErr == nil {
+			//			log.Printf("Identified LD6001a devicePath=%s baudRate=%d", devicePath, baudRate)
+			//			log.Printf("Identified LD6001a date=%s version=%s uid=%s ", date, version, uid)
+			//			isValid = true
+			//			break
+			//		}
+			//	}
 
-				var date, version, uid string
-				date, version, uid, tryErr = se.GetVersion()
-				if tryErr == nil {
-					log.Printf("Identified LD6001a devicePath=%s baudRate=%d", devicePath, baudRate)
-					log.Printf("Identified LD6001a date=%s version=%s uid=%s ", date, version, uid)
-					isValid = true
-					break
-				}
-			}
-
+			_ = se.Close()
+			se.isProbe = false
 			_ = se.Close()
 			se.isProbe = false
 

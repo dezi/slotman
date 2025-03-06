@@ -1,17 +1,22 @@
 package ld6001a
 
-func bytesAreEqual(b1, b2 []byte) (equal bool) {
+import (
+	"slotman/things"
+	"slotman/utils/log"
+)
 
-	if b1 == nil || b2 == nil || len(b1) != len(b2) {
+func (se *LD6001a) writeWithOk(command string) (err error) {
+
+	if !se.IsOpen {
+		err = things.ErrThingNotOpen
+		log.Cerror(err)
 		return
 	}
 
-	for inx := 0; inx < len(b1); inx++ {
-		if b1[inx] != b2[inx] {
-			return
-		}
-	}
+	log.Printf("Write command=%s", command)
 
-	equal = true
+	_, err = se.uart.Write([]byte(command + "\n"))
+	log.Cerror(err)
+
 	return
 }

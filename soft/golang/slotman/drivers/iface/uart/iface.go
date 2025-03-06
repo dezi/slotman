@@ -9,6 +9,7 @@ type Uart interface {
 	GetDevice() (device string)
 	GetBaudrate() (baudrate int)
 
+	SetBaudrate(baudrate int) (err error)
 	SetReadTimeout(timeout time.Duration) (err error)
 
 	Read(data []byte) (xfer int, err error)

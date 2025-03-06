@@ -10,6 +10,8 @@ import (
 
 func (se *LD2461) readLoop() {
 
+	defer se.loopGroup.Done()
+
 	if !se.isProbe {
 		log.Printf("LD2461 readLoop started...")
 		defer log.Printf("LD2461 readLoop done.")
@@ -33,27 +35,25 @@ func (se *LD2461) readLoop() {
 	// Drain buffered junk from port.
 	//
 
-	port := se.uart
-	if port != nil {
-		for {
-			xfer, _ := port.Read(parts)
-			if xfer == 0 {
-				break
-			}
-		}
-	}
+	//port := se.uart
+	//if port != nil {
+	//	for {
+	//		xfer, _ := port.Read(parts)
+	//		if xfer == 0 {
+	//			break
+	//		}
+	//	}
+	//}
 
 	for se.IsOpen {
 
-		port = se.uart
+		port := se.uart
 		if port == nil {
 			break
 		}
 
 		xfer, _ := port.Read(parts)
 		input = append(input, parts[:xfer]...)
-
-		//log.Printf("###### read xfer=%d [ %02x ]", xfer, parts[:xfer])
 
 		var tb byte
 
@@ -73,11 +73,20 @@ func (se *LD2461) readLoop() {
 
 			if len(ti) < clen+4 {
 
+				if clen > 100 {
+
+					//
+					// Corrupted input.
+					// Flush all.
+					//
+
+					input = nil
+					break
+				}
+
 				//
 				// Input not yet ready complete.
 				//
-
-				input = append([]byte{0xFF, 0xEE, 0xDD}, input...)
 
 				break
 			}
@@ -171,7 +180,7 @@ func (se *LD2461) readLoop() {
 						//log.Printf("GetCoordinates data=[ %02x ] %s", data, coords)
 
 						if se.handler != nil {
-							se.handler.OnHumanTracking(se, xPos, yPos)
+							go se.handler.OnHumanTracking(se, xPos, yPos)
 						}
 
 						lastCoordinates = data
@@ -193,12 +202,10 @@ func (se *LD2461) readLoop() {
 				}
 
 			} else {
-				//log.Printf("###### results xfer=%d [ %02x ]", len(data), data)
 				se.results <- data
 			}
 
 			input = ti
-			break
 		}
 
 		if len(input) == 0 {

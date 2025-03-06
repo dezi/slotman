@@ -14,7 +14,8 @@ func NewSC15IS752(devicePath string) (se *SC15IS752) {
 		Vendor:      "NXP",
 		Model:       "SC15IS752 Dual Uart",
 		DevicePath:  devicePath,
-		crystalFreq: 3072000,
+		crystalFreq: DefaultCrystalFreq,
+		baudrate:    [2]int{9600, 9600},
 	}
 
 	return
@@ -78,6 +79,14 @@ func (se *SC15IS752) Open() (err error) {
 	se.i2cDev = i2cDev
 	se.IsOpen = true
 
+	_ = se.SetFifoEnable(0, true)
+	_ = se.SetBaudrate(0, 9600)
+	_ = se.SetLine(0, 8, ParityNone, 1)
+
+	_ = se.SetFifoEnable(1, true)
+	_ = se.SetBaudrate(1, 9600)
+	_ = se.SetLine(1, 8, ParityNone, 1)
+
 	if se.handler != nil {
 		se.handler.OnThingOpened(se)
 	}
@@ -115,6 +124,8 @@ func (se *SC15IS752) Start() (err error) {
 
 	se.IsStarted = true
 
+	se.loopGroup.Add(2)
+
 	go se.readLoop(ChannelA)
 	go se.readLoop(ChannelB)
 
@@ -132,6 +143,8 @@ func (se *SC15IS752) Stop() (err error) {
 	}
 
 	se.IsStarted = false
+
+	se.loopGroup.Wait()
 
 	if se.handler != nil {
 		se.handler.OnThingStopped(se)

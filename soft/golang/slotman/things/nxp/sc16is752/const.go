@@ -16,6 +16,8 @@ var (
 
 //goland:noinspection GoUnusedConst
 const (
+	DefaultCrystalFreq = 1843200
+
 	//
 	// Possible I2C addresses.
 	//

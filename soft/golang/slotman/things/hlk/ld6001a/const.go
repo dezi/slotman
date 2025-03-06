@@ -5,7 +5,7 @@ package ld6001a
 //
 
 var (
-	baudRates = []int{9600}
+	baudRates = []int{115200}
 )
 
 const (
@@ -31,4 +31,12 @@ const (
 // Configure static target disappearance time ( unit 100ms, range 5~1000, default value is 100 )
 // AT+Exit=XXX\n
 // Configure target exit boundary time ( unit 100ms, range 2~1000, default value is 5 )
+)
+
+const (
+	//
+	// AT+BAUD=XX
+	// Configure the serial port baud rate (default value is 115200)
+	//
+	commandBaudrate = "AT+BAUD=%d"
 )

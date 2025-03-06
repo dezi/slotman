@@ -1,7 +1,7 @@
 package gps6mv2
 
 import (
-	"slotman/drivers/impl/uart"
+	"slotman/drivers/iface/uart"
 	"slotman/things"
 	"slotman/utils/simple"
 )
@@ -23,7 +23,7 @@ type GPS6MV2 struct {
 
 	isProbe bool
 	results chan string
-	uart    *uart.Device
+	uart    uart.Uart
 	handler Handler
 }
 

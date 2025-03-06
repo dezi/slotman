@@ -1,4 +1,4 @@
-package ld2461
+package ld2451
 
 import (
 	"fmt"
@@ -10,43 +10,43 @@ import (
 	"time"
 )
 
-func NewLD2461(devicePath string, baudRate int) (se *LD2461) {
-	se = &LD2461{
+func NewLD2451(devicePath string, baudRate int) (se *LD2451) {
+	se = &LD2451{
 		Vendor:     "HI-Link",
-		Model:      "LD2461 24GHz Human Tracking",
+		Model:      "LD2451 24GHz Human Tracking",
 		DevicePath: devicePath,
 		BaudRate:   baudRate,
 	}
 	return
 }
 
-func (se *LD2461) GetUuid() (uuid simple.UUIDHex) {
+func (se *LD2451) GetUuid() (uuid simple.UUIDHex) {
 	uuid = se.Uuid
 	return
 }
 
-func (se *LD2461) GetThingTypes() (thingTypes []things.ThingType) {
+func (se *LD2451) GetThingTypes() (thingTypes []things.ThingType) {
 	thingTypes = []things.ThingType{things.ThingTypeHumanTrack}
 	return
 }
 
-func (se *LD2461) GetThingDevicePath() (devicePath string) {
+func (se *LD2451) GetThingDevicePath() (devicePath string) {
 	devicePath = se.DevicePath
 	return
 }
 
-func (se *LD2461) GetThingAddress() (address int) {
+func (se *LD2451) GetThingAddress() (address int) {
 	return
 }
 
-func (se *LD2461) GetModelInfo() (vendor, model, short string) {
+func (se *LD2451) GetModelInfo() (vendor, model, short string) {
 	vendor = se.Vendor
 	model = se.Model
 	short = strings.Split(se.Model, " ")[0]
 	return
 }
 
-func (se *LD2461) Open() (err error) {
+func (se *LD2451) Open() (err error) {
 
 	shaData := fmt.Sprintf("%s|%s|%s|%s", things.ThingSystemUuid, se.Model, se.Vendor, se.DevicePath)
 	se.Uuid = simple.UuidHexFromSha256([]byte(shaData))
@@ -67,7 +67,6 @@ func (se *LD2461) Open() (err error) {
 	se.results = make(chan []byte, 10)
 	se.IsOpen = true
 
-	se.loopGroup.Add(1)
 	go se.readLoop()
 
 	if se.handler != nil {
@@ -77,7 +76,7 @@ func (se *LD2461) Open() (err error) {
 	return
 }
 
-func (se *LD2461) Close() (err error) {
+func (se *LD2451) Close() (err error) {
 
 	if !se.IsOpen {
 		return err
@@ -89,8 +88,6 @@ func (se *LD2461) Close() (err error) {
 
 	se.IsOpen = false
 
-	se.loopGroup.Wait()
-
 	err = se.uart.Close()
 	log.Cerror(err)
 
@@ -101,7 +98,7 @@ func (se *LD2461) Close() (err error) {
 	return
 }
 
-func (se *LD2461) Start() (err error) {
+func (se *LD2451) Start() (err error) {
 
 	if se.IsStarted {
 		return
@@ -116,7 +113,7 @@ func (se *LD2461) Start() (err error) {
 	return
 }
 
-func (se *LD2461) Stop() (err error) {
+func (se *LD2451) Stop() (err error) {
 
 	if !se.IsStarted {
 		return

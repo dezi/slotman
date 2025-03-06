@@ -64,7 +64,7 @@ func (se *LD6001a) Open() (err error) {
 	}
 
 	se.uart = uartPort
-	se.results = make(chan []byte, 10)
+	se.results = make(chan string, 10)
 	se.IsOpen = true
 
 	go se.readLoop()

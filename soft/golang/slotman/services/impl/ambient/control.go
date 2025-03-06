@@ -10,7 +10,7 @@ import (
 )
 
 func (sv *Service) DoControlTask() {
-	sv.checkThingSGP30()
+	//sv.checkThingSGP30()
 	sv.checkThingSGP40()
 	sv.checkThingAHT20()
 	sv.checkThingBMP280()

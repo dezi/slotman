@@ -1,11 +1,9 @@
 package ld2461
 
 import (
-	"runtime"
 	"slotman/drivers/impl/uart"
 	"slotman/utils/log"
 	"slotman/utils/simple"
-	"strings"
 )
 
 func ProbeThings(busySerialPaths []string) (things []*LD2461, err error) {
@@ -26,14 +24,9 @@ func ProbeThings(busySerialPaths []string) (things []*LD2461, err error) {
 			continue
 		}
 
-		if runtime.GOOS == "darwin" && !strings.HasPrefix(devicePath, "/dev/tty.usbserial") {
-
-			//
-			// Exclude bogus devices on OSX to speed up testing.
-			//
-
-			continue
-		}
+		//if devicePath != "/dev/i2c-1:48-0" {
+		//	continue
+		//}
 
 		for _, baudRate := range baudRates {
 

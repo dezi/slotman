@@ -33,7 +33,7 @@ func ProbeThings(busyDevicePaths []string, desiredAddresses []byte) (things []*S
 				continue
 			}
 
-			//log.Printf("Probing ADS1115 deviceAddrPath=%s", deviceAddrPath)
+			log.Printf("Probing SC15IS752 deviceAddrPath=%s", deviceAddrPath)
 
 			i2cDev := i2c.NewDevice(devicePath, address)
 			tryErr := i2cDev.Open()
@@ -70,6 +70,8 @@ func ProbeThings(busyDevicePaths []string, desiredAddresses []byte) (things []*S
 			_ = i2cDev.Close()
 
 			if isValid {
+				log.Printf("Identified SC15IS752 deviceAddrPath=%s", deviceAddrPath)
+
 				things = append(things, NewSC15IS752(deviceAddrPath))
 			}
 		}

@@ -6,7 +6,13 @@ import (
 )
 
 func GetDevicePaths() (devicePaths []string, err error) {
+
 	devicePaths, err = serial.GetPortsList()
+
+	for _, i2cUart := range i2cUarts {
+		devicePaths = append(devicePaths, i2cUart.GetDevice())
+	}
+
 	return
 }
 

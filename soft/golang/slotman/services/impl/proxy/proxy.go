@@ -3,10 +3,10 @@ package proxy
 import (
 	"github.com/gorilla/websocket"
 	"net/http"
+	"slotman/drivers/iface/uart"
 	"slotman/drivers/impl/gpio"
 	"slotman/drivers/impl/i2c"
 	"slotman/drivers/impl/spi"
-	"slotman/drivers/impl/uart"
 	proxyIface "slotman/services/iface/proxy"
 	"slotman/services/impl/provider"
 	proxyTypes "slotman/services/type/proxy"
@@ -30,7 +30,7 @@ type Service struct {
 	spiDevMap  map[string]*spi.Device
 	spiDevLock sync.Mutex
 
-	uartDevMap  map[string]*uart.Device
+	uartDevMap  map[string]uart.Uart
 	uartDevLock sync.Mutex
 
 	webServerConn     *websocket.Conn
@@ -62,7 +62,7 @@ func StartService() (err error) {
 	singleTon.gpioDevMap = make(map[string]*gpio.Pin)
 	singleTon.i2cDevMap = make(map[string]*i2c.Device)
 	singleTon.spiDevMap = make(map[string]*spi.Device)
-	singleTon.uartDevMap = make(map[string]*uart.Device)
+	singleTon.uartDevMap = make(map[string]uart.Uart)
 
 	singleTon.webClientsConns = make(map[string]*websocket.Conn)
 	singleTon.webClientsConnsLocks = make(map[string]*sync.Mutex)

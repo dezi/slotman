@@ -1,10 +1,11 @@
 package ld6001a
 
 import (
-	"errors"
+	"fmt"
+	"slotman/drivers/impl/uart"
 	"slotman/things"
 	"slotman/utils/log"
-	"slotman/utils/simple"
+	"time"
 )
 
 func (se *LD6001a) SetHandler(handler Handler) {
@@ -19,94 +20,29 @@ func (se *LD6001a) SetBaudRate(baudRate int) (err error) {
 		return
 	}
 
-	if !simple.IntInArray(baudRates, baudRate) {
-		err = things.ErrUnsupportedBaudRate
+	command := fmt.Sprintf(commandBaudrate, baudRate)
+
+	err = se.writeWithOk(command)
+	if err != nil {
 		log.Cerror(err)
 		return
 	}
 
-	return
-}
+	//
+	// Re-open serial port with new baudrate
+	//
 
-func (se *LD6001a) GetVersion() (date, version, uid string, err error) {
+	_ = se.uart.Close()
 
-	if !se.IsOpen {
-		err = things.ErrThingNotOpen
-		log.Cerror(err)
+	se.uart = uart.NewDevice(se.DevicePath, baudRate)
+	err = se.uart.Open()
+	if err != nil {
+		se.IsOpen = false
+		se.IsStarted = false
 		return
 	}
 
-	return
-}
-
-func (se *LD6001a) SetZoneFilter(zi ZoneInfo, active bool) (err error) {
-
-	if !se.IsOpen {
-		err = things.ErrThingNotOpen
-		log.Cerror(err)
-		return
-	}
-
-	return
-}
-
-func (se *LD6001a) DisableZoneFilter(zone int) (err error) {
-
-	if !se.IsOpen {
-		err = things.ErrThingNotOpen
-		log.Cerror(err)
-		return
-	}
-
-	if zone < 1 || zone > 3 {
-		err = errors.New("invalid zone")
-		log.Cerror(err)
-		return
-	}
-
-	return
-}
-
-func (se *LD6001a) ReadZoneFilters() (zi1, zi2, zi3 ZoneInfo, err error) {
-
-	if !se.IsOpen {
-		err = things.ErrThingNotOpen
-		log.Cerror(err)
-		return
-	}
-
-	return
-}
-
-func (se *LD6001a) SetReportingFormat(format ReportingFormat) (err error) {
-
-	if !se.IsOpen {
-		err = things.ErrThingNotOpen
-		log.Cerror(err)
-		return
-	}
-
-	return
-}
-
-func (se *LD6001a) GetReportingFormat() (format ReportingFormat, err error) {
-
-	if !se.IsOpen {
-		err = things.ErrThingNotOpen
-		log.Cerror(err)
-		return
-	}
-
-	return
-}
-
-func (se *LD6001a) FactoryReset() (err error) {
-
-	if !se.IsOpen {
-		err = things.ErrThingNotOpen
-		log.Cerror(err)
-		return
-	}
+	_ = se.uart.SetReadTimeout(time.Millisecond * 100)
 
 	return
 }

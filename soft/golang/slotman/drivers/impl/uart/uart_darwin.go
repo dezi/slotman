@@ -1,10 +1,13 @@
 package uart
 
 import (
+	"errors"
 	"go.bug.st/serial"
 	"slotman/services/iface/proxy"
 	"time"
 )
+
+const wantLocal = true
 
 func GetDevicePaths() (devicePaths []string, err error) {
 
@@ -13,12 +16,32 @@ func GetDevicePaths() (devicePaths []string, err error) {
 		return
 	}
 
-	if prx.CheckTarget() {
+	//goland:noinspection GoBoolExpressions
+	if prx.CheckTarget() && !wantLocal {
 		devicePaths, err = prx.UartGetDevicePaths()
 		return
 	}
 
-	devicePaths, err = serial.GetPortsList()
+	checkPaths, err := serial.GetPortsList()
+
+	for _, checkPath := range checkPaths {
+
+		if checkPath == "/dev/cu.wlan-debug" ||
+			checkPath == "/dev/cu.debug-console" ||
+			checkPath == "/dev/cu.Bluetooth-Incoming-Port" ||
+			checkPath == "/dev/tty.wlan-debug" ||
+			checkPath == "/dev/tty.debug-console" ||
+			checkPath == "/dev/tty.Bluetooth-Incoming-Port" {
+			continue
+		}
+
+		devicePaths = append(devicePaths, checkPath)
+	}
+
+	for _, i2cUart := range i2cUarts {
+		devicePaths = append(devicePaths, i2cUart.GetDevice())
+	}
+
 	return
 }
 
@@ -29,7 +52,8 @@ func (uart *Device) Open() (err error) {
 		return
 	}
 
-	if prx.CheckTarget() {
+	//goland:noinspection GoBoolExpressions
+	if prx.CheckTarget() && !wantLocal {
 		err = prx.UartOpen(uart)
 		return
 	}
@@ -55,7 +79,8 @@ func (uart *Device) Close() (err error) {
 		return
 	}
 
-	if prx.CheckTarget() {
+	//goland:noinspection GoBoolExpressions
+	if prx.CheckTarget() && !wantLocal {
 		err = prx.UartClose(uart)
 		return
 	}
@@ -71,7 +96,8 @@ func (uart *Device) SetReadTimeout(timeout time.Duration) (err error) {
 		return
 	}
 
-	if prx.CheckTarget() {
+	//goland:noinspection GoBoolExpressions
+	if prx.CheckTarget() && !wantLocal {
 		err = prx.UartSetReadTimeout(uart, timeout)
 		return
 	}
@@ -87,12 +113,19 @@ func (uart *Device) Read(data []byte) (xfer int, err error) {
 		return
 	}
 
-	if prx.CheckTarget() {
+	//goland:noinspection GoBoolExpressions
+	if prx.CheckTarget() && !wantLocal {
 		xfer, err = prx.UartRead(uart, data)
 		return
 	}
 
-	xfer, err = uart.port.Read(data)
+	port := uart.port
+	if port == nil {
+		err = errors.New("uart port is nil")
+		return
+	}
+
+	xfer, err = port.Read(data)
 	return
 }
 
@@ -103,11 +136,18 @@ func (uart *Device) Write(data []byte) (xfer int, err error) {
 		return
 	}
 
-	if prx.CheckTarget() {
+	//goland:noinspection GoBoolExpressions
+	if prx.CheckTarget() && !wantLocal {
 		xfer, err = prx.UartWrite(uart, data)
 		return
 	}
 
-	xfer, err = uart.port.Write(data)
+	port := uart.port
+	if port == nil {
+		err = errors.New("uart port is nil")
+		return
+	}
+
+	xfer, err = port.Write(data)
 	return
 }

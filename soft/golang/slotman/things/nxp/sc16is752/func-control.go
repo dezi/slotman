@@ -18,9 +18,9 @@ func (se *SC15IS752) SetFifoEnable(channel byte, enable bool) (err error) {
 	}
 
 	if enable {
-		value &= 0xFE
-	} else {
 		value |= 0x01
+	} else {
+		value &= 0xFE
 	}
 
 	err = se.WriteRegister(RegFCR, channel, value)
@@ -34,17 +34,24 @@ func (se *SC15IS752) SetCrystalFreq(crystalFreq int) (err error) {
 
 func (se *SC15IS752) SetBaudrate(channel byte, baudrate int) (err error) {
 
+	if channel > ChannelB {
+		err = ErrInvalidChannel
+		return
+	}
+
+	se.baudrate[channel] = baudrate
+
 	value, err := se.ReadRegister(RegMCR, channel)
 	if err != nil {
 		return
 	}
 
-	prescaler := 4
-	if value == 0 {
-		prescaler = 1
+	preScaler := 4
+	if value&0x80 == 0 {
+		preScaler = 1
 	}
 
-	divisor1 := se.crystalFreq / prescaler
+	divisor1 := se.crystalFreq / preScaler
 	divisor2 := baudrate * 16
 	if divisor2 > divisor1 {
 		err = things.ErrUnsupportedBaudRate
@@ -66,12 +73,12 @@ func (se *SC15IS752) SetBaudrate(channel byte, baudrate int) (err error) {
 		return
 	}
 
-	err = se.WriteRegister(RegDLH, channel, byte(divisor))
+	err = se.WriteRegister(RegDLH, channel, byte(divisor>>8))
 	if err != nil {
 		return
 	}
 
-	err = se.WriteRegister(RegDLL, channel, byte(divisor>>8))
+	err = se.WriteRegister(RegDLL, channel, byte(divisor))
 	if err != nil {
 		return
 	}
@@ -165,58 +172,25 @@ func (se *SC15IS752) SetReadTimeout(channel byte, millis int) (err error) {
 	return
 }
 
-func (se *SC15IS752) SetWriteTimeout(channel byte, millis int) (err error) {
+func (se *SC15IS752) GetReadFifoAvail(channel byte) (avail int, err error) {
 
-	if channel > ChannelB {
-		err = ErrInvalidChannel
+	value, err := se.ReadRegister(RegRxLvl, channel)
+	if err != nil {
 		return
 	}
 
-	se.writeTimeout[channel] = millis
+	avail = int(value)
 	return
 }
 
-//goland:noinspection GoStandardMethods
-func (se *SC15IS752) WriteUartByte(channel, value byte) (err error) {
+func (se *SC15IS752) GetWriteFifoAvail(channel byte) (avail int, err error) {
 
-	if channel > ChannelB {
-		err = ErrInvalidChannel
+	value, err := se.ReadRegister(RegTxLvl, channel)
+	if err != nil {
 		return
 	}
 
-	se.accessLock.Lock()
-	defer se.accessLock.Unlock()
-
-	var status byte
-	var waited int
-	var timeOut = se.writeTimeout[channel]
-
-	for {
-
-		if !se.IsOpen {
-			err = ErrDeviceClosed
-			return
-		}
-
-		status, err = se.ReadRegister(RegLSR, channel)
-		if err != nil {
-			return
-		}
-
-		if status&0x20 == 0 {
-			break
-		}
-
-		time.Sleep(time.Millisecond * 10)
-		waited += 10
-
-		if timeOut > 0 && waited > timeOut {
-			err = ErrWriteTimeout
-			return
-		}
-	}
-
-	err = se.WriteRegister(RegTHR, channel, value)
+	avail = int(value)
 	return
 }
 
@@ -227,92 +201,47 @@ func (se *SC15IS752) WriteUartBytes(channel byte, data []byte) (xfer int, err er
 		return
 	}
 
-	se.accessLock.Lock()
-	defer se.accessLock.Unlock()
-
-	var status byte
-	var waited int
-	var timeOut = se.writeTimeout[channel]
+	var avail int
 
 	for xfer < len(data) {
 
 		for {
 
-			if !se.IsOpen {
-				err = ErrDeviceClosed
-				return
-			}
-
-			status, err = se.ReadRegister(RegLSR, channel)
+			avail, err = se.GetWriteFifoAvail(channel)
 			if err != nil {
 				return
 			}
 
-			if status&0x20 == 0 {
+			if avail > 0 {
 				break
 			}
 
-			time.Sleep(time.Millisecond * 10)
-			waited += 10
-
-			if timeOut > 0 && waited > timeOut {
-				err = ErrWriteTimeout
-				return
-			}
+			time.Sleep(time.Millisecond * 1)
 		}
 
-		err = se.WriteRegister(RegTHR, channel, data[xfer])
+		if avail > len(data)-xfer {
+			avail = len(data) - xfer
+		}
+
+		err = se.WriteRegisterBytes(RegTHR, channel, data[xfer:xfer+avail])
 		if err != nil {
 			return
 		}
 
-		xfer++
+		xfer += avail
+
+		//for avail > 0 && xfer < len(data) {
+		//
+		//	err = se.WriteRegister(RegTHR, channel, data[xfer])
+		//	if err != nil {
+		//		return
+		//	}
+		//
+		//	xfer++
+		//	avail--
+		//}
 	}
 
-	return
-}
-
-//goland:noinspection GoStandardMethods
-func (se *SC15IS752) ReadUartByte(channel byte) (value byte, err error) {
-
-	if channel > ChannelB {
-		err = ErrInvalidChannel
-		return
-	}
-
-	se.accessLock.Lock()
-	defer se.accessLock.Unlock()
-
-	var avail byte
-	var waited int
-	var timeOut = se.readTimeout[channel]
-
-	for {
-
-		if !se.IsOpen {
-			err = ErrDeviceClosed
-			return
-		}
-
-		avail, err = se.ReadRegister(RegRxLvl, channel)
-		if err != nil {
-			return
-		}
-
-		if avail > 0 {
-			break
-		}
-
-		time.Sleep(time.Millisecond * 10)
-		waited += 10
-
-		if timeOut > 0 && waited > timeOut {
-			err = ErrReadTimeout
-			return
-		}
-	}
-
-	value, err = se.ReadRegister(RegRHR, channel)
 	return
 }
 
@@ -323,23 +252,15 @@ func (se *SC15IS752) ReadUartBytes(channel byte, size int) (xfer int, data []byt
 		return
 	}
 
-	se.accessLock.Lock()
-	defer se.accessLock.Unlock()
-
-	var avail byte
-	var waited int
+	var avail int
 	var timeOut = se.readTimeout[channel]
+	var startTime = time.Now().UnixMilli()
 
-	for size < len(data) {
+	for size > len(data) {
 
 		for {
 
-			if !se.IsOpen {
-				err = ErrDeviceClosed
-				return
-			}
-
-			avail, err = se.ReadRegister(RegRxLvl, channel)
+			avail, err = se.GetReadFifoAvail(channel)
 			if err != nil {
 				return
 			}
@@ -348,48 +269,53 @@ func (se *SC15IS752) ReadUartBytes(channel byte, size int) (xfer int, data []byt
 				break
 			}
 
-			time.Sleep(time.Millisecond * 10)
-			waited += 10
-
-			if timeOut > 0 && waited > timeOut {
+			if timeOut > 0 && time.Now().UnixMilli()-startTime > int64(timeOut) {
 				err = ErrReadTimeout
 				return
 			}
 		}
 
-		var value byte
-
-		for avail > 0 {
-
-			value, err = se.ReadRegister(RegRHR, channel)
-			if err != nil {
-				return
-			}
-
-			data = append(data, value)
-
-			xfer++
-			avail--
+		if avail > size-len(data) {
+			avail = size - len(data)
 		}
+
+		var read []byte
+		read, _, err = se.ReadRegisterBytes(RegRHR, channel, avail)
+		if err != nil {
+			return
+		}
+
+		data = append(data, read...)
+		xfer = len(data)
+
+		//for avail > 0 && xfer < size {
+		//
+		//	var value byte
+		//	value, err = se.ReadRegister(RegRHR, channel)
+		//	if err != nil {
+		//		return
+		//	}
+		//
+		//	data = append(data, value)
+		//
+		//	xfer++
+		//	avail--
+		//}
 	}
 
 	return
 }
 
-func (se *SC15IS752) ReadUartBytesNow(channel byte, size int) (xfer int, data []byte, err error) {
+func (se *SC15IS752) ReadUartBytesNow(channel byte) (data []byte, err error) {
 
 	if channel > ChannelB {
 		err = ErrInvalidChannel
 		return
 	}
 
-	se.accessLock.Lock()
-	defer se.accessLock.Unlock()
+	var avail int
 
-	var avail byte
-	var value byte
-
-	avail, err = se.ReadRegister(RegRxLvl, channel)
+	avail, err = se.GetReadFifoAvail(channel)
 	if err != nil {
 		return
 	}
@@ -398,19 +324,17 @@ func (se *SC15IS752) ReadUartBytesNow(channel byte, size int) (xfer int, data []
 		return
 	}
 
-	for avail > 0 && xfer < size {
+	//var value byte
+	//value, err = se.ReadRegister(RegRHR, channel)
+	//if err != nil {
+	//	return
+	//}
+	//
+	//data = append(data, value)
+	//
+	//avail--
 
-		value, err = se.ReadRegister(RegRHR, channel)
-		if err != nil {
-			return
-		}
-
-		data = append(data, value)
-
-		xfer++
-		avail--
-	}
-
+	data, _, err = se.ReadRegisterBytes(RegRHR, channel, avail)
 	return
 }
 

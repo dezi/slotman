@@ -1,9 +1,10 @@
 package ld2461
 
 import (
-	"slotman/drivers/impl/uart"
+	"slotman/drivers/iface/uart"
 	"slotman/things"
 	"slotman/utils/simple"
+	"sync"
 )
 
 type LD2461 struct {
@@ -17,10 +18,11 @@ type LD2461 struct {
 	IsOpen     bool
 	IsStarted  bool
 
-	isProbe bool
-	results chan []byte
-	uart    *uart.Device
-	handler Handler
+	isProbe   bool
+	results   chan []byte
+	uart      uart.Uart
+	handler   Handler
+	loopGroup sync.WaitGroup
 }
 
 type ReportingFormat byte

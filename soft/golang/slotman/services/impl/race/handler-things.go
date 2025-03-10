@@ -300,11 +300,15 @@ func (sv *Service) OnAsciiKeyPress(ascii byte) {
 
 		sv.roundsToGo = 10
 
+		sv.raceInfos[0].Rounds = 0
+		sv.raceInfos[1].Rounds = 0
+
 		sv.trackStates[0] = slotman.TrackStateReady
 		sv.trackStates[1] = slotman.TrackStateReady
 
 		sv.sdo.SetTrackFixedSpeed(0, 44)
 		sv.sdo.SetTrackFixedSpeed(1, 44)
+
 		sv.sdo.SetTrackEnable(0, true)
 		sv.sdo.SetTrackEnable(1, true)
 

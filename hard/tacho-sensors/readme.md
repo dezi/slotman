@@ -116,12 +116,69 @@ Solder it like shown in the image.
 Step 4
 ======
 
+This step needs to be done with all sensor modules.
+
+De-solder the photo resistor.
+
 [<img src="images/tacho-sensors-step-04-a.jpg" width="400"/>](images/tacho-sensors-step-04-a.jpg)
 
-[<img src="images/tacho-sensors-step-04-b.jpg" width="400"/>](images/tacho-sensors-step-04-b.jpg)
+Step 5
+======
 
-[<img src="images/tacho-sensors-step-04-c.jpg" width="400"/>](images/tacho-sensors-step-04-c.jpg)
+This step needs to be done with two sensors.
 
-[<img src="images/tacho-sensors-step-04-d.jpg" width="400"/>](images/tacho-sensors-step-04-d.jpg)
+Re-solder it to one of the outer contacts.
 
-[<img src="images/tacho-sensors-step-04-e.jpg" width="400"/>](images/tacho-sensors-step-04-e.jpg)
+[<img src="images/tacho-sensors-step-05-a.jpg" width="400"/>](images/tacho-sensors-step-05-a.jpg)
+
+Solder one of the spare wires to the opposite contact like shown here.
+
+[<img src="images/tacho-sensors-step-05-b.jpg" width="400"/>](images/tacho-sensors-step-05-b.jpg)
+
+Bend it towards the dangling leg of the photo resistor and solder it there.
+
+Cut off all superfluous ends of wires and legs.
+
+[<img src="images/tacho-sensors-step-05-c.jpg" width="400"/>](images/tacho-sensors-step-05-c.jpg)
+
+View of the result from top.
+
+[<img src="images/tacho-sensors-step-05-d.jpg" width="400"/>](images/tacho-sensors-step-05-d.jpg)
+
+Step 6
+======
+
+This step needs to be done with two sensors.
+
+Re-solder it to the opposite outer contacts.
+
+[<img src="images/tacho-sensors-step-06-a.jpg" width="400"/>](images/tacho-sensors-step-06-a.jpg)
+
+Solder one of the spare wires to the opposite contact like shown here.
+
+[<img src="images/tacho-sensors-step-06-b.jpg" width="400"/>](images/tacho-sensors-step-06-b.jpg)
+
+Bend it towards the dangling leg of the photo resistor and solder it there.
+
+Cut off all superfluous ends of wires and legs.
+
+[<img src="images/tacho-sensors-step-06-c.jpg" width="400"/>](images/tacho-sensors-step-06-c.jpg)
+
+Your should now have two left side and two right side sensors.
+
+[<img src="images/tacho-sensors-step-06-d.jpg" width="400"/>](images/tacho-sensors-step-06-d.jpg)
+
+Step 7
+======
+
+Prepare the Carrera-Go track.
+
+[<img src="images/tacho-sensors-step-07-a.jpg" width="400"/>](images/tacho-sensors-step-07-a.jpg)
+
+Drill the red holes just in the corner of that track area with a 5.5 mm drill.
+
+Drill the green holes so they enable the LEDs of the sensors to 
+shine through the track with  a 2.5 mm drill.
+
+
+[<img src="images/tacho-sensors-step-07-b.jpg" width="400"/>](images/tacho-sensors-step-07-b.jpg)

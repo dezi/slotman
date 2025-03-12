@@ -171,14 +171,37 @@ Your should now have two left side and two right side sensors.
 Step 7
 ======
 
-Prepare the Carrera-Go track.
+Prepare the Carrera-Go track and mount sensors.
 
 [<img src="images/tacho-sensors-step-07-a.jpg" width="400"/>](images/tacho-sensors-step-07-a.jpg)
 
 Drill the red holes just in the corner of that track area with a 5.5 mm drill.
 
 Drill the green holes so they enable the LEDs of the sensors to 
-shine through the track with  a 2.5 mm drill.
-
+shine through the track with a small 1.5 mm drill.
 
 [<img src="images/tacho-sensors-step-07-b.jpg" width="400"/>](images/tacho-sensors-step-07-b.jpg)
+
+View from top after drilling holes.
+
+[<img src="images/tacho-sensors-step-07-c.jpg" width="400"/>](images/tacho-sensors-step-07-c.jpg)
+
+Check if the sensors fit nicely.
+
+[<img src="images/tacho-sensors-step-07-d.jpg" width="400"/>](images/tacho-sensors-step-07-d.jpg)
+
+Put some hot glue on the sensor like this.
+
+[<img src="images/tacho-sensors-step-07-e.jpg" width="400"/>](images/tacho-sensors-step-07-e.jpg)
+
+Glue all four sensors to track.
+
+[<img src="images/tacho-sensors-step-07-f.jpg" width="400"/>](images/tacho-sensors-step-07-f.jpg)
+
+Check from top side if they sit evenly in their hole and
+are on the same level.
+
+Step 8
+======
+
+Do the 5V and GND wires.

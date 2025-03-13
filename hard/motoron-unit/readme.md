@@ -184,3 +184,20 @@ Continue with GND. Prepare a wire like this:
 Solder it at the spots marked with green bullets:
 
 [<img src="images/motoron-unit-step-08-d.jpg" width="400"/>](images/motoron-unit-step-08-d.jpg)
+
+Step 9
+======
+
+Connect I2C SDA and SCL.
+
+Prepare a wire like this:
+
+[<img src="images/motoron-unit-step-09-a.jpg" width="400"/>](images/motoron-unit-step-09-a.jpg)
+
+We start with SDA. Solder it at the spots marked with red bullets:
+
+[<img src="images/motoron-unit-step-09-b.jpg" width="400"/>](images/motoron-unit-step-09-b.jpg)
+
+Continue with SCL. Solder it at the spots marked with green bullets:
+
+[<img src="images/motoron-unit-step-09-c.jpg" width="400"/>](images/motoron-unit-step-09-c.jpg)

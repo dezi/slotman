@@ -118,3 +118,69 @@ Prepare the single power source jumper.
 Solder it into this position:
 
 [<img src="images/motoron-unit-step-05-b.jpg" width="400"/>](images/motoron-unit-step-05-b.jpg)
+
+Step 6
+======
+
+Soldering the driving power connections.
+
+We start with the GND connect. 
+
+Prepare a thicker wire like this:
+
+[<img src="images/motoron-unit-step-06-a.jpg" width="400"/>](images/motoron-unit-step-06-a.jpg)
+
+Solder it into these positions:
+
+[<img src="images/motoron-unit-step-06-b.jpg" width="400"/>](images/motoron-unit-step-06-b.jpg)
+
+Prepare two thicker VIN connect wires.
+
+[<img src="images/motoron-unit-step-06-c.jpg" width="400"/>](images/motoron-unit-step-06-c.jpg)
+
+Solder them into these positions:
+
+[<img src="images/motoron-unit-step-06-d.jpg" width="400"/>](images/motoron-unit-step-06-d.jpg)
+
+Step 7
+======
+
+Connect the Motorons enable I2C address programming jumpers.
+
+The jumpers connect against GND. If pulled to ground,
+You can programm the real I2C access address for each unit.
+
+We simply make tin bridges:
+
+[<img src="images/motoron-unit-step-07-a.jpg" width="400"/>](images/motoron-unit-step-07-a.jpg)
+
+The same here:
+
+[<img src="images/motoron-unit-step-07-b.jpg" width="400"/>](images/motoron-unit-step-07-b.jpg)
+
+**Tip: Measure after applying the bridges if they do not produce
+a shortcut.**
+
+**Important: Also remember to unplug the jumpers, as they produce
+a desired shortcut if active.**
+
+Step 8
+======
+
+Connect 5V and GND.
+
+We start with 5V. Prepare a wire like this:
+
+[<img src="images/motoron-unit-step-08-a.jpg" width="400"/>](images/motoron-unit-step-08-a.jpg)
+
+Solder it at the spots marked with red bullets:
+
+[<img src="images/motoron-unit-step-08-b.jpg" width="400"/>](images/motoron-unit-step-08-b.jpg)
+
+Continue with GND. Prepare a wire like this:
+
+[<img src="images/motoron-unit-step-08-c.jpg" width="400"/>](images/motoron-unit-step-08-c.jpg)
+
+Solder it at the spots marked with green bullets:
+
+[<img src="images/motoron-unit-step-08-d.jpg" width="400"/>](images/motoron-unit-step-08-d.jpg)

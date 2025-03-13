@@ -201,3 +201,37 @@ We start with SDA. Solder it at the spots marked with red bullets:
 Continue with SCL. Solder it at the spots marked with green bullets:
 
 [<img src="images/motoron-unit-step-09-c.jpg" width="400"/>](images/motoron-unit-step-09-c.jpg)
+
+Step 10
+=======
+
+Connect Motorons 1 and 3 power outputs.
+
+Prepare 8 shorter wires:
+
+[<img src="images/motoron-unit-step-10-a.jpg" width="400"/>](images/motoron-unit-step-10-a.jpg)
+
+Solder them into place at one end.
+
+[<img src="images/motoron-unit-step-10-b.jpg" width="400"/>](images/motoron-unit-step-10-b.jpg)
+
+Solder now the other ends corresponding to the colors.
+
+[<img src="images/motoron-unit-step-10-c.jpg" width="400"/>](images/motoron-unit-step-10-c.jpg)
+
+Step 11
+=======
+
+Connect Motorons 0 and 2 power outputs.
+
+Prepare 8 longer wires:
+
+[<img src="images/motoron-unit-step-11-a.jpg" width="400"/>](images/motoron-unit-step-11-a.jpg)
+
+Solder them into place at one end.
+
+[<img src="images/motoron-unit-step-11-b.jpg" width="400"/>](images/motoron-unit-step-11-b.jpg)
+
+Solder now the other ends corresponding to the colors.
+
+[<img src="images/motoron-unit-step-11-c.jpg" width="400"/>](images/motoron-unit-step-11-c.jpg)

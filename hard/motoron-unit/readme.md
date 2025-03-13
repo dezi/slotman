@@ -5,14 +5,20 @@ Converts speed control instructions into track voltage.
 The conversion is done via Pololu M2T550 Motorons each of which 
 can control the car voltage for two tracks.
 
+The Motorons can regulate driving power in a range
+from 10 to 22 Volt, compared to the normal input
+of 14.5 Volt.
+
 The data is exchanged via the **I2C** bus with the **Raspberry Pi**.
 
 ## Benefits
 
-- 0 - 100 % voltage regulation.
+- True 0 - 100 % voltage regulation.
+- Input driving voltage from 10 V upto 22 V.
+- Controls up to 8 tracks.
+- Supports one or two power supplies.
 - Pilot individual power curves.
-- Min and max speed limiting.
-- Input voltage from 10 V upto 20 V.
+- Pilot individual min and max speed limiting.
 
 Material List
 =============

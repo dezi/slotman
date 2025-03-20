@@ -12,6 +12,8 @@ sensor per track with two lanes.
 Material List
 =============
 
+4 x Digital Light Sensor  (https://www.amazon.de/dp/B07DJ4CMF7)
+
 1 x 2.54mm Breakaway 40 Pin Female Header PCB Connector (https://www.amazon.de/dp/B07DBY753C)
 
 1 x Enameled Copper Wire 0.4 mm (https://www.amazon.de/dp/B0DCJQJJCY)
@@ -205,3 +207,67 @@ Step 8
 ======
 
 Do the 5V and GND wires.
+
+Prepare a 6 pin straight connector.
+
+[<img src="images/tacho-sensors-step-08-a.jpg" width="400"/>](images/tacho-sensors-step-08-a.jpg)
+
+Prepare two thicker wires like this.
+
+[<img src="images/tacho-sensors-step-08-b.jpg" width="400"/>](images/tacho-sensors-step-08-b.jpg)
+
+The 5V connect goes to the first pin.
+
+[<img src="images/tacho-sensors-step-08-c.jpg" width="400"/>](images/tacho-sensors-step-08-c.jpg)
+
+The GND connect goes to the second pin.
+
+[<img src="images/tacho-sensors-step-08-d.jpg" width="400"/>](images/tacho-sensors-step-08-d.jpg)
+
+Also notice that the sensors have been numbered 0-3.
+
+Step 9
+======
+
+Do the sensor output connectors.
+
+Prepare four wires like this.
+
+[<img src="images/tacho-sensors-step-09-a.jpg" width="400"/>](images/tacho-sensors-step-09-a.jpg)
+
+Solder the wires like this:
+
+[<img src="images/tacho-sensors-step-09-b.jpg" width="400"/>](images/tacho-sensors-step-09-b.jpg)
+
+Step 10
+=======
+
+Glue the 6 pin connector to track.
+
+The 5V side of connector has been marked with the red bullet.
+
+Prepare a cut-out for the connector with a cutter knife.
+
+[<img src="images/tacho-sensors-step-10-a.jpg" width="400"/>](images/tacho-sensors-step-10-a.jpg)
+
+Place a spare 40 pin female header on the connector.
+It will help You to adjust the connector properly and
+hold it in place while gluing.
+
+The 5V side of connector has been marked with the red bullet.
+
+[<img src="images/tacho-sensors-step-10-b.jpg" width="400"/>](images/tacho-sensors-step-10-b.jpg)
+
+Glue the connector to track with a hot glue pistol.
+
+[<img src="images/tacho-sensors-step-10-c.jpg" width="400"/>](images/tacho-sensors-step-10-c.jpg)
+
+I also put some glue on the wires to hold them in place.
+
+[<img src="images/tacho-sensors-step-10-d.jpg" width="400"/>](images/tacho-sensors-step-10-d.jpg)
+
+The result:
+
+[<img src="images/tacho-sensors-step-10-e.jpg" width="400"/>](images/tacho-sensors-step-10-e.jpg)
+
+**Good job.**

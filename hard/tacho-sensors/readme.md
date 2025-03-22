@@ -271,3 +271,76 @@ The result:
 [<img src="images/tacho-sensors-step-10-e.jpg" width="400"/>](images/tacho-sensors-step-10-e.jpg)
 
 **Good job.**
+
+# Four to Eight Track Upgrade
+
+If desired, You can make the four / six / eight track upgrade like this:
+
+Step 11
+=======
+
+Prepare two 6 pin connectors like this:
+
+[<img src="images/tacho-sensors-step-11-a.jpg" width="400"/>](images/tacho-sensors-step-11-a.jpg)
+
+Prepare 6 wires like this:
+
+**Tip: You can estimate the length of the wire
+by the size of the track.**
+
+[<img src="images/tacho-sensors-step-11-b.jpg" width="400"/>](images/tacho-sensors-step-11-b.jpg)
+
+Solder the wires so that You get a one-to-one connections 
+between the two connectors.
+
+[<img src="images/tacho-sensors-step-11-c.jpg" width="400"/>](images/tacho-sensors-step-11-c.jpg)
+
+Step 12
+=======
+
+I assume that You have prepared another track already.
+
+Provide a cut-out like this:
+
+[<img src="images/tacho-sensors-step-12-a.jpg" width="400"/>](images/tacho-sensors-step-12-a.jpg)
+
+Put the first and the second tracks and also the bridge connector in place. 
+
+[<img src="images/tacho-sensors-step-12-b.jpg" width="400"/>](images/tacho-sensors-step-12-b.jpg)
+
+Glue the bridge connect with the hot glue pistol.
+
+[<img src="images/tacho-sensors-step-12-c.jpg" width="400"/>](images/tacho-sensors-step-12-c.jpg)
+
+Detail view of the gluing.
+
+[<img src="images/tacho-sensors-step-12-d.jpg" width="400"/>](images/tacho-sensors-step-12-d.jpg)
+
+Step 13
+=======
+
+Prepare a longer cut-out on the other side of secondary track.
+
+[<img src="images/tacho-sensors-step-13-a.jpg" width="400"/>](images/tacho-sensors-step-13-a.jpg)
+
+Use a spare 40 female head connector to hold the two connectors in
+an exact position. 
+
+**Important: Leave a one pin space between the two connectors.**
+
+[<img src="images/tacho-sensors-step-13-b.jpg" width="400"/>](images/tacho-sensors-step-13-b.jpg)
+
+Glue the connectors onto track now.
+
+[<img src="images/tacho-sensors-step-13-c.jpg" width="400"/>](images/tacho-sensors-step-13-c.jpg)
+
+Also apply some additional glue spots to keep the wires in place at
+the red bullets positions.
+
+[<img src="images/tacho-sensors-step-13-d.jpg" width="400"/>](images/tacho-sensors-step-13-d.jpg)
+
+Both tracks put together.
+
+[<img src="images/tacho-sensors-step-13-e.jpg" width="400"/>](images/tacho-sensors-step-13-e.jpg)
+
+**Good job.**

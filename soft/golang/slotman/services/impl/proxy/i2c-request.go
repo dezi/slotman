@@ -123,6 +123,27 @@ func (sv *Service) I2cRead(i2c i2c.I2c, data []byte) (xfer int, err error) {
 	return
 }
 
+func (sv *Service) I2cReadUart(i2c i2c.I2c, channel byte, timeOut int, data []byte) (xfer int, err error) {
+
+	req := &proxy.I2c{
+		Area:    proxy.AreaI2c,
+		What:    proxy.I2cWhatReadUart,
+		Size:    len(data),
+		Channel: channel,
+		TimeOut: timeOut,
+	}
+
+	res, err := sv.i2cExecuteRequest(req, i2c)
+	if err != nil {
+		return
+	}
+
+	copy(data, res.Read)
+
+	xfer, err = res.Xfer, res.NE
+	return
+}
+
 func (sv *Service) i2cExecuteRequest(req *proxy.I2c, i2c i2c.I2c) (res *proxy.I2c, err error) {
 
 	if i2c != nil {

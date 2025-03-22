@@ -83,3 +83,14 @@ func (i2c *Device) Read(data []byte) (xfer int, err error) {
 	xfer, err = prx.I2cRead(i2c, data)
 	return
 }
+
+func (i2c *Device) ReadUart(channel byte, timeOut int, data []byte) (xfer int, err error) {
+
+	prx, err := proxy.GetInstance()
+	if err != nil {
+		return
+	}
+
+	xfer, err = prx.I2cReadUart(i2c, channel, timeOut, data)
+	return
+}

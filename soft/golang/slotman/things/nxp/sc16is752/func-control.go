@@ -3,6 +3,7 @@ package sc16is752
 import (
 	"errors"
 	"slotman/things"
+	"slotman/utils/log"
 	"time"
 )
 
@@ -201,6 +202,8 @@ func (se *SC15IS752) WriteUartBytes(channel byte, data []byte) (xfer int, err er
 		return
 	}
 
+	log.Printf("####### WriteUartBytes size=%d [ %02x ]", len(data), data)
+
 	var avail int
 
 	for xfer < len(data) {
@@ -225,22 +228,14 @@ func (se *SC15IS752) WriteUartBytes(channel byte, data []byte) (xfer int, err er
 
 		err = se.WriteRegisterBytes(RegTHR, channel, data[xfer:xfer+avail])
 		if err != nil {
+			log.Cerror(err)
 			return
 		}
 
 		xfer += avail
-
-		//for avail > 0 && xfer < len(data) {
-		//
-		//	err = se.WriteRegister(RegTHR, channel, data[xfer])
-		//	if err != nil {
-		//		return
-		//	}
-		//
-		//	xfer++
-		//	avail--
-		//}
 	}
+
+	log.Printf("####### WriteUartBytes xfer=%d [ %02x ]", xfer, data)
 
 	return
 }
@@ -252,9 +247,30 @@ func (se *SC15IS752) ReadUartBytes(channel byte, size int) (xfer int, data []byt
 		return
 	}
 
+	data = make([]byte, size)
+
+	xfer, err = se.i2cDev.ReadUart(channel, se.readTimeout[channel], data)
+	data = data[:xfer]
+
+	if err != nil {
+		return
+	}
+
+	return
+}
+
+func (se *SC15IS752) ReadUartBytesLocal(channel byte, size int) (xfer int, data []byte, err error) {
+
+	if channel > ChannelB {
+		err = ErrInvalidChannel
+		return
+	}
+
 	var avail int
 	var timeOut = se.readTimeout[channel]
 	var startTime = time.Now().UnixMilli()
+
+	log.Printf("############# ReadUartBytes size=%d", size)
 
 	for size > len(data) {
 
@@ -262,15 +278,18 @@ func (se *SC15IS752) ReadUartBytes(channel byte, size int) (xfer int, data []byt
 
 			avail, err = se.GetReadFifoAvail(channel)
 			if err != nil {
+				log.Cerror(err)
 				return
 			}
 
 			if avail > 0 {
+				log.Printf("######fifo avail=%d", avail)
 				break
 			}
 
 			if timeOut > 0 && time.Now().UnixMilli()-startTime > int64(timeOut) {
 				err = ErrReadTimeout
+				log.Cerror(err)
 				return
 			}
 		}
@@ -282,26 +301,18 @@ func (se *SC15IS752) ReadUartBytes(channel byte, size int) (xfer int, data []byt
 		var read []byte
 		read, _, err = se.ReadRegisterBytes(RegRHR, channel, avail)
 		if err != nil {
+			log.Printf("############### fuck here....")
+			log.Cerror(err)
 			return
 		}
 
 		data = append(data, read...)
 		xfer = len(data)
 
-		//for avail > 0 && xfer < size {
-		//
-		//	var value byte
-		//	value, err = se.ReadRegister(RegRHR, channel)
-		//	if err != nil {
-		//		return
-		//	}
-		//
-		//	data = append(data, value)
-		//
-		//	xfer++
-		//	avail--
-		//}
+		startTime = time.Now().UnixMilli()
 	}
+
+	log.Printf("############# ReadUartBytes size=%d xfer=%d done...", size, xfer)
 
 	return
 }

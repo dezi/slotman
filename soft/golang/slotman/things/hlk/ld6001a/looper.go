@@ -1,6 +1,7 @@
 package ld6001a
 
 import (
+	"encoding/json"
 	"errors"
 	"math"
 	"slotman/things"
@@ -10,6 +11,8 @@ import (
 )
 
 func (se *LD6001a) readLoop() {
+
+	defer se.loopGroup.Done()
 
 	if !se.isProbe {
 		log.Printf("LD6001a readLoop started...")
@@ -22,26 +25,26 @@ func (se *LD6001a) readLoop() {
 		return
 	}
 
-	parts := make([]byte, 100)
+	parts := make([]byte, 1000)
 	input := make([]byte, 0)
 
 	//
 	// Drain buffered junk from port.
 	//
 
-	port := se.uart
-	if port != nil {
-		for {
-			xfer, _ := port.Read(parts)
-			if xfer == 0 {
-				break
-			}
-		}
-	}
+	//port := se.uart
+	//if port != nil {
+	//	for {
+	//		xfer, _ := port.Read(parts)
+	//		if xfer < len(parts) {
+	//			break
+	//		}
+	//	}
+	//}
 
 	for se.IsOpen {
 
-		port = se.uart
+		port := se.uart
 		if port == nil {
 			break
 		}
@@ -49,10 +52,29 @@ func (se *LD6001a) readLoop() {
 		xfer, _ := port.Read(parts)
 		input = append(input, parts[:xfer]...)
 
-		log.Printf("###### read xfer=%d [ %02x ]", xfer, parts[:xfer])
+		//log.Printf("###### read size=%d xfer=%d [ %02x ]", len(input), xfer, parts[:xfer])
+
+		if len(input) > 1000 {
+
+			//
+			// Chaos recovery.
+			//
+
+			input = nil
+			continue
+		}
+
+		//if xfer > 0 {
+		//	log.Printf("###### read xfer=%d <%s>", xfer, string(parts[:xfer]))
+		//}
+
+		//if xfer == 0 {
+		//	time.Sleep(time.Millisecond * 10)
+		//	continue
+		//}
 
 		var ok bool
-		var s1, s2, s3 bool
+		var s1, s2, s3, s4, s5 bool
 
 		for len(input) > 0 {
 
@@ -60,8 +82,10 @@ func (se *LD6001a) readLoop() {
 			// Skip anything what is not a possible header.
 			//
 
-			for input[0] != 0x01 && input[0] != 0x55 && input[0] != 'A' {
+			if input[0] != 0x01 && input[0] != 0x55 && input[0] != 'A' &&
+				input[0] != '{' && input[0] != '-' {
 				input = input[1:]
+				continue
 			}
 
 			input, s1, ok = se.readLevel3(input)
@@ -79,7 +103,17 @@ func (se *LD6001a) readLoop() {
 				continue
 			}
 
-			if s1 || s2 || s3 {
+			input, s4, ok = se.readParams(input)
+			if ok {
+				continue
+			}
+
+			input, s5, ok = se.readPositions(input)
+			if ok {
+				continue
+			}
+
+			if s1 || s2 || s3 || s4 || s5 {
 				break
 			}
 
@@ -101,18 +135,122 @@ func (se *LD6001a) readATOK(input []byte) (output []byte, short, ok bool) {
 		return
 	}
 
-	if !strings.HasPrefix(string(output), "AT+OK") {
+	if !strings.HasPrefix(string(output), "AT+") {
 		return
 	}
 
-	output = output[5:]
+	var result []byte
+
+	for len(output) > 0 && output[0] != '\n' && output[0] != '\r' {
+		result = append(result, output[0])
+		output = output[1:]
+	}
 
 	for len(output) > 0 && (output[0] == '\n' || output[0] == '\r') {
 		output = output[1:]
 	}
 
-	se.results <- "AT+OK"
+	//log.Printf("Response result=<%s>", string(result))
+
+	se.results <- string(result)
 	ok = true
+	return
+}
+
+func (se *LD6001a) readPositions(input []byte) (output []byte, short, ok bool) {
+
+	output = input
+
+	if len(output) < 5 {
+		short = true
+		return
+	}
+
+	if !strings.HasPrefix(string(output), "-----") {
+		return
+	}
+
+	if !strings.HasSuffix(string(output), "\r\n") {
+		short = true
+		return
+	}
+
+	log.Printf("################ positions=%s", string(output))
+	return
+}
+
+func (se *LD6001a) readParams(input []byte) (output []byte, short, ok bool) {
+
+	output = input
+
+	if len(output) < 1 {
+		short = true
+		return
+	}
+
+	//
+	// Fuck this shit.
+	//
+	// This is a real shitty implementation:
+	//
+	// 1. Developer starts response like JSON,
+	// but fails to terminate it correctly.
+	//
+	// 2. Careless spelling like "PeopleCntSoftVerison".
+	//
+	// 3. Developer is too stupid to send CR/LF instead
+	// he sends "\x09\x0a".
+	//
+	// 4. Developer messes up string with bogus "\xa3\xba"
+	// character sequences.
+	//
+	// 5. Developer sends NO indication that
+	// response is complete.
+	//
+
+	if output[0] != '{' {
+		return
+	}
+
+	if !strings.Contains(string(output), "Target exit") {
+		short = true
+		return
+	}
+
+	//
+	// De-fuck output to make it work with JSON.
+	//
+
+	result := string(output)
+	result = strings.ReplaceAll(result, "\x09\x0a", "\r\n")
+	result = strings.ReplaceAll(result, "\xa3\xba", " ")
+	result = strings.ReplaceAll(result, "Moving target", `"Moving target":`)
+	result = strings.ReplaceAll(result, "Static target", `"Static target":`)
+	result = strings.ReplaceAll(result, "Target exit", `"Target exit":`)
+	result = strings.ReplaceAll(result, "s,", ",")
+	result = strings.TrimSpace(result)
+	result = strings.TrimSuffix(result, ",")
+	result = result + "\r\n" + "}"
+
+	output = nil
+
+	//log.Printf("Response params=\n%s", result)
+
+	err := json.Unmarshal([]byte(result), &se.Params)
+	if err != nil {
+		log.Cerror(err)
+		return
+	}
+
+	//log.Printf("Parsed params=%+v", se.Params)
+
+	//
+	// Fake a result code to satisfy write ok.
+	//
+
+	se.results <- "AT+READ"
+	ok = true
+
 	return
 }
 
@@ -138,14 +276,15 @@ func (se *LD6001a) readLevel0(input []byte) (output []byte, short, ok bool) {
 		return
 	}
 
-	if output[0] != 0x55 && output[1] != 0xaa && output[2] != 0x0a {
+	if output[0] != 0x55 || output[1] != 0xaa || output[2] != 0x0a {
 		return
 	}
 
 	if output[3] == 0x04 {
 
 		people := output[8]
-		_ = people
+
+		log.Printf("People count=%d", people)
 
 		// todo: inject result...
 
@@ -153,7 +292,7 @@ func (se *LD6001a) readLevel0(input []byte) (output []byte, short, ok bool) {
 
 	output = output[10:]
 
-	ok = true
+	//ok = true
 	return
 }
 
@@ -180,20 +319,33 @@ func (se *LD6001a) readLevel3(input []byte) (output []byte, short, ok bool) {
 	// CS: CC
 	//
 
-	if len(input) < 12 {
+	output = input
+
+	if len(output) < 12 {
 		short = true
 		return
 	}
 
-	if output[0] != 0x01 && output[1] != 0x02 &&
-		output[2] != 0x03 && output[3] != 0x04 &&
-		output[4] != 0x05 && output[5] != 0x06 &&
-		output[6] != 0x07 && output[7] != 0x08 {
+	if output[0] != 0x01 || output[1] != 0x02 ||
+		output[2] != 0x03 || output[3] != 0x04 ||
+		output[4] != 0x05 || output[5] != 0x06 ||
+		output[6] != 0x07 || output[7] != 0x08 {
 		return
 	}
 
 	length := int(output[8])<<0 + int(output[9])<<8 +
 		int(output[10])<<16 + int(output[11])<<24
+
+	if length%32 != 0 || length >= 1024 {
+
+		//
+		// Recover from read chaos.
+		//
+
+		log.Printf("Flush corrupted (1)...")
+		output = nil
+		return
+	}
 
 	if length >= 32 && len(input) < length {
 		short = true
@@ -210,15 +362,48 @@ func (se *LD6001a) readLevel3(input []byte) (output []byte, short, ok bool) {
 		return
 	}
 
+	var xor byte
+
+	//
+	// Frame number.
+	//
+
+	xor ^= output[12]
+	xor ^= output[13]
+	xor ^= output[14]
+	xor ^= output[15]
+
 	trackLength := int(output[28])<<0 + int(output[29])<<8 +
 		int(output[30])<<16 + int(output[31])<<24
 
-	if len(input) < 32+trackLength {
+	if trackLength%32 != 0 || trackLength >= 1024 {
+
+		//
+		// Recover from read chaos.
+		//
+
+		log.Printf("Flush corrupted (2)...")
+
+		output = nil
+		return
+	}
+
+	if len(input) < 32+trackLength+1 {
 		short = true
 		return
 	}
 
-	for index := 0; index < trackLength/32; index++ {
+	sets := trackLength / 32
+
+	var ids []int
+	var xps []float64
+	var yps []float64
+	var zps []float64
+	var xvs []float64
+	var yvs []float64
+	var zvs []float64
+
+	for index := 0; index < sets; index++ {
 
 		bi := 32 + index*32
 
@@ -255,18 +440,45 @@ func (se *LD6001a) readLevel3(input []byte) (output []byte, short, ok bool) {
 
 		vz := math.Float32frombits(parsed)
 
-		_ = id
-		_ = x
-		_ = y
-		_ = z
-		_ = vx
-		_ = vy
-		_ = vz
+		ids = append(ids, id)
+		xps = append(xps, float64(x))
+		yps = append(yps, float64(y))
+		zps = append(zps, float64(z))
+		xvs = append(xvs, float64(vx))
+		yvs = append(yvs, float64(vy))
+		zvs = append(zvs, float64(vz))
 	}
 
-	// todo: inject result...
+	for inx := 32; inx < length; inx++ {
+		xor = xor ^ output[inx]
+	}
 
-	output = output[length:]
+	if xor != output[length] {
+		log.Printf("Checksum error...")
+		output = nil
+		return
+	}
+
+	//for inx := range ids {
+	//	log.Printf("Target id=%d %0.1f %0.1f %0.1f %0.1f %0.1f %0.1f",
+	//		ids[inx], xps[inx], yps[inx], zps[inx], xvs[inx], yvs[inx], zvs[inx])
+	//}
+
+	handler := se.handler
+	if handler != nil {
+		go handler.OnHumanTracking(se, xps, yps)
+		//go handler.OnHumanTracking3D(se, ids, xps, yps, zps, xvs, yvs, zvs)
+	}
+
+	_ = xvs
+	_ = yvs
+	_ = zvs
+
+	//
+	// Skip length + 1 (checksum).
+	//
+
+	output = output[length+1:]
 	ok = true
 	return
 }

@@ -4,6 +4,7 @@ import (
 	"errors"
 	"go.bug.st/serial"
 	"slotman/services/iface/proxy"
+	"strings"
 	"time"
 )
 
@@ -32,6 +33,10 @@ func GetDevicePaths() (devicePaths []string, err error) {
 			checkPath == "/dev/tty.wlan-debug" ||
 			checkPath == "/dev/tty.debug-console" ||
 			checkPath == "/dev/tty.Bluetooth-Incoming-Port" {
+			continue
+		}
+
+		if strings.HasPrefix(checkPath, "/dev/cu.") {
 			continue
 		}
 
@@ -106,29 +111,6 @@ func (uart *Device) SetReadTimeout(timeout time.Duration) (err error) {
 	return
 }
 
-func (uart *Device) Read(data []byte) (xfer int, err error) {
-
-	prx, err := proxy.GetInstance()
-	if err != nil {
-		return
-	}
-
-	//goland:noinspection GoBoolExpressions
-	if prx.CheckTarget() && !wantLocal {
-		xfer, err = prx.UartRead(uart, data)
-		return
-	}
-
-	port := uart.port
-	if port == nil {
-		err = errors.New("uart port is nil")
-		return
-	}
-
-	xfer, err = port.Read(data)
-	return
-}
-
 func (uart *Device) Write(data []byte) (xfer int, err error) {
 
 	prx, err := proxy.GetInstance()
@@ -149,5 +131,28 @@ func (uart *Device) Write(data []byte) (xfer int, err error) {
 	}
 
 	xfer, err = port.Write(data)
+	return
+}
+
+func (uart *Device) Read(data []byte) (xfer int, err error) {
+
+	prx, err := proxy.GetInstance()
+	if err != nil {
+		return
+	}
+
+	//goland:noinspection GoBoolExpressions
+	if prx.CheckTarget() && !wantLocal {
+		xfer, err = prx.UartRead(uart, data)
+		return
+	}
+
+	port := uart.port
+	if port == nil {
+		err = errors.New("uart port is nil")
+		return
+	}
+
+	xfer, err = port.Read(data)
 	return
 }

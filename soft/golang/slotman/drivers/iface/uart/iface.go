@@ -12,6 +12,6 @@ type Uart interface {
 	SetBaudrate(baudrate int) (err error)
 	SetReadTimeout(timeout time.Duration) (err error)
 
-	Read(data []byte) (xfer int, err error)
 	Write(data []byte) (xfer int, err error)
+	Read(data []byte) (xfer int, err error)
 }

@@ -67,6 +67,7 @@ func (se *LD6001a) Open() (err error) {
 	se.results = make(chan string, 10)
 	se.IsOpen = true
 
+	se.loopGroup.Add(1)
 	go se.readLoop()
 
 	if se.handler != nil {
@@ -87,6 +88,8 @@ func (se *LD6001a) Close() (err error) {
 	}
 
 	se.IsOpen = false
+
+	se.loopGroup.Wait()
 
 	err = se.uart.Close()
 	log.Cerror(err)

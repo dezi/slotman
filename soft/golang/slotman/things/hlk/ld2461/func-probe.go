@@ -24,9 +24,9 @@ func ProbeThings(busySerialPaths []string) (things []*LD2461, err error) {
 			continue
 		}
 
-		//if devicePath != "/dev/i2c-1:48-0" {
-		//	continue
-		//}
+		if devicePath != "/dev/i2c-1:48-0" {
+			continue
+		}
 
 		for _, baudRate := range baudRates {
 
@@ -50,7 +50,7 @@ func ProbeThings(busySerialPaths []string) (things []*LD2461, err error) {
 				date, version, uid, tryErr = se.GetVersion()
 				if tryErr == nil {
 					log.Printf("Identified LD2461 devicePath=%s baudRate=%d", devicePath, baudRate)
-					log.Printf("Identified LD2461 date=%s version=%s uid=%s ", date, version, uid)
+					log.Printf("Identified LD2461 date=%s version=%s uid=%s", date, version, uid)
 					isValid = true
 					break
 				}

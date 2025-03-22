@@ -53,6 +53,14 @@ func (seUart *SC15IS752Uart) SetReadTimeout(timeout time.Duration) (err error) {
 	return
 }
 
+func (seUart *SC15IS752Uart) Write(data []byte) (xfer int, err error) {
+
+	//log.Printf("UART write device=%s data=[ %02x ]", seUart.devicePath, data)
+
+	xfer, err = seUart.sc15is752.WriteUartBytes(seUart.channel, data)
+	return
+}
+
 func (seUart *SC15IS752Uart) Read(data []byte) (xfer int, err error) {
 
 	var read []byte
@@ -62,13 +70,5 @@ func (seUart *SC15IS752Uart) Read(data []byte) (xfer int, err error) {
 
 	copy(data, read)
 
-	return
-}
-
-func (seUart *SC15IS752Uart) Write(data []byte) (xfer int, err error) {
-
-	//log.Printf("UART write device=%s data=[ %02x ]", seUart.devicePath, data)
-
-	xfer, err = seUart.sc15is752.WriteUartBytes(seUart.channel, data)
 	return
 }

@@ -38,17 +38,17 @@ func (se *LD6001a) StopWorking() (err error) {
 
 	err = se.writeWithOk(commandAtStop)
 
-	if errors.Is(err, ErrSerialTimeout) {
-
-		//
-		// Fuck this shit.
-		//
-		// If sensor is already stopped,
-		// this command returns nothing...
-		//
-
-		err = nil
-	}
+	//if errors.Is(err, ErrSerialTimeout) {
+	//
+	//	//
+	//	// Fuck this shit.
+	//	//
+	//	// If sensor is already stopped,
+	//	// this command returns nothing...
+	//	//
+	//
+	//	err = nil
+	//}
 
 	return
 }

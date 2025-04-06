@@ -70,6 +70,12 @@ func (se *LD6001a) Open() (err error) {
 	se.loopGroup.Add(1)
 	go se.readLoop()
 
+	//
+	// Yield time to read loop startup.
+	//
+
+	time.Sleep(time.Millisecond * 100)
+
 	if se.handler != nil {
 		se.handler.OnThingOpened(se)
 	}

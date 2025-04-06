@@ -25,28 +25,38 @@ func (se *LD6001a) writeWithOk(command string) (err error) {
 		<-se.results
 	}
 
-	log.Printf("Write inp command=%s", command)
+	devAddr := se.DevicePath
+
+	parts := strings.Split(devAddr, ":")
+	if len(parts) == 2 {
+		devAddr = parts[1]
+	}
+
+	log.Printf("Write inp dev=%s command=%s", devAddr, command)
 
 	_, err = se.uart.Write([]byte(command + "\n"))
 	log.Cerror(err)
 
 	select {
+
 	case result := <-se.results:
 		if result == command {
-			log.Printf("Write out command=%s success", command)
+			log.Printf("Write out dev=%s command=%s success", devAddr, command)
 			return
 		}
 
 		if strings.HasPrefix(result, "AT+OK=") {
-			log.Printf("Write out command=%s result=%s", command, result)
+			log.Printf("Write out dev=%s command=%s result=%s", devAddr, command, result)
 			return
 		}
 
-		err = errors.New(fmt.Sprintf("serial fail <%s>", result))
+		err = errors.New(fmt.Sprintf("dev=%s serial fail <%s>", devAddr, result))
 
-	case <-time.After(time.Millisecond * 250):
+	case <-time.After(time.Millisecond * 2000):
 		err = ErrSerialTimeout
 	}
+
+	log.Cerror(err)
 
 	return
 }

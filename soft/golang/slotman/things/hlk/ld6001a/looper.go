@@ -29,27 +29,27 @@ func (se *LD6001a) readLoop() {
 	input := make([]byte, 0)
 
 	//
-	// Drain buffered junk from port.
+	// Drain buffered junk from uart.
 	//
 
-	//port := se.uart
-	//if port != nil {
-	//	for {
-	//		xfer, _ := port.Read(parts)
-	//		if xfer < len(parts) {
-	//			break
-	//		}
-	//	}
-	//}
+	uart := se.uart
+	if uart != nil {
+		for {
+			xfer, _ := uart.Read(parts)
+			if xfer < len(parts) {
+				break
+			}
+		}
+	}
 
 	for se.IsOpen {
 
-		port := se.uart
-		if port == nil {
+		uart = se.uart
+		if uart == nil {
 			break
 		}
 
-		xfer, _ := port.Read(parts)
+		xfer, _ := uart.Read(parts)
 		input = append(input, parts[:xfer]...)
 
 		//log.Printf("###### read size=%d xfer=%d [ %02x ]", len(input), xfer, parts[:xfer])
@@ -123,6 +123,8 @@ func (se *LD6001a) readLoop() {
 		if len(input) == 0 {
 			input = nil
 		}
+
+		time.Sleep(time.Millisecond * 2)
 	}
 }
 
@@ -176,6 +178,8 @@ func (se *LD6001a) readPositions(input []byte) (output []byte, short, ok bool) {
 	}
 
 	log.Printf("################ positions=%s", string(output))
+
+	ok = true
 	return
 }
 
@@ -217,6 +221,13 @@ func (se *LD6001a) readParams(input []byte) (output []byte, short, ok bool) {
 		return
 	}
 
+	for inx, ccc := range output {
+		if ccc == 0x01 {
+			output = output[:inx]
+			break
+		}
+	}
+
 	//
 	// De-fuck output to make it work with JSON.
 	//
@@ -238,6 +249,7 @@ func (se *LD6001a) readParams(input []byte) (output []byte, short, ok bool) {
 
 	err := json.Unmarshal([]byte(result), &se.Params)
 	if err != nil {
+		log.Printf("##### unmarshal result:\n%s", []byte(result))
 		log.Cerror(err)
 		return
 	}

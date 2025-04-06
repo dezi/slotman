@@ -15,7 +15,7 @@ func NewSC15IS752(devicePath string) (se *SC15IS752) {
 		Model:       "SC15IS752 Dual Uart",
 		DevicePath:  devicePath,
 		crystalFreq: DefaultCrystalFreq,
-		baudrate:    [2]int{9600, 9600},
+		baudrate:    [2]int{115200, 115200},
 	}
 
 	return
@@ -79,13 +79,13 @@ func (se *SC15IS752) Open() (err error) {
 	se.i2cDev = i2cDev
 	se.IsOpen = true
 
-	_ = se.SetFifoEnable(0, true)
-	_ = se.SetBaudrate(0, 9600)
 	_ = se.SetLine(0, 8, ParityNone, 1)
+	_ = se.SetBaudrate(0, se.baudrate[0])
+	_ = se.SetFifoEnable(0, true)
 
-	_ = se.SetFifoEnable(1, true)
-	_ = se.SetBaudrate(1, 9600)
 	_ = se.SetLine(1, 8, ParityNone, 1)
+	_ = se.SetBaudrate(1, se.baudrate[0])
+	_ = se.SetFifoEnable(1, true)
 
 	if se.handler != nil {
 		se.handler.OnThingOpened(se)

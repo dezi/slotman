@@ -25,7 +25,14 @@ func ProbeThings(busySerialPaths []string) (things []*LD6001a, err error) {
 			continue
 		}
 
-		if devicePath != "/dev/i2c-1:48-0" {
+		if devicePath != "/dev/i2c-1:48-0+" && // 0bfe9a0a
+			devicePath != "/dev/i2c-1:48-1+" && // 5b255252
+			devicePath != "/dev/i2c-1:49-0" && // 4a3b77e2
+			devicePath != "/dev/i2c-1:49-1" && // a325d0dd
+			devicePath != "/dev/i2c-1:4c-0" && // ffcd0b16
+			devicePath != "/dev/i2c-1:4c-1" && // 499f7a07
+			devicePath != "/dev/i2c-1:4d-0+" && // 5ac050f5
+			devicePath != "/dev/i2c-1:4d-1+" { // 1d6707a7
 			continue
 		}
 
@@ -45,15 +52,26 @@ func ProbeThings(busySerialPaths []string) (things []*LD6001a, err error) {
 
 			isValid := false
 
-			_ = se.StopWorking()
+			tryErr = se.Reset()
+			log.Cerror(tryErr)
+			time.Sleep(time.Millisecond * 250)
 
-			for try := 0; try < 3; try++ {
+			for try := 0; try < 5; try++ {
+				tryErr = se.StopWorking()
+				if tryErr == nil {
+					break
+				}
+				log.Cerror(tryErr)
+				time.Sleep(time.Millisecond * 100)
+			}
+
+			for try := 0; try < 5; try++ {
 				tryErr = se.ReadParams()
 				isValid = tryErr == nil && se.Params.SoftwareVersion != ""
 				if isValid {
 					break
 				}
-				time.Sleep(time.Second * 5)
+				time.Sleep(time.Second * 1)
 			}
 
 			_ = se.Close()

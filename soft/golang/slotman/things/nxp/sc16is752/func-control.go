@@ -40,6 +40,10 @@ func (se *SC15IS752) SetBaudrate(channel byte, baudrate int) (err error) {
 		return
 	}
 
+	if se.baudrate[channel] == baudrate {
+		return
+	}
+
 	se.baudrate[channel] = baudrate
 
 	value, err := se.ReadRegister(RegMCR, channel)
@@ -202,7 +206,19 @@ func (se *SC15IS752) WriteUartBytes(channel byte, data []byte) (xfer int, err er
 		return
 	}
 
-	log.Printf("####### WriteUartBytes size=%d [ %02x ]", len(data), data)
+	xfer, err = se.i2cDev.WriteUart(channel, 100, data)
+
+	return
+}
+
+func (se *SC15IS752) WriteUartBytesLocal(channel byte, data []byte) (xfer int, err error) {
+
+	if channel > ChannelB {
+		err = ErrInvalidChannel
+		return
+	}
+
+	//log.Printf("####### WriteUartBytes size=%d [ %02x ]", len(data), data)
 
 	var avail int
 
@@ -235,7 +251,7 @@ func (se *SC15IS752) WriteUartBytes(channel byte, data []byte) (xfer int, err er
 		xfer += avail
 	}
 
-	log.Printf("####### WriteUartBytes xfer=%d [ %02x ]", xfer, data)
+	//log.Printf("####### WriteUartBytes xfer=%d [ %02x ]", xfer, data)
 
 	return
 }
@@ -249,12 +265,8 @@ func (se *SC15IS752) ReadUartBytes(channel byte, size int) (xfer int, data []byt
 
 	data = make([]byte, size)
 
-	xfer, err = se.i2cDev.ReadUart(channel, se.readTimeout[channel], data)
+	xfer, err = se.i2cDev.ReadUart(channel, 25, data)
 	data = data[:xfer]
-
-	if err != nil {
-		return
-	}
 
 	return
 }

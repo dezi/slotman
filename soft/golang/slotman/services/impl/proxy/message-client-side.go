@@ -38,13 +38,13 @@ func (sv *Service) ProxyRequest(req proxy.Message) (res []byte, err error) {
 
 	sv.webServerConnLock.Unlock()
 
-	resc := make(chan []byte, 1)
-	defer close(resc)
+	resChan := make(chan []byte, 1)
+	defer close(resChan)
 
 	uuid := simple.NewUuidHex()
 
 	sv.webServerChanLock.Lock()
-	sv.webServerChan[uuid] = resc
+	sv.webServerChan[uuid] = resChan
 	sv.webServerChanLock.Unlock()
 
 	defer func() {
@@ -60,24 +60,26 @@ func (sv *Service) ProxyRequest(req proxy.Message) (res []byte, err error) {
 		return
 	}
 
-	sv.webServerConnLock.Lock()
-	defer sv.webServerConnLock.Unlock()
+	conn := sv.webServerConn
 
-	if sv.webServerConn == nil {
+	if conn == nil {
 		err = errors.New("no socket connect")
 		log.Cerror(err)
 		return
 	}
 
-	err = sv.webServerConn.WriteMessage(websocket.TextMessage, reqBytes)
+	sv.webServerConnLock.Lock()
+	err = conn.WriteMessage(websocket.TextMessage, reqBytes)
+	sv.webServerConnLock.Unlock()
+
 	if err != nil {
 		log.Cerror(err)
-		_ = sv.webServerConn.Close()
+		_ = conn.Close()
 		sv.webServerConn = nil
 		return
 	}
 
-	res = <-resc
+	res = <-resChan
 
 	return
 }
@@ -137,8 +139,6 @@ func (sv *Service) connectReadLoop() {
 			continue
 		}
 
-		//log.Printf("ProxyRequest res=%s", string(res))
-
 		msg := &message{}
 		err = json.Unmarshal(resBytes, msg)
 		if err != nil {
@@ -149,11 +149,11 @@ func (sv *Service) connectReadLoop() {
 		uuid := msg.Uuid
 
 		sv.webServerChanLock.Lock()
-		resc := sv.webServerChan[uuid]
+		resChan := sv.webServerChan[uuid]
 		sv.webServerChanLock.Unlock()
 
-		if resc != nil {
-			resc <- resBytes
+		if resChan != nil {
+			resChan <- resBytes
 			continue
 		}
 

@@ -81,12 +81,14 @@ func (sv *Service) handleI2c(sender string, reqBytes []byte) (resBytes []byte, e
 		req.Read = make([]byte, req.Size)
 		req.Xfer, req.NE = i2cDev.Read(req.Read)
 		req.Read = req.Read[:req.Xfer]
-		//log.Printf("I2C  Read size=%d xfer=%d dev=%s addr=%02x err=%v",
-		//	req.Size, req.Xfer, i2cDev.GetDevice(), i2cDev.GetAddr(), req.NE)
-		//log.Printf("I2C  Read [ %02x ]", req.Read)
+	//log.Printf("I2C  Read size=%d xfer=%d dev=%s addr=%02x err=%v",
+	//	req.Size, req.Xfer, i2cDev.GetDevice(), i2cDev.GetAddr(), req.NE)
+	//log.Printf("I2C  Read [ %02x ]", req.Read)
+
+	case proxy.I2cWhatWriteUart:
+		req.Xfer, req.NE = i2cDev.WriteUart(req.Channel, req.TimeOut, req.Write)
+
 	case proxy.I2cWhatReadUart:
-		sv.i2cDevLock.Lock()
-		defer sv.i2cDevLock.Unlock()
 		req.Read = make([]byte, req.Size)
 		req.Xfer, req.NE = i2cDev.ReadUart(req.Channel, req.TimeOut, req.Read)
 		req.Read = req.Read[:req.Xfer]

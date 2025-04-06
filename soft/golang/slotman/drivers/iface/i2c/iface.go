@@ -12,6 +12,8 @@ type I2c interface {
 
 	Write(data []byte) (xfer int, err error)
 	Read(data []byte) (xfer int, err error)
+
+	WriteUart(channel byte, timeOut int, data []byte) (xfer int, err error)
 	ReadUart(channel byte, timeOut int, data []byte) (xfer int, err error)
 
 	WriteBytes(data []byte) (xfer int, err error)

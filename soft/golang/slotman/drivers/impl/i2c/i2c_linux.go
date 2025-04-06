@@ -7,6 +7,7 @@ import (
 	"path/filepath"
 	"slotman/utils/log"
 	"strings"
+	"sync"
 	"syscall"
 	"time"
 )
@@ -168,33 +169,33 @@ func (i2c *Device) Read(data []byte) (xfer int, err error) {
 	return
 }
 
-// ReadUart
+var globalLock sync.Mutex
+
+// WriteUart
 //
-// Specialized function to read high-speed
+// Specialized function to write high-speed
 // I2C dual uart devices of type SC16IS752 by proxy.
-func (i2c *Device) ReadUart(channel byte, timeOut int, data []byte) (xfer int, err error) {
+func (i2c *Device) WriteUart(channel byte, timeOut int, data []byte) (xfer int, err error) {
 
 	//
 	// Required SC16IS752 registers.
 	//
 
-	var RegRHR byte = 0x00
-	var RegRxLvl byte = 0x09
+	var RegTHR byte = 0x00
+	var RegTxLvl byte = 0x08
 
-	var size = len(data)
 	var startTime = time.Now().UnixMilli()
 
-	//log.Printf("ReadUart channel=%d timeOut=%d size=%d dev=%s addr=%02x",
-	//	channel, timeOut, size, i2c.device, i2c.addr)
-
 	var avail byte
-	var temp []byte
 
-	for size > len(temp) {
+	for xfer < len(data) {
 
 		for {
 
-			avail, err = i2c.ReadRegByte(RegRxLvl<<3 | channel<<1)
+			globalLock.Lock()
+			avail, err = i2c.ReadRegByte(RegTxLvl<<3 | channel<<1)
+			globalLock.Unlock()
+
 			if err != nil {
 				log.Cerror(err)
 				return
@@ -206,8 +207,84 @@ func (i2c *Device) ReadUart(channel byte, timeOut int, data []byte) (xfer int, e
 
 			if timeOut > 0 && time.Now().UnixMilli()-startTime > int64(timeOut) {
 				err = errors.New("read timeout")
+				//log.Printf("ReadUart out addr=%02x/%d timeOut=%d xfer=%d",
+				//	i2c.addr, channel, timeOut, xfer)
 				return
 			}
+
+			time.Sleep(time.Millisecond * 1)
+		}
+
+		if int(avail) > len(data)-xfer {
+			avail = byte(len(data) - xfer)
+		}
+
+		globalLock.Lock()
+		err = i2c.WriteRegBytes(RegTHR<<3|channel<<1, data[xfer:xfer+int(avail)])
+		globalLock.Unlock()
+
+		if err != nil {
+			log.Printf("WriteRegBytes fail should not happen...")
+			log.Cerror(err)
+			return
+		}
+
+		xfer += int(avail)
+	}
+
+	log.Printf("#### uartwrite wrote addr=%02x/%d data=%s",
+		i2c.addr, channel, strings.TrimSpace(string(data)))
+
+	return
+}
+
+// ReadUart
+//
+// Specialized function to read high-speed
+// I2C dual uart devices of type SC16IS752 by proxy.
+func (i2c *Device) ReadUart(channel byte, timeOut int, data []byte) (xfer int, err error) {
+
+	log.Printf("ReadUart in  addr=%02x/%d timeOut=%d size=%d",
+		i2c.addr, channel, timeOut, len(data))
+
+	//
+	// Required SC16IS752 registers.
+	//
+
+	var RegRHR byte = 0x00
+	var RegRxLvl byte = 0x09
+
+	var size = len(data)
+	var startTime = time.Now().UnixMilli()
+
+	var avail byte
+	var temp []byte
+
+	for size > len(temp) {
+
+		for {
+
+			globalLock.Lock()
+			avail, err = i2c.ReadRegByte(RegRxLvl<<3 | channel<<1)
+			globalLock.Unlock()
+
+			if err != nil {
+				log.Cerror(err)
+				return
+			}
+
+			if avail > 0 {
+				break
+			}
+
+			if timeOut > 0 && time.Now().UnixMilli()-startTime > int64(timeOut) {
+				err = errors.New("read timeout")
+				log.Printf("ReadUart out addr=%02x/%d timeOut=%d xfer=%d",
+					i2c.addr, channel, timeOut, xfer)
+				return
+			}
+
+			time.Sleep(time.Millisecond * 1)
 		}
 
 		if int(avail) > size-len(temp) {
@@ -216,7 +293,10 @@ func (i2c *Device) ReadUart(channel byte, timeOut int, data []byte) (xfer int, e
 
 		var read []byte
 
+		globalLock.Lock()
 		read, _, err = i2c.ReadRegBytes(RegRHR<<3|channel<<1, int(avail))
+		globalLock.Unlock()
+
 		if err != nil {
 			log.Printf("ReadRegBytes fail should not happen...")
 			log.Cerror(err)
@@ -235,6 +315,7 @@ func (i2c *Device) ReadUart(channel byte, timeOut int, data []byte) (xfer int, e
 		//
 
 		time.Sleep(time.Millisecond * 1)
+		startTime += 10
 	}
 
 	return

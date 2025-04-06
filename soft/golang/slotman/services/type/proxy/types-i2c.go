@@ -12,6 +12,7 @@ const (
 	I2cWhatTransUnlock    I2cWhat = "i2c.trans.unlock"
 	I2cWhatWrite          I2cWhat = "i2c.write"
 	I2cWhatRead           I2cWhat = "i2c.read"
+	I2cWhatWriteUart      I2cWhat = "i2c.write.uart"
 	I2cWhatReadUart       I2cWhat = "i2c.read.uart"
 )
 

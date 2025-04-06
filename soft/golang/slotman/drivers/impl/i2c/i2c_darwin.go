@@ -84,6 +84,17 @@ func (i2c *Device) Read(data []byte) (xfer int, err error) {
 	return
 }
 
+func (i2c *Device) WriteUart(channel byte, timeOut int, data []byte) (xfer int, err error) {
+
+	prx, err := proxy.GetInstance()
+	if err != nil {
+		return
+	}
+
+	xfer, err = prx.I2cWriteUart(i2c, channel, timeOut, data)
+	return
+}
+
 func (i2c *Device) ReadUart(channel byte, timeOut int, data []byte) (xfer int, err error) {
 
 	prx, err := proxy.GetInstance()

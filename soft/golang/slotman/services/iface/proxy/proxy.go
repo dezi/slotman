@@ -56,6 +56,7 @@ type Interface interface {
 	I2cWrite(i2c i2c.I2c, data []byte) (xfer int, err error)
 	I2cRead(i2c i2c.I2c, data []byte) (xfer int, err error)
 
+	I2cWriteUart(i2c i2c.I2c, channel byte, timeOut int, data []byte) (xfer int, err error)
 	I2cReadUart(i2c i2c.I2c, channel byte, timeOut int, data []byte) (xfer int, err error)
 
 	//

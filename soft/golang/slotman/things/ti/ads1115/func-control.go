@@ -118,27 +118,12 @@ func (se *ADS1115) ReadADConversion(input int) (value uint16, err error) {
 	se.readLock.Lock()
 	defer se.readLock.Unlock()
 
-	//err = se.i2cDev.BeginTransaction()
-	//if err != nil {
-	//	return
-	//}
-	//
-	//defer func() { _ = se.i2cDev.EndTransaction() }()
-
 	config := uint16(0)
 
 	//config, err := se.i2cDev.ReadRegU16BE(byte(RegisterConfig))
 	//if err != nil {
 	//	return
 	//}
-
-	//log.Printf("################ old dev=%s config=%04x", se.DevicePath, config)
-
-	//log.Printf("################ old   os=%1x", (config>>OsShift)&OsMask)
-	//log.Printf("################ old  mux=%1x", (config>>MuxShift)&MuxMask)
-	//log.Printf("################ old gain=%1x", (config>>GainShift)&GainMask)
-	//log.Printf("################ old mode=%1x", (config>>ModeShift)&ModeMask)
-	//log.Printf("################ old rate=%1x", (config>>RateShift)&RateMask)
 
 	config &= ^(OsMask << OsShift)
 	config |= OsWriteStart << OsShift
@@ -151,8 +136,6 @@ func (se *ADS1115) ReadADConversion(input int) (value uint16, err error) {
 
 	config &= ^(RateMask << RateShift)
 	config |= uint16(se.rates[input]) << RateShift
-
-	//log.Printf("################ new config=%04x", config)
 
 	config &= ^(MuxMask << MuxShift)
 

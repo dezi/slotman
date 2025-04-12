@@ -3,6 +3,7 @@ package ads1115
 import (
 	"errors"
 	"slotman/things"
+	"slotman/utils/log"
 	"time"
 )
 
@@ -130,7 +131,7 @@ func (se *ADS1115) ReadADConversion(input int) (value uint16, err error) {
 		return
 	}
 
-	//log.Printf("################ old config=%04x", config)
+	log.Printf("################ old dev=%s config=%04x", se.DevicePath, config)
 
 	//log.Printf("################ old   os=%1x", (config>>OsShift)&OsMask)
 	//log.Printf("################ old  mux=%1x", (config>>MuxShift)&MuxMask)

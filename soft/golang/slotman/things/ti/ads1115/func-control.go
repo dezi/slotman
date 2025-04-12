@@ -125,10 +125,12 @@ func (se *ADS1115) ReadADConversion(input int) (value uint16, err error) {
 	//
 	//defer func() { _ = se.i2cDev.EndTransaction() }()
 
-	config, err := se.i2cDev.ReadRegU16BE(byte(RegisterConfig))
-	if err != nil {
-		return
-	}
+	config := uint16(0)
+
+	//config, err := se.i2cDev.ReadRegU16BE(byte(RegisterConfig))
+	//if err != nil {
+	//	return
+	//}
 
 	//log.Printf("################ old dev=%s config=%04x", se.DevicePath, config)
 

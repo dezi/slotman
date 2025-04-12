@@ -142,8 +142,8 @@ func (se *ADS1115) ReadADConversion(input int) (value uint16, err error) {
 	config &= ^(OsMask << OsShift)
 	config |= OsWriteStart << OsShift
 
-	//config &= ^(ModeMask << ModeShift)
-	//config |= ModeSingleShot << OsShift
+	config &= ^(ModeMask << ModeShift)
+	config |= ModeSingleShot << OsShift
 
 	config &= ^(GainMask << GainShift)
 	config |= uint16(se.gains[input]) << GainShift
